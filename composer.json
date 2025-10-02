@@ -17,17 +17,17 @@
         "sebastian/diff": "^5.0"
     },
     "require-dev": {
-        "editorconfig-checker/editorconfig-checker": "^10.6.0",
-        "ergebnis/composer-normalize": "^2.45.0",
-        "phpstan/phpstan": "^2.1.0",
-        "phpstan/phpstan-phpunit": "^2.0.0",
-        "phpstan/phpstan-strict-rules": "^2.0.0",
+        "editorconfig-checker/editorconfig-checker": "10.7.0",
+        "ergebnis/composer-normalize": "2.48.2",
+        "phpstan/phpstan": "2.1.29",
+        "phpstan/phpstan-phpunit": "2.0.7",
+        "phpstan/phpstan-strict-rules": "2.0.7",
         "phpunit/php-code-coverage": "^10.1",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "~10.5.58",
         "shipmonk/coding-standard": "^0.1.3",
-        "shipmonk/composer-dependency-analyser": "^1.8.0",
-        "shipmonk/name-collision-detector": "^2.1.0",
-        "shipmonk/phpstan-rules": "^4.1.0"
+        "shipmonk/composer-dependency-analyser": "1.8.3",
+        "shipmonk/name-collision-detector": "2.1.1",
+        "shipmonk/phpstan-rules": "4.2.1"
     },
     "autoload": {
         "psr-4": {
