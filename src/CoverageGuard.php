@@ -2,29 +2,22 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use Composer\InstalledVersions;
 use LogicException;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
-use SimpleXMLElement;
+use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
+use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
+use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
+use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
-use function count;
-use function extension_loaded;
 use function file_get_contents;
-use function get_debug_type;
-use function is_array;
-use function is_int;
-use function libxml_clear_errors;
-use function libxml_get_last_error;
-use function libxml_use_internal_errors;
-use function simplexml_load_file;
+use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
@@ -152,88 +145,40 @@ final class CoverageGuard
     /**
      * @return array<string, array<int, int>> file_path => [executable_line => hits]
      */
-    private function readCoverageFromClover(string $cloverFilePath): array
-    {
-        $xml = $this->readXml($cloverFilePath);
-
-        $coverage = [];
-        $fileNodes = $xml->xpath('//file');
-
-        if ($fileNodes === null) {
-            return $coverage;
-        }
-
-        foreach ($fileNodes as $fileNode) {
-            $filePath = $this->normalizePath((string) $fileNode['name']);
-            $coverage[$filePath] = [];
-
-            if (!isset($fileNode->line)) {
-                continue;
-            }
-
-            foreach ($fileNode->line as $lineNode) {
-                $lineNumber = (int) $lineNode['num'];
-                $hitCount = (int) $lineNode['count'];
-                $coverage[$filePath][$lineNumber] = $hitCount;
-            }
-        }
-
-        return $coverage;
-    }
-
-    /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
-     */
-    private function readCoverageFromCov(string $covFilePath): array
-    {
-        if (!InstalledVersions::isInstalled('phpunit/php-code-coverage')) {
-            throw new LogicException('In order to use .cov coverage files, you need to install phpunit/php-code-coverage');
-        }
-
-        $coverage = (static function (string $file): mixed {
-            return include $file;
-        })($covFilePath);
-
-        if (!$coverage instanceof CodeCoverage) {
-            throw new LogicException("Invalid coverage file: '{$covFilePath}'. Expected serialized CodeCoverage instance, got " . get_debug_type($coverage));
-        }
-
-        $result = [];
-        $lineCoverage = $coverage->getData()->lineCoverage();
-
-        foreach ($lineCoverage as $filePath => $fileCoverage) {
-            if (!is_array($fileCoverage)) {
-                continue;
-            }
-
-            $normalizedPath = $this->normalizePath((string) $filePath);
-
-            foreach ($fileCoverage as $lineNumber => $tests) {
-                if (!is_int($lineNumber) || !is_array($tests)) {
-                    continue;
-                }
-
-                $result[$normalizedPath][$lineNumber] = count($tests);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
-     */
     private function getCoverage(string $coverageFile): array
     {
+        return $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+    }
+
+    private function createExtractor(string $coverageFile): CoverageExtractor
+    {
         if (str_ends_with($coverageFile, '.cov')) {
-            return $this->readCoverageFromCov($coverageFile);
+            return new PhpUnitCoverageExtractor($this->config->getStripPaths());
         }
 
         if (str_ends_with($coverageFile, '.xml')) {
-            return $this->readCoverageFromClover($coverageFile);
+            return $this->detectExtractorForXml($coverageFile);
         }
 
         throw new LogicException("Unknown coverage file format: '{$coverageFile}'. Expecting .cov or .xml");
+    }
+
+    private function detectExtractorForXml(
+        string $xmlFile,
+    ): CoverageExtractor
+    {
+        $xmlLoader = new XmlLoader();
+        $content = file_get_contents($xmlFile);
+
+        if ($content === false) {
+            throw new LogicException("Failed to read file: {$xmlFile}");
+        }
+
+        if (str_contains($content, 'cobertura')) {
+            return new CoberturaCoverageExtractor($xmlLoader, $this->config->getStripPaths());
+        }
+
+        return new CloverCoverageExtractor($xmlLoader, $this->config->getStripPaths());
     }
 
     private function normalizePath(string $filePath): string
@@ -245,26 +190,6 @@ final class CoverageGuard
         }
 
         return $filePath;
-    }
-
-    private function readXml(string $xmlFile): SimpleXMLElement
-    {
-        if (!extension_loaded('simplexml')) {
-            throw new LogicException('In order to use xml coverage files, you need to enable the simplexml extension');
-        }
-        $libXmlErrorsOld = libxml_use_internal_errors(true);
-        $xml = simplexml_load_file($xmlFile);
-
-        if ($xml === false) {
-            $libXmlError = libxml_get_last_error();
-            $libXmlErrorMessage = $libXmlError === false ? '' : ' Error: ' . $libXmlError->message;
-            throw new LogicException("Failed to parse clover XML file: {$xmlFile}." . $libXmlErrorMessage);
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($libXmlErrorsOld);
-
-        return $xml;
     }
 
 }
