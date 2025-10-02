@@ -93,12 +93,12 @@ use const T_YIELD_FROM;
 final class PhpSyntaxHighlighter
 {
 
-    private const string COLOR_RESET = "\033[0m";
-    private const string COLOR_KEYWORD = "\033[35m"; // Magenta
-    private const string COLOR_STRING = "\033[32m"; // Green
-    private const string COLOR_COMMENT = "\033[90m"; // Dark gray
-    private const string COLOR_VARIABLE = "\033[36m"; // Cyan
-    private const string COLOR_NUMBER = "\033[33m"; // Yellow
+    private const COLOR_RESET = "\033[0m";
+    private const COLOR_KEYWORD = "\033[35m"; // Magenta
+    private const COLOR_STRING = "\033[32m"; // Green
+    private const COLOR_COMMENT = "\033[90m"; // Dark gray
+    private const COLOR_VARIABLE = "\033[36m"; // Cyan
+    private const COLOR_NUMBER = "\033[33m"; // Yellow
 
     public function highlight(string $code): string
     {

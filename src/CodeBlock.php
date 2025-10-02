@@ -8,14 +8,14 @@ use function explode;
 use function file_get_contents;
 use function implode;
 
-final readonly class CodeBlock
+final class CodeBlock
 {
 
     public function __construct(
-        public CodeBlockType $type,
-        public string $path,
-        public int $startLine,
-        public int $endLine,
+        public readonly CodeBlockType $type,
+        public readonly string $path,
+        public readonly int $startLine,
+        public readonly int $endLine,
     )
     {
     }
