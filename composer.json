@@ -1,0 +1,74 @@
+{
+    "name": "shipmonk/coverage-guard",
+    "description": "Enforce code coverage in your CI. Not by percentage, but target core methods. No more untested Facades, Controllers, or Repositories. Allows you to start enforcing coverage for new code only!",
+    "license": [
+        "MIT"
+    ],
+    "keywords": [
+        "code coverage",
+        "phpunit",
+        "testing",
+        "patch",
+        "git diff"
+    ],
+    "require": {
+        "php": "^8.1",
+        "nikic/php-parser": "^5.0",
+        "sebastian/diff": "^5.0"
+    },
+    "require-dev": {
+        "editorconfig-checker/editorconfig-checker": "10.7.0",
+        "ergebnis/composer-normalize": "2.48.2",
+        "phpstan/phpstan": "2.1.29",
+        "phpstan/phpstan-phpunit": "2.0.7",
+        "phpstan/phpstan-strict-rules": "2.0.7",
+        "phpunit/php-code-coverage": "^10.1",
+        "phpunit/phpunit": "~10.5.58",
+        "shipmonk/coding-standard": "^0.1.3",
+        "shipmonk/composer-dependency-analyser": "1.8.3",
+        "shipmonk/name-collision-detector": "2.1.1",
+        "shipmonk/phpstan-rules": "4.2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShipMonk\\CoverageGuard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ShipMonk\\CoverageGuard\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/coverage-guard"
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false,
+            "ergebnis/composer-normalize": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "check": [
+            "@check:composer",
+            "@check:ec",
+            "@check:cs",
+            "@check:types",
+            "@check:tests",
+            "@check:collisions",
+            "@check:dependencies"
+        ],
+        "check:collisions": "detect-collisions src tests",
+        "check:composer": [
+            "composer normalize --dry-run --no-update-lock",
+            "composer validate --strict"
+        ],
+        "check:cs": "phpcs",
+        "check:dependencies": "composer-dependency-analyser",
+        "check:ec": "ec src tests",
+        "check:tests": "phpunit tests",
+        "check:types": "phpstan analyse -vv --ansi",
+        "fix:cs": "phpcbf"
+    }
+}
