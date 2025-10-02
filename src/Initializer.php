@@ -57,9 +57,12 @@ class Initializer
             ? $this->loadConfig($configFilePath)
             : new Config();
 
-        $gitRoot = $this->detectGitRoot($cwd);
-        if ($gitRoot !== null) {
-            $config->setGitRoot($gitRoot);
+        if ($config->getGitRoot() === null) {
+            $detectedGitRoot = $this->detectGitRoot($cwd);
+
+            if ($detectedGitRoot !== null) {
+                $config->setGitRoot($detectedGitRoot);
+            }
         }
 
         return new InitializationResult($coverageFile, $patchFile, $config);

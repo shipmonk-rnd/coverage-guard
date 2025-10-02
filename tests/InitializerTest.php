@@ -149,4 +149,27 @@ class InitializerTest extends TestCase
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--patch']);
     }
 
+    public function testLoadConfigSucceedsWithValidConfig(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $configFile = __DIR__ . '/fixtures/valid-config.php';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
+
+        self::assertSame(__DIR__ . '/fixtures/', $result->config->getGitRoot());
+    }
+
+    public function testLoadConfigFailsWhenConfigFileReturnsNonConfigInstance(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $configFile = __DIR__ . '/fixtures/invalid-config.php';
+        $initializer = new Initializer();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage("Config file '$configFile' must return an instance of " . Config::class);
+
+        $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
+    }
+
 }
