@@ -25,6 +25,7 @@ vendor/bin/coverage-guard clover.xml # Without config, reports longer methods wi
 
 ### Supported coverage formats
 - PHPUnit clover format (`.xml`)
+- PHPUnit corbertura format (`.xml`)
 - PHPUnit serialized PHP format (`.cov`)
 
 ## Verifying only changed code
