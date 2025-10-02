@@ -39,4 +39,11 @@ parameters:
         # allow calling internal methods from SebastianBergmann\CodeCoverage
         -
             message: "#Call to method .* of internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
-            path: src/CoverageGuard.php
+            path: src/Extractor/PhpUnitCoverageExtractor.php
+
+        -
+            identifiers:
+                - classConstant.internalClass
+                - new.internalClass
+                - method.internalClass
+            path: tests/Extractor/PhpUnitCoverageExtractorTest.php
