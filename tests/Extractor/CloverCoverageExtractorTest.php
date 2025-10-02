@@ -3,6 +3,7 @@
 namespace Extractor;
 
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
@@ -10,10 +11,11 @@ use ShipMonk\CoverageGuard\XmlLoader;
 final class CloverCoverageExtractorTest extends TestCase
 {
 
-    public function testExtractsCoverageFromCloverXml(): void
+    #[DataProvider('provideCoverageFiles')]
+    public function testExtractsCoverageFromCloverXml(string $filePath): void
     {
         $extractor = new CloverCoverageExtractor(new XmlLoader());
-        $coverage = $extractor->getCoverage(__DIR__ . '/../fixtures/clover.xml');
+        $coverage = $extractor->getCoverage($filePath);
 
         self::assertArrayHasKey('tests/fixtures/Sample.php', $coverage);
         $fileCoverage = $coverage['tests/fixtures/Sample.php'];
@@ -26,10 +28,11 @@ final class CloverCoverageExtractorTest extends TestCase
         ], $fileCoverage);
     }
 
-    public function testStripsPathsFromFilePaths(): void
+    #[DataProvider('provideCoverageFiles')]
+    public function testStripsPathsFromFilePaths(string $filePath): void
     {
         $extractor = new CloverCoverageExtractor(new XmlLoader(), ['tests/fixtures/']);
-        $coverage = $extractor->getCoverage(__DIR__ . '/../fixtures/clover.xml');
+        $coverage = $extractor->getCoverage($filePath);
 
         self::assertArrayHasKey('Sample.php', $coverage);
         self::assertArrayNotHasKey('tests/fixtures/Sample.php', $coverage);
@@ -43,6 +46,15 @@ final class CloverCoverageExtractorTest extends TestCase
         $this->expectExceptionMessage('Failed to parse XML file');
 
         $extractor->getCoverage(__DIR__ . '/../fixtures/Sample.php'); // not an XML file
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function provideCoverageFiles(): iterable
+    {
+        yield 'default' => [__DIR__ . '/../fixtures/clover.xml'];
+        yield 'with package' => [__DIR__ . '/../fixtures/clover_with_package.xml'];
     }
 
 }
