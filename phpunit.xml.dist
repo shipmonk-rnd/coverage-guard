@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutChangesToGlobalState="true"
+    failOnRisky="true"
+    failOnWarning="true"
+    failOnPhpunitWarning="false"
+    cacheResultFile="cache/phpunit.result.cache"
+>
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <coverage>
+        <report>
+            <clover outputFile="cache/coverage/phpstorm/clover.xml"/>
+            <cobertura outputFile="cache/coverage/ci/cobertura.xml"/>
+            <html outputDirectory="cache/coverage/html"/>
+            <text outputFile="cache/coverage/coverage.txt"/>
+            <php outputFile="cache/coverage/coverage.cov"/>
+        </report>
+    </coverage>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+</phpunit>

@@ -1,0 +1,62 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use ShipMonk\CoverageGuard\ConsoleOutput;
+use ShipMonk\CoverageGuard\CoverageGuard;
+use ShipMonk\CoverageGuard\PhpSyntaxHighlighter;
+
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+
+foreach ($autoloadPaths as $autoloadPath) {
+    if (file_exists($autoloadPath)) {
+        require $autoloadPath;
+        break;
+    }
+}
+
+$output = new ConsoleOutput();
+$highlighter = new PhpSyntaxHighlighter();
+
+if ($argc < 3) {
+    $output->writeErrorLine('Usage: coverage-guard <changes.patch> <clover-coverage.xml>');
+    exit(1);
+}
+
+$patchFile = $argv[1];
+$coverageFile = $argv[2];
+
+if (!is_file($patchFile)) {
+    $output->writeErrorLine("Patch file not found: {$patchFile}");
+    exit(1);
+}
+
+if (!is_file($coverageFile)) {
+    $output->writeErrorLine("Coverage file not found: {$coverageFile}");
+    exit(1);
+}
+
+try {
+    $guard = new CoverageGuard();
+    $untestedBlocks = $guard->checkCoverage($patchFile, $coverageFile);
+
+    if (count($untestedBlocks) === 0) {
+        $output->writeLine('✅ All changed code blocks are covered by tests');
+        exit(0);
+    }
+
+    foreach ($untestedBlocks as $block) {
+        $output->writeLine("Untested {$block->type->name} block in file {$block->path}:");
+        $output->writeLine($highlighter->highlight($block->getBlockCode()));
+        $output->writeLine('');
+    }
+
+    $output->writeErrorLine('❌ Found ' . count($untestedBlocks) . ' untested code block(s)');
+    exit(1);
+
+} catch (Throwable $e) {
+    $output->writeErrorLine('⚠️ Error: ' . $e->getMessage());
+    exit(1);
+}
