@@ -19,59 +19,28 @@ use function count;
 use function extension_loaded;
 use function file_get_contents;
 use function get_debug_type;
-use function getcwd;
 use function is_array;
 use function is_int;
 use function libxml_clear_errors;
 use function libxml_get_last_error;
 use function libxml_use_internal_errors;
-use function realpath;
 use function simplexml_load_file;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function substr;
-use const DIRECTORY_SEPARATOR;
 
 final class CoverageGuard
 {
 
-    /**
-     * @var list<string>
-     */
-    private array $stripPaths;
-
     private Parser $phpParser;
 
-    private string $gitRoot;
+    private Config $config;
 
-    public function __construct(?string $gitRoot = null)
+    public function __construct(Config $config)
     {
-        $cwd = getcwd();
-
-        if ($cwd === false) {
-            throw new LogicException('Could not determine current working directory');
-        }
-
-        $realCwd = realpath($cwd);
-
-        if ($realCwd === false) {
-            throw new LogicException('Could not resolve current working directory path');
-        }
-
-        $this->gitRoot = $gitRoot ?? ($realCwd . DIRECTORY_SEPARATOR);
-        $this->stripPaths = [
-            $this->gitRoot,
-        ];
+        $this->config = $config;
         $this->phpParser = (new ParserFactory())->createForHostVersion();
-    }
-
-    /**
-     * @param list<string> $additionalStripPaths
-     */
-    public function setStripPaths(array $additionalStripPaths): void
-    {
-        $this->stripPaths = [...$this->stripPaths, ...$additionalStripPaths];
     }
 
     /**
@@ -144,8 +113,12 @@ final class CoverageGuard
         if (!str_ends_with($patchFile, '.patch')) {
             throw new LogicException("Unknown patch file format: {$patchFile}");
         }
-
+        $gitRoot = $this->config->getGitRoot();
         $patchContent = file_get_contents($patchFile);
+
+        if ($gitRoot === null) {
+            throw new LogicException('In order to process patch files, you need to be inside git repository folder, install git or use $config->setGitRoot(..).');
+        }
 
         if ($patchContent === false) {
             throw new LogicException("Failed to read patch file: {$patchFile}");
@@ -155,7 +128,7 @@ final class CoverageGuard
         $changes = [];
 
         foreach ($patch as $diff) {
-            $file = $this->normalizePath($this->gitRoot . substr($diff->to(), 2));
+            $file = $this->normalizePath($gitRoot . substr($diff->to(), 2));
             $changes[$file] = [];
 
             foreach ($diff->chunks() as $chunk) {
@@ -265,7 +238,7 @@ final class CoverageGuard
 
     private function normalizePath(string $filePath): string
     {
-        foreach ($this->stripPaths as $stripPath) {
+        foreach ($this->config->getStripPaths() as $stripPath) {
             if (str_starts_with($filePath, $stripPath)) {
                 return substr($filePath, strlen($stripPath));
             }

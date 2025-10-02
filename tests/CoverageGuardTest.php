@@ -4,7 +4,6 @@ namespace ShipMonk\CoverageGuard;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function getcwd;
 
 class CoverageGuardTest extends TestCase
 {
@@ -15,11 +14,10 @@ class CoverageGuardTest extends TestCase
     #[DataProvider('provideArgs')]
     public function testDetectsUntestedChangedMethod(array $args): void
     {
-        $cwd = getcwd();
-        self::assertNotFalse($cwd);
-
-        $guard = new CoverageGuard($cwd . '/');
-        $guard->setStripPaths([$cwd . '/']);
+        $config = new Config();
+        $config->setGitRoot(__DIR__ . '/../');
+        $config->addStripPath(__DIR__ . '/../'); // since we cannot have absolute paths in clover.xml fixture, we use this to align the paths
+        $guard = new CoverageGuard($config);
 
         $untestedBlocks = $guard->checkCoverage(...$args);
 

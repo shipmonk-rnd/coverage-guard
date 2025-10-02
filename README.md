@@ -35,6 +35,39 @@ git diff master...HEAD > changes.patch
 vendor/bin/coverage-guard clover.xml --patch changes.patch # Without config, reports only fully new methods with 0% line coverage
 ```
 
+The config file must return an instance of `ShipMonk\CoverageGuard\Config`. See [Configuration](#configuration) for more details.
+
+## Configuration
+
+Create a `coverage-guard.php` file in your project root to customize behavior:
+
+```php
+<?php
+
+use ShipMonk\CoverageGuard\Config;
+
+$config = new Config();
+
+// Strip prefix from absolute paths in coverage files
+// Handy if you want to reuse clover.xml from CI
+$config->addStripPath('/absolute/ci/prefix');
+
+// As git patch files are relative to the project root, you can specify the root directory here
+// It gets autodetected if cwd is beside /.git/ and if git binary is available
+$config->setGitRoot(__DIR__);
+
+return $config;
+```
+
+You can also use a custom config file by passing `--config config.php`.
+
+## Cli options
+
+- `--patch <file>` verify only changed code
+- `--config <file>` specify a custom config file
+
+Even `--option=value` syntax is supported.
+
 ## Contributing
 - Check your code by `composer check`
 - Autofix coding-style by `composer fix:cs`

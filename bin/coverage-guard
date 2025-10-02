@@ -3,6 +3,7 @@
 
 use ShipMonk\CoverageGuard\ConsoleOutput;
 use ShipMonk\CoverageGuard\CoverageGuard;
+use ShipMonk\CoverageGuard\Initializer;
 use ShipMonk\CoverageGuard\PhpSyntaxHighlighter;
 
 $autoloadPaths = [
@@ -17,35 +18,19 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
-$output = new ConsoleOutput();
-$highlighter = new PhpSyntaxHighlighter();
-
-$options = getopt('', ['patch:']);
-
-if ($argc < 2) {
-    $output->writeErrorLine('Usage: coverage-guard <clover-coverage.xml> [--patch <changes.patch>]');
-    exit(1);
-}
-
-$coverageFile = $argv[1];
-$patchFile = $options['patch'] ?? null;
-
-if (!is_file($coverageFile)) {
-    $output->writeErrorLine("Coverage file not found: {$coverageFile}");
-    exit(1);
-}
-
-if ($patchFile !== null && !is_file($patchFile)) {
-    $output->writeErrorLine("Patch file not found: {$patchFile}");
-    exit(1);
-}
-
 try {
-    $guard = new CoverageGuard();
-    $untestedBlocks = $guard->checkCoverage($coverageFile, $patchFile);
+    $cwd = getcwd() ? : throw new LogicException('Cannot determine current working directory');
+
+    $output = new ConsoleOutput();
+    $highlighter = new PhpSyntaxHighlighter();
+    $initializer = new Initializer();
+    $initResult = $initializer->initialize($cwd, $argv);
+
+    $guard = new CoverageGuard($initResult->config);
+    $untestedBlocks = $guard->checkCoverage($initResult->coverageFile, $initResult->patchFile);
 
     if (count($untestedBlocks) === 0) {
-        $message = $patchFile !== null
+        $message = $initResult->patchFile !== null
             ? '✅ All changed methods are covered by tests'
             : '✅ All methods are covered by tests';
         $output->writeLine($message);
@@ -62,6 +47,6 @@ try {
     exit(1);
 
 } catch (Throwable $e) {
-    $output->writeErrorLine('⚠️ Error: ' . $e->getMessage());
+    $output->writeErrorLine('⚠️  Error: ' . $e->getMessage());
     exit(1);
 }
