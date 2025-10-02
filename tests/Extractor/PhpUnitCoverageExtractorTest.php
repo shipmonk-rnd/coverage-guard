@@ -16,7 +16,7 @@ use const PHP_EOL;
 final class PhpUnitCoverageExtractorTest extends TestCase
 {
 
-    public function testThrowsExceptionForInvalidCovFile(): void
+    public function testValidCovFile(): void
     {
         $tmp = sys_get_temp_dir();
         $path = $tmp . '/coverage.cov';
