@@ -13,6 +13,8 @@ use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use SimpleXMLElement;
 use function array_combine;
+use function array_fill_keys;
+use function array_keys;
 use function count;
 use function extension_loaded;
 use function file_get_contents;
@@ -76,12 +78,14 @@ final class CoverageGuard
      * @return list<CodeBlock>
      */
     public function checkCoverage(
-        string $patchFile,
         string $coverageFile,
+        ?string $patchFile = null,
     ): array
     {
         $coveragePerFile = $this->getCoverage($coverageFile);
-        $changesPerFile = $this->getPatchChangedLines($patchFile);
+        $changesPerFile = $patchFile === null
+            ? array_fill_keys(array_keys($coveragePerFile), null)
+            : $this->getPatchChangedLines($patchFile);
 
         $untestedBlocks = [];
 
@@ -100,18 +104,18 @@ final class CoverageGuard
     }
 
     /**
-     * @param list<int> $linesChanged
+     * @param list<int>|null $linesChanged
      * @param array<int, int> $linesCoverage executable_line => hits
      * @return list<CodeBlock>
      */
     private function getUntestedChangedBlocks(
         string $file,
-        array $linesChanged,
+        ?array $linesChanged,
         array $linesCoverage,
     ): array
     {
         $nameResolver = new NameResolver();
-        $linesChangedMap = array_combine($linesChanged, $linesChanged);
+        $linesChangedMap = $linesChanged === null ? null : array_combine($linesChanged, $linesChanged);
         $extractor = new ExtractUntestedChangedBlocksVisitor($file, $linesChangedMap, $linesCoverage);
         $traverser = new NodeTraverser($nameResolver, $extractor);
 
@@ -129,7 +133,7 @@ final class CoverageGuard
 
         $traverser->traverse($ast);
 
-        return $extractor->getUntestedChangedBlocks();
+        return $extractor->getUntestedBlocks();
     }
 
     /**

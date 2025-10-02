@@ -20,30 +20,35 @@ foreach ($autoloadPaths as $autoloadPath) {
 $output = new ConsoleOutput();
 $highlighter = new PhpSyntaxHighlighter();
 
-if ($argc < 3) {
-    $output->writeErrorLine('Usage: coverage-guard <changes.patch> <clover-coverage.xml>');
+$options = getopt('', ['patch:']);
+
+if ($argc < 2) {
+    $output->writeErrorLine('Usage: coverage-guard <clover-coverage.xml> [--patch <changes.patch>]');
     exit(1);
 }
 
-$patchFile = $argv[1];
-$coverageFile = $argv[2];
-
-if (!is_file($patchFile)) {
-    $output->writeErrorLine("Patch file not found: {$patchFile}");
-    exit(1);
-}
+$coverageFile = $argv[1];
+$patchFile = $options['patch'] ?? null;
 
 if (!is_file($coverageFile)) {
     $output->writeErrorLine("Coverage file not found: {$coverageFile}");
     exit(1);
 }
 
+if ($patchFile !== null && !is_file($patchFile)) {
+    $output->writeErrorLine("Patch file not found: {$patchFile}");
+    exit(1);
+}
+
 try {
     $guard = new CoverageGuard();
-    $untestedBlocks = $guard->checkCoverage($patchFile, $coverageFile);
+    $untestedBlocks = $guard->checkCoverage($coverageFile, $patchFile);
 
     if (count($untestedBlocks) === 0) {
-        $output->writeLine('✅ All changed code blocks are covered by tests');
+        $message = $patchFile !== null
+            ? '✅ All changed methods are covered by tests'
+            : '✅ All methods are covered by tests';
+        $output->writeLine($message);
         exit(0);
     }
 

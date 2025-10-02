@@ -15,15 +15,15 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
     /**
      * @var list<CodeBlock>
      */
-    private array $untestedChangedBlocks = [];
+    private array $untestedBlocks = [];
 
     /**
-     * @param array<int, int> $linesChanged line => line
+     * @param array<int, int>|null $linesChanged line => line, null means scan all blocks
      * @param array<int, int> $linesCoverage executable_line => hits
      */
     public function __construct(
         private string $filePath,
-        private array $linesChanged,
+        private ?array $linesChanged,
         private array $linesCoverage,
     )
     {
@@ -40,9 +40,14 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
                 return null;
             }
 
-            $changedLines = array_filter($executableLines, function (int $line): bool {
-                return isset($this->linesChanged[$line]);
-            });
+            if ($this->linesChanged === null) {
+                $changedLines = $executableLines; // when patch is not provided, scan all lines
+            } else {
+                $changedLines = array_filter($executableLines, function (int $line): bool {
+                    return isset($this->linesChanged[$line]);
+                });
+            }
+
             if ($changedLines === []) {
                 return null;
             }
@@ -52,7 +57,7 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
             });
 
             if ($changedLines === $executableLines && count($testedLines) === 0) {
-                $this->untestedChangedBlocks[] = new CodeBlock(
+                $this->untestedBlocks[] = new CodeBlock(
                     CodeBlockType::ClassMethod,
                     $this->filePath,
                     $startLine,
@@ -89,9 +94,9 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
     /**
      * @return list<CodeBlock>
      */
-    public function getUntestedChangedBlocks(): array
+    public function getUntestedBlocks(): array
     {
-        return $this->untestedChangedBlocks;
+        return $this->untestedBlocks;
     }
 
 }
