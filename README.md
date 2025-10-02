@@ -20,7 +20,7 @@ composer require --dev shipmonk/coverage-guard
 
 ```sh
 vendor/bin/phpunit --coverage-clover clover.xml # Run tests with coverage
-vendor/bin/coverage-guard clover.xml # Without any configuration, reports longer methods with 0% line coverage
+vendor/bin/coverage-guard clover.xml # Without config, reports longer methods with 0% line coverage
 ```
 
 ### Supported coverage formats
@@ -32,7 +32,7 @@ vendor/bin/coverage-guard clover.xml # Without any configuration, reports longer
 Example:
 ```sh
 git diff master...HEAD > changes.patch
-vendor/bin/coverage-guard clover.xml --patch changes.patch
+vendor/bin/coverage-guard clover.xml --patch changes.patch # Without config, reports only fully new methods with 0% line coverage
 ```
 
 ## Contributing
