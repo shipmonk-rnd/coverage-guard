@@ -1,0 +1,21 @@
+<?php declare(strict_types = 1);
+
+namespace ShipMonk\CoverageGuard\Report;
+
+use ShipMonk\CoverageGuard\Rule\ReportedError;
+
+final class CoverageReport
+{
+
+    /**
+     * @param list<ReportedError> $reportedErrors
+     * @param list<string> $analysedFiles
+     */
+    public function __construct(
+        public readonly array $reportedErrors,
+        public readonly array $analysedFiles,
+    )
+    {
+    }
+
+}
