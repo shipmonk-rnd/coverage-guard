@@ -17,6 +17,7 @@ use function str_replace;
 use function strlen;
 use function substr;
 use function token_get_all;
+use const DIRECTORY_SEPARATOR;
 use const PHP_INT_MAX;
 use const STR_PAD_LEFT;
 use const T_ABSTRACT;
@@ -115,11 +116,17 @@ final class ErrorFormatter
     private const BG_COVERED = "\033[48;5;22m"; // Dark green background
     private const BG_UNCOVERED = "\033[48;5;52m"; // Dark red background
 
+    private readonly string $cwd;
+
+    private readonly Printer $printer;
+
     public function __construct(
-        private readonly string $cwd,
-        private readonly Printer $printer,
+        string $cwd,
+        Printer $printer,
     )
     {
+        $this->cwd = rtrim($cwd, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->printer = $printer;
     }
 
     public function formatReport(CoverageReport $report): int
