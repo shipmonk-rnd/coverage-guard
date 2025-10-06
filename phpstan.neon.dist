@@ -48,6 +48,11 @@ parameters:
             message: "#Call to method .* of internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
             path: src/Extractor/PhpUnitCoverageExtractor.php
 
+        # support even old sebastian/diff
+        -
+            message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
+            path: src/CoverageGuard.php
+
         -
             identifiers:
                 - classConstant.internalClass
