@@ -170,10 +170,6 @@ final class ErrorFormatter
     {
         $lines = $codeBlock->getLines();
 
-        if ($lines === []) {
-            return '';
-        }
-
         // Calculate common leading whitespace to strip
         $minIndent = $this->calculateMinIndent($lines);
 
@@ -209,7 +205,7 @@ final class ErrorFormatter
             $trimmedContent = substr($lineContent, $minIndent);
 
             // Highlight the code content
-            $highlightedContent = $this->highlightLine($trimmedContent, '');
+            $highlightedContent = $this->highlightLine($trimmedContent);
 
             // Combine all parts: line number + change indicator + content
             $output .= '│ ';
@@ -224,7 +220,6 @@ final class ErrorFormatter
 
     private function highlightLine(
         string $lineContent,
-        string $bgColor,
     ): string
     {
         if (!extension_loaded('tokenizer') || $this->printer->hasDisabledColors()) {
@@ -246,11 +241,11 @@ final class ErrorFormatter
                 [$tokenType, $tokenValue] = $token;
 
                 $output .= match (true) {
-                    $tokenType === T_COMMENT || $tokenType === T_DOC_COMMENT => self::COLOR_COMMENT . $bgColor . $tokenValue . self::COLOR_RESET . $bgColor,
-                    $tokenType === T_VARIABLE => self::COLOR_VARIABLE . $bgColor . $tokenValue . self::COLOR_RESET . $bgColor,
-                    $tokenType === T_CONSTANT_ENCAPSED_STRING => self::COLOR_STRING . $bgColor . $tokenValue . self::COLOR_RESET . $bgColor,
-                    $tokenType === T_LNUMBER => self::COLOR_NUMBER . $bgColor . $tokenValue . self::COLOR_RESET . $bgColor,
-                    $this->isKeyword($tokenType) => self::COLOR_KEYWORD . $bgColor . $tokenValue . self::COLOR_RESET . $bgColor,
+                    $tokenType === T_COMMENT || $tokenType === T_DOC_COMMENT => self::COLOR_COMMENT . $tokenValue . self::COLOR_RESET,
+                    $tokenType === T_VARIABLE => self::COLOR_VARIABLE . $tokenValue . self::COLOR_RESET,
+                    $tokenType === T_CONSTANT_ENCAPSED_STRING => self::COLOR_STRING . $tokenValue . self::COLOR_RESET,
+                    $tokenType === T_LNUMBER => self::COLOR_NUMBER . $tokenValue . self::COLOR_RESET,
+                    $this->isKeyword($tokenType) => self::COLOR_KEYWORD . $tokenValue . self::COLOR_RESET,
                     default => $tokenValue,
                 };
             } else {

@@ -28,7 +28,7 @@ abstract class CodeBlock
     }
 
     /**
-     * @return list<LineOfCode>
+     * @return non-empty-list<LineOfCode>
      */
     public function getLines(): array
     {
