@@ -32,7 +32,10 @@ class CoverageGuardTest extends TestCase
                 bool $patchMode,
             ): ?CoverageError
             {
-                if (!$codeBlock->isFullyUncovered()) {
+                if (
+                    $codeBlock->isFullyUncovered()
+                    && $codeBlock->isFullyChanged()
+                ) {
                     return CoverageError::message('Not 100% covered');
                 }
 
@@ -48,6 +51,7 @@ class CoverageGuardTest extends TestCase
         self::assertCount(1, $errors);
         self::assertSame('Not 100% covered', $errors[0]->error->getMessage());
         self::assertStringEndsWith('Sample.php', $errors[0]->codeBlock->getFilePath());
+        self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
     /**
@@ -55,7 +59,7 @@ class CoverageGuardTest extends TestCase
      */
     public static function provideArgs(): iterable
     {
-        // yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch']];
+        yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch']];
         yield 'without patch' => [[__DIR__ . '/fixtures/clover.xml']];
     }
 

@@ -55,7 +55,7 @@ final class CoverageGuard
         $patchMode = $patchFile !== null;
         $coveragePerFile = $this->getCoverage($coverageFile);
         $changesPerFile = $patchFile === null
-            ? array_fill_keys(array_keys($coveragePerFile), [])
+            ? array_fill_keys(array_keys($coveragePerFile), null)
             : $this->getPatchChangedLines($patchFile);
 
         $rules = $this->config->getRules();
@@ -68,7 +68,7 @@ final class CoverageGuard
         $analysedFiles = [];
         $reportedErrors = [];
 
-        foreach ($changesPerFile as $file => $changedLines) {
+        foreach ($changesPerFile as $file => $changedLinesOrNull) {
             if (!isset($coveragePerFile[$file])) {
                 continue;
             }
@@ -78,9 +78,10 @@ final class CoverageGuard
             }
 
             $analysedFiles[] = $file;
-            $fileCoverage = $coveragePerFile[$file];
+            $linesCoverage = $coveragePerFile[$file];
+            $linesChanged = $changedLinesOrNull ?? array_keys($linesCoverage);
 
-            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLines, $fileCoverage) as $reportedError) {
+            foreach ($this->getReportedErrors($rules, $patchMode, $file, $linesChanged, $linesCoverage) as $reportedError) {
                 $reportedErrors[] = $reportedError;
             }
         }
@@ -130,7 +131,7 @@ final class CoverageGuard
     private function getPatchChangedLines(string $patchFile): array
     {
         if (!str_ends_with($patchFile, '.patch')) {
-            throw new LogicException("Unknown patch file format: {$patchFile}");
+            throw new LogicException("Unknown patch file format: {$patchFile}, expecting .patch extension");
         }
         $gitRoot = $this->config->getGitRoot();
         $patchContent = file_get_contents($patchFile);
