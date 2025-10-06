@@ -14,6 +14,7 @@ final class CoverageReport
     public function __construct(
         public readonly array $reportedErrors,
         public readonly array $analysedFiles,
+        public readonly bool $patchMode,
     )
     {
     }

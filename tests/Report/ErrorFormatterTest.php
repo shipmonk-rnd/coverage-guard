@@ -43,7 +43,7 @@ class ErrorFormatterTest extends TestCase
             $codeBlock,
             CoverageError::message('Message'),
         );
-        $report = new CoverageReport([$reportedError], ['/tmp/test.php']);
+        $report = new CoverageReport([$reportedError], ['/tmp/test.php'], patchMode: true);
 
         $highlighter->formatReport($report);
         rewind($stream);

@@ -142,7 +142,7 @@ final class ErrorFormatter
         }
 
         foreach ($reportedErrors as $reportedError) {
-            $this->formatError($reportedError);
+            $this->formatError($reportedError, $report->patchMode);
         }
 
         $this->printer->printLine('❌ Found ' . count($reportedErrors) . " violations (in $analysedFilesCount analysed files)");
@@ -150,7 +150,10 @@ final class ErrorFormatter
         return 1;
     }
 
-    private function formatError(ReportedError $reportedError): void
+    private function formatError(
+        ReportedError $reportedError,
+        bool $patchMode,
+    ): void
     {
         $codeBlock = $reportedError->codeBlock;
         $coverageError = $reportedError->error;
@@ -162,7 +165,7 @@ final class ErrorFormatter
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine("│ {$coverageError->getMessage()}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
-        $this->printer->printLine($this->formatBlock($codeBlock));
+        $this->printer->printLine($this->formatBlock($codeBlock, $patchMode));
         $this->printer->printLine('└─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine('');
         $this->printer->printLine('');
@@ -173,7 +176,10 @@ final class ErrorFormatter
         return str_replace($this->cwd, '', $path);
     }
 
-    private function formatBlock(CodeBlock $codeBlock): string
+    private function formatBlock(
+        CodeBlock $codeBlock,
+        bool $patchMode,
+    ): string
     {
         $lines = $codeBlock->getLines();
 
@@ -200,7 +206,7 @@ final class ErrorFormatter
             }
 
             // Add change indicator
-            $changeIndicator = $isChanged ? '+' : ' ';
+            $changeIndicator = $patchMode && $isChanged ? '+' : ' ';
 
             // Coverage indicator (for plain text mode)
             $coverageIndicator = ' ';

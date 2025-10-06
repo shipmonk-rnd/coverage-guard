@@ -20,8 +20,12 @@ use ShipMonk\CoverageGuard\Rule\ReportedError;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
+use function count;
+use function file;
 use function file_get_contents;
+use function implode;
 use function is_file;
+use function range;
 use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
@@ -60,7 +64,7 @@ final class CoverageGuard
 
         $rules = $this->config->getRules();
         if ($rules === []) {
-            $this->printer->printWarning('No rules configured, will report only long fully untested ' . ($patchMode ? 'and fully changed' : '') . ' methods!');
+            $this->printer->printWarning('No rules configured, will report only long fully untested ' . ($patchMode ? 'and fully changed' : '') . 'methods!');
 
             $rules[] = new DefaultCoverageRule();
         }
@@ -79,19 +83,18 @@ final class CoverageGuard
 
             $analysedFiles[] = $file;
             $linesCoverage = $coveragePerFile[$file];
-            $linesChanged = $changedLinesOrNull ?? array_keys($linesCoverage);
 
-            foreach ($this->getReportedErrors($rules, $patchMode, $file, $linesChanged, $linesCoverage) as $reportedError) {
+            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $linesCoverage) as $reportedError) {
                 $reportedErrors[] = $reportedError;
             }
         }
 
-        return new CoverageReport($reportedErrors, $analysedFiles);
+        return new CoverageReport($reportedErrors, $analysedFiles, $patchMode);
     }
 
     /**
      * @param list<CoverageRule> $rules
-     * @param list<int> $linesChanged
+     * @param list<int>|null $linesChanged
      * @param array<int, int> $linesCoverage executable_line => hits
      * @return list<ReportedError>
      */
@@ -99,22 +102,24 @@ final class CoverageGuard
         array $rules,
         bool $patchMode,
         string $file,
-        array $linesChanged,
+        ?array $linesChanged,
         array $linesCoverage,
     ): array
     {
-        $nameResolver = new NameResolver();
-        $linesChangedMap = array_combine($linesChanged, $linesChanged);
-        $extractor = new ExtractUntestedChangedBlocksVisitor($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
-        $traverser = new NodeTraverser($nameResolver, $extractor);
-
-        $code = file_get_contents($file);
-
-        if ($code === false) {
+        $codeLines = file($file);
+        if ($codeLines === false) {
             throw new LogicException("Failed to read file: {$file}");
         }
 
-        $ast = $this->phpParser->parse($code);
+        $nameResolver = new NameResolver();
+        $linesChangedMap = $linesChanged === null
+            ? array_combine(range(1, count($codeLines)), range(1, count($codeLines)))
+            : array_combine($linesChanged, $linesChanged);
+
+        $extractor = new ExtractUntestedChangedBlocksVisitor($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
+        $traverser = new NodeTraverser($nameResolver, $extractor);
+
+        $ast = $this->phpParser->parse(implode('', $codeLines));
 
         if ($ast === null) {
             throw new LogicException("Failed to parse PHP code in file {$file}");
