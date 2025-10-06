@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 
-class DefaultCoverageRuleTest extends TestCase
+final class DefaultCoverageRuleTest extends TestCase
 {
 
     public function testReturnsErrorWhenMethodIsFullyUncoveredFullyChangedAndHasMoreThan5ExecutableLines(): void

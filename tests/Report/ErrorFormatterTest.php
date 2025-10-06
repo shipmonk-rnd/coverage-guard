@@ -14,7 +14,7 @@ use function fopen;
 use function rewind;
 use function stream_get_contents;
 
-class ErrorFormatterTest extends TestCase
+final class ErrorFormatterTest extends TestCase
 {
 
     public function testHighlightWithColors(): void

@@ -5,7 +5,7 @@ namespace ShipMonk\CoverageGuard;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
-class InitializerTest extends TestCase
+final class InitializerTest extends TestCase
 {
 
     public function testInitializeWithCoverageFileOnly(): void

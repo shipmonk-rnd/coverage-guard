@@ -5,7 +5,7 @@ namespace ShipMonk\CoverageGuard;
 use PHPUnit\Framework\TestCase;
 use const DIRECTORY_SEPARATOR;
 
-class ConfigTest extends TestCase
+final class ConfigTest extends TestCase
 {
 
     public function testPaths(): void
