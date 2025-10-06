@@ -12,6 +12,7 @@ use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\ReportedError;
 use function array_combine;
+use function assert;
 use function count;
 use function file;
 use function range;
@@ -54,7 +55,8 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node): ?int
     {
         if ($node instanceof ClassLike && $node->name !== null) {
-            $this->currentClass = $node->name->toString();
+            assert($node->namespacedName !== null); // using NameResolver
+            $this->currentClass = $node->namespacedName->toString();
         }
 
         if ($node instanceof ClassMethod && $node->stmts !== null) {
