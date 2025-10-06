@@ -49,14 +49,16 @@ abstract class CodeBlock
             throw new LogicException('Minimal required percentage must be between 0 and 100');
         }
 
-        $coveredLines = 0;
-        $totalLines = count($this->getExecutableLines());
+        $executableLines = $this->getExecutableLines();
+        $totalLines = count($executableLines);
 
         if ($totalLines === 0) {
             return false;
         }
 
-        foreach ($this->getExecutableLines() as $line) {
+        $coveredLines = 0;
+
+        foreach ($executableLines as $line) {
             if ($line->isCovered()) {
                 $coveredLines++;
             }
@@ -68,18 +70,21 @@ abstract class CodeBlock
 
     public function getCoveragePercentage(): float
     {
-        $coveredLines = 0;
-        $totalLines = count($this->getExecutableLines());
+        $executableLines = $this->getExecutableLines();
+        $totalLines = count($executableLines);
 
         if ($totalLines === 0) {
             return 0;
         }
 
-        foreach ($this->getExecutableLines() as $line) {
+        $coveredLines = 0;
+
+        foreach ($executableLines as $line) {
             if ($line->isCovered()) {
                 $coveredLines++;
             }
         }
+
         return ($coveredLines / $totalLines) * 100;
     }
 
@@ -103,10 +108,16 @@ abstract class CodeBlock
             throw new LogicException('Minimal required percentage must be between 0 and 100');
         }
 
-        $changedLines = 0;
-        $totalLines = count($this->getExecutableLines());
+        $executableLines = $this->getExecutableLines();
+        $totalLines = count($executableLines);
 
-        foreach ($this->getExecutableLines() as $line) {
+        if ($totalLines === 0) {
+            return false;
+        }
+
+        $changedLines = 0;
+
+        foreach ($executableLines as $line) {
             if ($line->isChanged()) {
                 $changedLines++;
             }

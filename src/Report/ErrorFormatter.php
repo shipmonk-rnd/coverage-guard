@@ -137,7 +137,8 @@ final class ErrorFormatter
         $this->printer->printLine('');
 
         if (count($reportedErrors) === 0) {
-            $this->printer->printLine("✅ No violations found, analysed $analysedFilesCount files");
+            $this->printer->printLine("✅ No violations found (analysed $analysedFilesCount files)");
+            $this->printer->printLine('');
             return 0;
         }
 
@@ -146,6 +147,7 @@ final class ErrorFormatter
         }
 
         $this->printer->printLine('❌ Found ' . count($reportedErrors) . " violations (in $analysedFilesCount analysed files)");
+        $this->printer->printLine('');
 
         return 1;
     }
