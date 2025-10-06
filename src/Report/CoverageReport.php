@@ -2,8 +2,6 @@
 
 namespace ShipMonk\CoverageGuard\Report;
 
-use ShipMonk\CoverageGuard\Rule\ReportedError;
-
 final class CoverageReport
 {
 

@@ -5,7 +5,6 @@ namespace ShipMonk\CoverageGuard\Report;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Printer;
-use ShipMonk\CoverageGuard\Rule\ReportedError;
 use function count;
 use function extension_loaded;
 use function is_array;
