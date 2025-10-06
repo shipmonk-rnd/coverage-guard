@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
-use ShipMonk\CoverageGuard\ConsoleOutput;
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\Initializer;
-use ShipMonk\CoverageGuard\PhpSyntaxHighlighter;
+use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 
 $autoloadPaths = [
     __DIR__ . '/../vendor/autoload.php',
@@ -20,33 +20,22 @@ foreach ($autoloadPaths as $autoloadPath) {
 
 try {
     $cwd = getcwd() ? : throw new LogicException('Cannot determine current working directory');
+    $noColor = getenv('NO_COLOR') !== false;
 
-    $output = new ConsoleOutput();
-    $highlighter = new PhpSyntaxHighlighter();
+    $printer = new Printer(STDOUT, $noColor);
     $initializer = new Initializer();
     $initResult = $initializer->initialize($cwd, $argv);
 
-    $guard = new CoverageGuard($initResult->config);
-    $untestedBlocks = $guard->checkCoverage($initResult->coverageFile, $initResult->patchFile);
+    $formatter = new ErrorFormatter($cwd, $printer);
+    $guard = new CoverageGuard($initResult->config, $printer);
+    $coverageReport = $guard->checkCoverage($initResult->coverageFile, $initResult->patchFile);
 
-    if (count($untestedBlocks) === 0) {
-        $message = $initResult->patchFile !== null
-            ? '✅ All changed methods are covered by tests'
-            : '✅ All methods are covered by tests';
-        $output->writeLine($message);
-        exit(0);
-    }
+    $exitCode = $formatter->formatReport($coverageReport);
+    exit($exitCode);
 
-    foreach ($untestedBlocks as $block) {
-        $output->writeLine("Untested {$block->type->name} block in file {$block->path}:");
-        $output->writeLine($highlighter->highlight($block->getBlockCode()));
-        $output->writeLine('');
-    }
-
-    $output->writeErrorLine('❌ Found ' . count($untestedBlocks) . ' untested code block(s)');
-    exit(1);
 
 } catch (Throwable $e) {
-    $output->writeErrorLine('⚠️  Error: ' . $e->getMessage());
+    $printer->printLine('⚠️  Error: ' . $e->getMessage());
+    $printer->printLine($e->getTraceAsString());
     exit(1);
 }

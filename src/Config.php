@@ -3,10 +3,14 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function is_dir;
 use function realpath;
 use const DIRECTORY_SEPARATOR;
 
+/**
+ * @api
+ */
 final class Config
 {
 
@@ -16,6 +20,11 @@ final class Config
      * @var list<string>
      */
     private array $stripPaths = [];
+
+    /**
+     * @var list<CoverageRule>
+     */
+    private array $rules = [];
 
     public function __construct()
     {
@@ -41,6 +50,12 @@ final class Config
         return $this;
     }
 
+    public function addRule(CoverageRule $rule): self
+    {
+        $this->rules[] = $rule;
+        return $this;
+    }
+
     public function getGitRoot(): ?string
     {
         return $this->gitRoot;
@@ -52,6 +67,14 @@ final class Config
     public function getStripPaths(): array
     {
         return $this->stripPaths;
+    }
+
+    /**
+     * @return list<CoverageRule>
+     */
+    public function getRules(): array
+    {
+        return $this->rules;
     }
 
     private function realpath(string $path): string

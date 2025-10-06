@@ -24,7 +24,7 @@ class InitializerTest extends TestCase
         $initializer = new Initializer();
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <config.php>]');
+        $this->expectExceptionMessage('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
 
         $initializer->initialize(__DIR__, ['coverage-guard']);
     }

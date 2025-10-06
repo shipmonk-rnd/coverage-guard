@@ -4,6 +4,10 @@ namespace ShipMonk\CoverageGuard;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
+use ShipMonk\CoverageGuard\Rule\CoverageError;
+use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use function fopen;
 
 class CoverageGuardTest extends TestCase
 {
@@ -14,18 +18,40 @@ class CoverageGuardTest extends TestCase
     #[DataProvider('provideArgs')]
     public function testDetectsUntestedChangedMethod(array $args): void
     {
+        $stream = fopen('php://memory', 'rw');
+        self::assertNotFalse($stream);
+
+        $printer = new Printer($stream, noColor: false);
         $config = new Config();
         $config->setGitRoot(__DIR__ . '/../');
         $config->addStripPath(__DIR__ . '/../'); // since we cannot have absolute paths in clover.xml fixture, we use this to align the paths
-        $guard = new CoverageGuard($config);
+        $config->addRule(new class implements CoverageRule {
 
-        $untestedBlocks = $guard->checkCoverage(...$args);
+            public function inspect(
+                CodeBlock $codeBlock,
+                bool $patchMode,
+            ): ?CoverageError
+            {
+                if (
+                    $codeBlock->isFullyUncovered()
+                    && $codeBlock->isFullyChanged()
+                ) {
+                    return CoverageError::message('Not 100% covered');
+                }
 
-        self::assertCount(1, $untestedBlocks);
-        self::assertSame(CodeBlockType::ClassMethod, $untestedBlocks[0]->type);
-        self::assertStringEndsWith('Sample.php', $untestedBlocks[0]->path);
-        self::assertSame(13, $untestedBlocks[0]->startLine);
-        self::assertSame(16, $untestedBlocks[0]->endLine);
+                return null;
+            }
+
+        });
+        $guard = new CoverageGuard($config, $printer);
+
+        $report = $guard->checkCoverage(...$args);
+        $errors = $report->reportedErrors;
+
+        self::assertCount(1, $errors);
+        self::assertSame('Not 100% covered', $errors[0]->error->getMessage());
+        self::assertStringEndsWith('Sample.php', $errors[0]->codeBlock->getFilePath());
+        self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
     /**

@@ -13,10 +13,19 @@ use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
+use ShipMonk\CoverageGuard\Report\CoverageReport;
+use ShipMonk\CoverageGuard\Report\ReportedError;
+use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\DefaultCoverageRule;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
+use function count;
+use function file;
 use function file_get_contents;
+use function implode;
+use function is_file;
+use function range;
 use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
@@ -26,68 +35,91 @@ use function substr;
 final class CoverageGuard
 {
 
+    private Printer $printer;
+
     private Parser $phpParser;
 
     private Config $config;
 
-    public function __construct(Config $config)
+    public function __construct(
+        Config $config,
+        Printer $printer,
+    )
     {
+        $this->printer = $printer;
         $this->config = $config;
         $this->phpParser = (new ParserFactory())->createForHostVersion();
     }
 
-    /**
-     * @return list<CodeBlock>
-     */
     public function checkCoverage(
         string $coverageFile,
         ?string $patchFile = null,
-    ): array
+    ): CoverageReport
     {
+        $patchMode = $patchFile !== null;
         $coveragePerFile = $this->getCoverage($coverageFile);
         $changesPerFile = $patchFile === null
             ? array_fill_keys(array_keys($coveragePerFile), null)
             : $this->getPatchChangedLines($patchFile);
 
-        $untestedBlocks = [];
+        $rules = $this->config->getRules();
+        if ($rules === []) {
+            $this->printer->printWarning('No rules configured, will report only long fully untested ' . ($patchMode ? 'and fully changed' : '') . 'methods!');
 
-        foreach ($changesPerFile as $file => $changedLines) {
+            $rules[] = new DefaultCoverageRule();
+        }
+
+        $analysedFiles = [];
+        $reportedErrors = [];
+
+        foreach ($changesPerFile as $file => $changedLinesOrNull) {
             if (!isset($coveragePerFile[$file])) {
-                throw new LogicException("Coverage data for file {$file} not found");
+                continue;
             }
-            $fileCoverage = $coveragePerFile[$file];
 
-            foreach ($this->getUntestedChangedBlocks($file, $changedLines, $fileCoverage) as $untestedBlock) {
-                $untestedBlocks[] = $untestedBlock;
+            if (!is_file($file)) {
+                throw new LogicException("File '{$file}' present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
+            }
+
+            $analysedFiles[] = $file;
+            $linesCoverage = $coveragePerFile[$file];
+
+            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $linesCoverage) as $reportedError) {
+                $reportedErrors[] = $reportedError;
             }
         }
 
-        return $untestedBlocks;
+        return new CoverageReport($reportedErrors, $analysedFiles, $patchMode);
     }
 
     /**
+     * @param list<CoverageRule> $rules
      * @param list<int>|null $linesChanged
      * @param array<int, int> $linesCoverage executable_line => hits
-     * @return list<CodeBlock>
+     * @return list<ReportedError>
      */
-    private function getUntestedChangedBlocks(
+    private function getReportedErrors(
+        array $rules,
+        bool $patchMode,
         string $file,
         ?array $linesChanged,
         array $linesCoverage,
     ): array
     {
-        $nameResolver = new NameResolver();
-        $linesChangedMap = $linesChanged === null ? null : array_combine($linesChanged, $linesChanged);
-        $extractor = new ExtractUntestedChangedBlocksVisitor($file, $linesChangedMap, $linesCoverage);
-        $traverser = new NodeTraverser($nameResolver, $extractor);
-
-        $code = file_get_contents($file);
-
-        if ($code === false) {
+        $codeLines = file($file);
+        if ($codeLines === false) {
             throw new LogicException("Failed to read file: {$file}");
         }
 
-        $ast = $this->phpParser->parse($code);
+        $nameResolver = new NameResolver();
+        $linesChangedMap = $linesChanged === null
+            ? array_combine(range(1, count($codeLines)), range(1, count($codeLines)))
+            : array_combine($linesChanged, $linesChanged);
+
+        $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
+        $traverser = new NodeTraverser($nameResolver, $extractor);
+
+        $ast = $this->phpParser->parse(implode('', $codeLines));
 
         if ($ast === null) {
             throw new LogicException("Failed to parse PHP code in file {$file}");
@@ -95,7 +127,7 @@ final class CoverageGuard
 
         $traverser->traverse($ast);
 
-        return $extractor->getUntestedBlocks();
+        return $extractor->getReportedErrors();
     }
 
     /**
@@ -104,7 +136,7 @@ final class CoverageGuard
     private function getPatchChangedLines(string $patchFile): array
     {
         if (!str_ends_with($patchFile, '.patch')) {
-            throw new LogicException("Unknown patch file format: {$patchFile}");
+            throw new LogicException("Unknown patch file format: {$patchFile}, expecting .patch extension");
         }
         $gitRoot = $this->config->getGitRoot();
         $patchContent = file_get_contents($patchFile);

@@ -26,7 +26,7 @@ class Initializer
     ): InitializationResult
     {
         if (!isset($argv[1])) {
-            throw new LogicException('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <config.php>]');
+            throw new LogicException('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
         }
 
         $options = $this->parseOptions($argv, ['patch', 'config']);

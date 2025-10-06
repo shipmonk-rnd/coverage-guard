@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard;
+namespace ShipMonk\CoverageGuard\Hierarchy;
 
 enum CodeBlockType
 {
