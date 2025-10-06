@@ -5,9 +5,11 @@ includes:
     - ./vendor/phpstan/phpstan-phpunit/extension.neon
     - ./vendor/phpstan/phpstan-phpunit/rules.neon
     - ./vendor/shipmonk/phpstan-rules/rules.neon
+    - ./vendor/shipmonk/dead-code-detector/rules.neon
 
 parameters:
     paths:
+        - bin/coverage-guard
         - src
         - tests
     excludePaths:
@@ -34,6 +36,11 @@ parameters:
 
     editorUrl: null
     editorUrlTitle: '%%relFile%%:%%line%%'
+
+    shipmonkDeadCode:
+        usageExcluders:
+            tests:
+                enabled: true
 
     ignoreErrors:
         # allow calling internal methods from SebastianBergmann\CodeCoverage

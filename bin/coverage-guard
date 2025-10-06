@@ -18,11 +18,15 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
-try {
-    $cwd = getcwd() ? : throw new LogicException('Cannot determine current working directory');
-    $noColor = getenv('NO_COLOR') !== false;
+$cwd = getcwd();
+$noColor = getenv('NO_COLOR') !== false;
+$printer = new Printer(STDOUT, $noColor);
 
-    $printer = new Printer(STDOUT, $noColor);
+if ($cwd === false) {
+    throw new LogicException('Cannot determine current working directory via getcwd()');
+}
+
+try {
     $initializer = new Initializer();
     $initResult = $initializer->initialize($cwd, $argv);
 
@@ -33,8 +37,7 @@ try {
     $exitCode = $formatter->formatReport($coverageReport);
     exit($exitCode);
 
-
-} catch (Throwable $e) {
+} catch (Throwable $e) { // @phpstan-ignore catch.neverThrown
     $printer->printLine('⚠️  Error: ' . $e->getMessage());
     $printer->printLine($e->getTraceAsString());
     exit(1);
