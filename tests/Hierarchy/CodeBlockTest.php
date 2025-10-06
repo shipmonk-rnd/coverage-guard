@@ -5,7 +5,7 @@ namespace ShipMonk\CoverageGuard\Hierarchy;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
-class CodeBlockTest extends TestCase
+final class CodeBlockTest extends TestCase
 {
 
     public function testGetFilePath(): void

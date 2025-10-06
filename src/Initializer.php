@@ -14,7 +14,7 @@ use function strlen;
 use function substr;
 use function trim;
 
-class Initializer
+final class Initializer
 {
 
     /**

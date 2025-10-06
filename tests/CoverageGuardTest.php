@@ -9,7 +9,7 @@ use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function fopen;
 
-class CoverageGuardTest extends TestCase
+final class CoverageGuardTest extends TestCase
 {
 
     /**

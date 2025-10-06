@@ -7,7 +7,7 @@ use function escapeshellarg;
 use function exec;
 use function implode;
 
-class BinTest extends TestCase
+final class BinTest extends TestCase
 {
 
     public function testBinDetectsUntestedChangedMethod(): void

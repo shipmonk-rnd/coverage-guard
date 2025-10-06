@@ -2,7 +2,7 @@
 
 namespace ShipMonk\CoverageGuard;
 
-class InitializationResult
+final class InitializationResult
 {
 
     public function __construct(
