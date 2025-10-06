@@ -96,7 +96,7 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node): mixed
     {
         if ($node instanceof ClassLike && $node->name !== null) {
-            $this->currentClass = $node->name->toString();
+            $this->currentClass = null;
         }
 
         return null;

@@ -46,18 +46,22 @@ Create a `coverage-guard.php` file in your project root to customize behavior an
 <?php
 
 use ShipMonk\CoverageGuard\Config;
+use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
+use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
+use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\CoverageError;
 
 $config = new Config();
 
 // Your main specification of what must be covered
-$config->addRule(new class implements \ShipMonk\CoverageGuard\Rule\CoverageRule {
+$config->addRule(new class implements CoverageRule {
 
     public function inspect(
         CodeBlock $codeBlock,
         bool $patchMode, // when --patch was provided (thus only changed files and methods are analyzed)
     ): ?CoverageError
     {
-        if (!$codeBlock instanceof \ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock) {
+        if (!$codeBlock instanceof ClassMethodBlock) {
             return null;
         }
 
@@ -75,7 +79,7 @@ $config->addRule(new class implements \ShipMonk\CoverageGuard\Rule\CoverageRule 
 
             $error = "Method <white>$methodRef</white>$infix has only $coverage %% coverage.";
 
-            return \ShipMonk\CoverageGuard\Rule\CoverageError::message($error));
+            return CoverageError::message($error);
         }
 
         return null;

@@ -163,7 +163,7 @@ final class ErrorFormatter
         $relativePath = $this->relativizePath($codeBlock->getFilePath());
 
         $this->printer->printLine('┌─────────────────────────────────────────────────────────────────────────────────');
-        $this->printer->printLine("│ {$relativePath}::{$codeBlock->getStartLineNumber()}");
+        $this->printer->printLine("│ {$relativePath}:{$codeBlock->getStartLineNumber()}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine("│ {$coverageError->getMessage()}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
