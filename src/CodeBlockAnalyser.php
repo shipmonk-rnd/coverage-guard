@@ -17,7 +17,7 @@ use function count;
 use function file;
 use function range;
 
-final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
+final class CodeBlockAnalyser extends NodeVisitorAbstract
 {
 
     /**
@@ -113,7 +113,7 @@ final class ExtractUntestedChangedBlocksVisitor extends NodeVisitorAbstract
         $executableLines = [];
         foreach (range($startLine, $endLine) as $lineNumber) {
             if (!isset($this->linesContent[$lineNumber])) {
-                throw new LogicException("Line number #{$lineNumber} of file '{$this->filePath}' was expected to exist.");
+                throw new LogicException("Line number #{$lineNumber} of file '{$this->filePath}' is expected to exist.");
             }
 
             $executableLines[] = new LineOfCode(

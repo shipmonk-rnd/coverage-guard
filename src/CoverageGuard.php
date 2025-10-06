@@ -116,7 +116,7 @@ final class CoverageGuard
             ? array_combine(range(1, count($codeLines)), range(1, count($codeLines)))
             : array_combine($linesChanged, $linesChanged);
 
-        $extractor = new ExtractUntestedChangedBlocksVisitor($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
+        $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
         $traverser = new NodeTraverser($nameResolver, $extractor);
 
         $ast = $this->phpParser->parse(implode('', $codeLines));
