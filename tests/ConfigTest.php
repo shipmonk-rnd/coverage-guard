@@ -12,10 +12,10 @@ final class ConfigTest extends TestCase
     {
         $config = new Config();
         $config->setGitRoot(__DIR__);
-        $config->addStripPath(__DIR__);
+        $config->addCoveragePathMapping(__DIR__, __DIR__);
 
         self::assertSame(__DIR__ . DIRECTORY_SEPARATOR, $config->getGitRoot());
-        self::assertSame([__DIR__ . DIRECTORY_SEPARATOR], $config->getStripPaths());
+        self::assertSame([__DIR__ => __DIR__], $config->getCoveragePathMapping());
     }
 
 }

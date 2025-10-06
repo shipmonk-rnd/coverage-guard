@@ -88,9 +88,9 @@ $config->addRule(new class implements CoverageRule {
 
 });
 
-// Strip prefix from absolute paths in coverage files
-// Handy if you want to reuse clover.xml from CI
-$config->addStripPath('/absolute/ci/prefix');
+// Replace prefix of absolute paths in coverage files
+// Handy if you want to reuse clover.xml generated in CI
+$config->addCoveragePathMapping('/absolute/ci/prefix', __DIR__);
 
 // As filepaths in git patches are relative to the project root, you can specify the root directory here
 // It gets autodetected if cwd is beside /.git/ or if git binary is available

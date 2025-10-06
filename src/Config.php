@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard;
 
 use LogicException;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use function file_exists;
 use function is_dir;
 use function realpath;
 use const DIRECTORY_SEPARATOR;
@@ -17,9 +18,9 @@ final class Config
     private ?string $gitRoot = null;
 
     /**
-     * @var list<string>
+     * @var array<string, string>
      */
-    private array $stripPaths = [];
+    private array $coveragePathMapping = [];
 
     /**
      * @var list<CoverageRule>
@@ -40,13 +41,19 @@ final class Config
         return $this;
     }
 
-    public function addStripPath(string $stripPath): self
+    public function addCoveragePathMapping(
+        string $originalPathInCoverageFile,
+        string $existingPathToUseInstead,
+    ): self
     {
-        if (!is_dir($stripPath)) {
-            throw new LogicException("Provided strip path '$stripPath' is not a directory");
+        if (!file_exists($existingPathToUseInstead)) {
+            throw new LogicException("Provided new path '$existingPathToUseInstead' does not exist");
+        }
+        if (!is_dir($existingPathToUseInstead)) {
+            throw new LogicException("Provided new path '$existingPathToUseInstead' is not a directory");
         }
 
-        $this->stripPaths[] = $this->realpath($stripPath) . DIRECTORY_SEPARATOR;
+        $this->coveragePathMapping[$originalPathInCoverageFile] = $existingPathToUseInstead;
         return $this;
     }
 
@@ -62,11 +69,11 @@ final class Config
     }
 
     /**
-     * @return list<string>
+     * @return array<string, string>
      */
-    public function getStripPaths(): array
+    public function getCoveragePathMapping(): array
     {
-        return $this->stripPaths;
+        return $this->coveragePathMapping;
     }
 
     /**

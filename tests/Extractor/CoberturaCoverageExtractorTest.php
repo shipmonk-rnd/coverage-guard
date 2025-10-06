@@ -26,15 +26,6 @@ final class CoberturaCoverageExtractorTest extends TestCase
         ], $fileCoverage);
     }
 
-    public function testStripsPathsFromFilePaths(): void
-    {
-        $extractor = new CoberturaCoverageExtractor(new XmlLoader(), ['tests/fixtures/']);
-        $coverage = $extractor->getCoverage(__DIR__ . '/../fixtures/cobertura.xml');
-
-        self::assertArrayHasKey('Sample.php', $coverage);
-        self::assertArrayNotHasKey('tests/fixtures/Sample.php', $coverage);
-    }
-
     public function testThrowsExceptionForInvalidXml(): void
     {
         $extractor = new CoberturaCoverageExtractor(new XmlLoader());

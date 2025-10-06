@@ -7,7 +7,6 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 
 $config = new Config();
 $config->setGitRoot(__DIR__ . '/../..');
-$config->addStripPath(__DIR__ . '/../../');
 $config->addRule(new class implements CoverageRule {
 
     public function inspect(CodeBlock $codeBlock, bool $patchMode,): ?CoverageError
