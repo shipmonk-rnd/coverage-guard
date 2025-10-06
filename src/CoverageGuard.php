@@ -26,6 +26,7 @@ use function file_get_contents;
 use function implode;
 use function is_file;
 use function range;
+use function realpath;
 use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
@@ -75,10 +76,6 @@ final class CoverageGuard
         foreach ($changesPerFile as $file => $changedLinesOrNull) {
             if (!isset($coveragePerFile[$file])) {
                 continue;
-            }
-
-            if (!is_file($file)) {
-                throw new LogicException("File '{$file}' present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
             }
 
             $analysedFiles[] = $file;
@@ -153,15 +150,21 @@ final class CoverageGuard
         $changes = [];
 
         foreach ($patch as $diff) {
-            $file = $this->normalizePath($gitRoot . substr($diff->to(), 2));
-            $changes[$file] = [];
+            $absolutePath = $gitRoot . substr($diff->to(), 2);
+            if (!is_file($absolutePath)) {
+                throw new LogicException("File '{$absolutePath}' present in patch file '{$patchFile}' was not found. Is the patch up-to-date?");
+            }
+
+            $realPath = $this->realpath($absolutePath);
+
+            $changes[$realPath] = [];
 
             foreach ($diff->chunks() as $chunk) {
                 $lineNumber = $chunk->end();
 
                 foreach ($chunk->lines() as $line) {
                     if ($line->type() === Line::ADDED) {
-                        $changes[$file][] = $lineNumber;
+                        $changes[$realPath][] = $lineNumber;
                     }
 
                     if ($line->type() !== Line::REMOVED) {
@@ -179,13 +182,29 @@ final class CoverageGuard
      */
     private function getCoverage(string $coverageFile): array
     {
-        return $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+        $originalCoverageData = $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+        $remappedFilesData = [];
+
+        foreach ($originalCoverageData as $filePath => $data) {
+            $newFilePath = $this->mapCoverageFilePath($filePath);
+
+            if (!is_file($newFilePath)) {
+                $infix = $newFilePath === $filePath ? '' : " (mapped from {$filePath})";
+                throw new LogicException("File '$newFilePath'$infix present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
+            }
+
+            $realPath = $this->realpath($newFilePath);
+
+            $remappedFilesData[$realPath] = $data;
+        }
+
+        return $remappedFilesData;
     }
 
     private function createExtractor(string $coverageFile): CoverageExtractor
     {
         if (str_ends_with($coverageFile, '.cov')) {
-            return new PhpUnitCoverageExtractor($this->config->getStripPaths());
+            return new PhpUnitCoverageExtractor();
         }
 
         if (str_ends_with($coverageFile, '.xml')) {
@@ -207,21 +226,30 @@ final class CoverageGuard
         }
 
         if (str_contains($content, 'cobertura')) {
-            return new CoberturaCoverageExtractor($xmlLoader, $this->config->getStripPaths());
+            return new CoberturaCoverageExtractor($xmlLoader);
         }
 
-        return new CloverCoverageExtractor($xmlLoader, $this->config->getStripPaths());
+        return new CloverCoverageExtractor($xmlLoader);
     }
 
-    private function normalizePath(string $filePath): string
+    private function mapCoverageFilePath(string $filePath): string
     {
-        foreach ($this->config->getStripPaths() as $stripPath) {
-            if (str_starts_with($filePath, $stripPath)) {
-                return substr($filePath, strlen($stripPath));
+        foreach ($this->config->getCoveragePathMapping() as $oldPath => $newPath) {
+            if (str_starts_with($filePath, $oldPath)) {
+                return $newPath . substr($filePath, strlen($oldPath));
             }
         }
 
         return $filePath;
+    }
+
+    private function realpath(string $path): string
+    {
+        $realpath = realpath($path);
+        if ($realpath === false) {
+            throw new LogicException("Could not realpath '$path'");
+        }
+        return $realpath;
     }
 
 }

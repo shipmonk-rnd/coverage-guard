@@ -8,22 +8,9 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use function count;
 use function get_debug_type;
 use function is_array;
-use function is_int;
-use function str_starts_with;
-use function strlen;
-use function substr;
 
 final class PhpUnitCoverageExtractor implements CoverageExtractor
 {
-
-    /**
-     * @param list<string> $stripPaths
-     */
-    public function __construct(
-        private array $stripPaths = [],
-    )
-    {
-    }
 
     /**
      * @return array<string, array<int, int>> file_path => [executable_line => hits]
@@ -47,32 +34,19 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
 
         foreach ($lineCoverage as $filePath => $fileCoverage) {
             if (!is_array($fileCoverage)) {
-                continue;
+                throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array under '{$filePath}' key, got " . get_debug_type($fileCoverage));
             }
 
-            $normalizedPath = $this->normalizePath((string) $filePath);
-
             foreach ($fileCoverage as $lineNumber => $tests) {
-                if (!is_int($lineNumber) || !is_array($tests)) {
-                    continue;
+                if (!is_array($tests)) {
+                    throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array under {$filePath} and #$lineNumber, got " . get_debug_type($tests));
                 }
 
-                $result[$normalizedPath][$lineNumber] = count($tests);
+                $result[(string) $filePath][(int) $lineNumber] = count($tests);
             }
         }
 
         return $result;
-    }
-
-    private function normalizePath(string $filePath): string
-    {
-        foreach ($this->stripPaths as $stripPath) {
-            if (str_starts_with($filePath, $stripPath)) {
-                return substr($filePath, strlen($stripPath));
-            }
-        }
-
-        return $filePath;
     }
 
 }

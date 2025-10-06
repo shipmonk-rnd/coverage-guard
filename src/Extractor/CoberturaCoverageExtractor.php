@@ -5,19 +5,13 @@ namespace ShipMonk\CoverageGuard\Extractor;
 use ShipMonk\CoverageGuard\XmlLoader;
 use SimpleXMLElement;
 use function str_starts_with;
-use function strlen;
-use function substr;
 use const DIRECTORY_SEPARATOR;
 
 final class CoberturaCoverageExtractor implements CoverageExtractor
 {
 
-    /**
-     * @param list<string> $stripPaths
-     */
     public function __construct(
         private XmlLoader $xmlLoader,
-        private array $stripPaths = [],
     )
     {
     }
@@ -42,10 +36,9 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
 
             // Combine source path with filename to get full path
             $filePath = $this->resolveFilePath($source, $filename);
-            $normalizedPath = $this->normalizePath($filePath);
 
-            if (!isset($coverage[$normalizedPath])) {
-                $coverage[$normalizedPath] = [];
+            if (!isset($coverage[$filePath])) {
+                $coverage[$filePath] = [];
             }
 
             if (!isset($classNode->lines->line)) {
@@ -55,7 +48,7 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             foreach ($classNode->lines->line as $lineNode) {
                 $lineNumber = (int) $lineNode['number'];
                 $hitCount = (int) $lineNode['hits'];
-                $coverage[$normalizedPath][$lineNumber] = $hitCount;
+                $coverage[$filePath][$lineNumber] = $hitCount;
             }
         }
 
@@ -89,17 +82,6 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
         }
 
         return $filename;
-    }
-
-    private function normalizePath(string $filePath): string
-    {
-        foreach ($this->stripPaths as $stripPath) {
-            if (str_starts_with($filePath, $stripPath)) {
-                return substr($filePath, strlen($stripPath));
-            }
-        }
-
-        return $filePath;
     }
 
 }

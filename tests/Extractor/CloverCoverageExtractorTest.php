@@ -28,16 +28,6 @@ final class CloverCoverageExtractorTest extends TestCase
         ], $fileCoverage);
     }
 
-    #[DataProvider('provideCoverageFiles')]
-    public function testStripsPathsFromFilePaths(string $filePath): void
-    {
-        $extractor = new CloverCoverageExtractor(new XmlLoader(), ['tests/fixtures/']);
-        $coverage = $extractor->getCoverage($filePath);
-
-        self::assertArrayHasKey('Sample.php', $coverage);
-        self::assertArrayNotHasKey('tests/fixtures/Sample.php', $coverage);
-    }
-
     public function testThrowsExceptionForInvalidXml(): void
     {
         $extractor = new CloverCoverageExtractor(new XmlLoader());

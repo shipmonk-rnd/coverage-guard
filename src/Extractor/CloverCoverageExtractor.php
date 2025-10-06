@@ -3,19 +3,12 @@
 namespace ShipMonk\CoverageGuard\Extractor;
 
 use ShipMonk\CoverageGuard\XmlLoader;
-use function str_starts_with;
-use function strlen;
-use function substr;
 
 final class CloverCoverageExtractor implements CoverageExtractor
 {
 
-    /**
-     * @param list<string> $stripPaths
-     */
     public function __construct(
         private XmlLoader $xmlLoader,
-        private array $stripPaths = [],
     )
     {
     }
@@ -35,7 +28,7 @@ final class CloverCoverageExtractor implements CoverageExtractor
         }
 
         foreach ($fileNodes as $fileNode) {
-            $filePath = $this->normalizePath((string) $fileNode['name']);
+            $filePath = (string) $fileNode['name'];
             $coverage[$filePath] = [];
 
             if (!isset($fileNode->line)) {
@@ -50,17 +43,6 @@ final class CloverCoverageExtractor implements CoverageExtractor
         }
 
         return $coverage;
-    }
-
-    private function normalizePath(string $filePath): string
-    {
-        foreach ($this->stripPaths as $stripPath) {
-            if (str_starts_with($filePath, $stripPath)) {
-                return substr($filePath, strlen($stripPath));
-            }
-        }
-
-        return $filePath;
     }
 
 }

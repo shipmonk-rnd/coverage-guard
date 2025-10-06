@@ -14,9 +14,13 @@ final class CoverageGuardTest extends TestCase
 
     /**
      * @param list<string> $args
+     * @param (callable(Config): void)|null $adjustConfig
      */
     #[DataProvider('provideArgs')]
-    public function testDetectsUntestedChangedMethod(array $args): void
+    public function testDetectsUntestedChangedMethod(
+        array $args,
+        ?callable $adjustConfig = null,
+    ): void
     {
         $stream = fopen('php://memory', 'rw');
         self::assertNotFalse($stream);
@@ -24,7 +28,6 @@ final class CoverageGuardTest extends TestCase
         $printer = new Printer($stream, noColor: false);
         $config = new Config();
         $config->setGitRoot(__DIR__ . '/../');
-        $config->addStripPath(__DIR__ . '/../'); // since we cannot have absolute paths in clover.xml fixture, we use this to align the paths
         $config->addRule(new class implements CoverageRule {
 
             public function inspect(
@@ -43,6 +46,11 @@ final class CoverageGuardTest extends TestCase
             }
 
         });
+
+        if ($adjustConfig !== null) {
+            $adjustConfig($config);
+        }
+
         $guard = new CoverageGuard($config, $printer);
 
         $report = $guard->checkCoverage(...$args);
@@ -61,6 +69,11 @@ final class CoverageGuardTest extends TestCase
     {
         yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch']];
         yield 'without patch' => [[__DIR__ . '/fixtures/clover.xml']];
+
+        yield 'with path mapping' => [
+        [__DIR__ . '/fixtures/clover_with_absolute_paths.xml'], static function (Config $config): void {
+            $config->addCoveragePathMapping('/some/ci/path/root', __DIR__ . '/..');
+        }];
     }
 
 }
