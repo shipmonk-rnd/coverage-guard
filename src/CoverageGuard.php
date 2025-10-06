@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard;
 
+use Composer\InstalledVersions;
 use LogicException;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -25,6 +26,7 @@ use function file;
 use function file_get_contents;
 use function implode;
 use function is_file;
+use function method_exists;
 use function range;
 use function realpath;
 use function str_contains;
@@ -135,6 +137,11 @@ final class CoverageGuard
         if (!str_ends_with($patchFile, '.patch')) {
             throw new LogicException("Unknown patch file format: {$patchFile}, expecting .patch extension");
         }
+
+        if (!InstalledVersions::isInstalled('sebastian/diff')) {
+            throw new LogicException('In order to use --patch mode, you need to install sebastian/diff');
+        }
+
         $gitRoot = $this->config->getGitRoot();
         $patchContent = file_get_contents($patchFile);
 
@@ -150,7 +157,9 @@ final class CoverageGuard
         $changes = [];
 
         foreach ($patch as $diff) {
-            $absolutePath = $gitRoot . substr($diff->to(), 2);
+            $diffTo = method_exists($diff, 'to') ? $diff->to() : $diff->getTo();
+            $absolutePath = $gitRoot . substr($diffTo, 2);
+
             if (!is_file($absolutePath)) {
                 throw new LogicException("File '{$absolutePath}' present in patch file '{$patchFile}' was not found. Is the patch up-to-date?");
             }
@@ -159,15 +168,18 @@ final class CoverageGuard
 
             $changes[$realPath] = [];
 
-            foreach ($diff->chunks() as $chunk) {
-                $lineNumber = $chunk->end();
+            $diffChunks = method_exists($diff, 'chunks') ? $diff->chunks() : $diff->getChunks();
+            foreach ($diffChunks as $chunk) {
+                $lineNumber = method_exists($chunk, 'end') ? $chunk->end() : $chunk->getEnd();
+                $chunkLines = method_exists($chunk, 'lines') ? $chunk->lines() : $chunk->getLines();
 
-                foreach ($chunk->lines() as $line) {
-                    if ($line->type() === Line::ADDED) {
+                foreach ($chunkLines as $line) {
+                    $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
+                    if ($lineType === Line::ADDED) {
                         $changes[$realPath][] = $lineNumber;
                     }
 
-                    if ($line->type() !== Line::REMOVED) {
+                    if ($lineType !== Line::REMOVED) {
                         $lineNumber++;
                     }
                 }
