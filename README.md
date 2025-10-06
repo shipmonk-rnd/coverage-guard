@@ -88,7 +88,7 @@ $config->addRule(new class implements CoverageRule {
 
 });
 
-// Replace prefix from absolute paths in coverage files
+// Replace prefix of absolute paths in coverage files
 // Handy if you want to reuse clover.xml generated in CI
 $config->addCoveragePathMapping('/absolute/ci/prefix', __DIR__);
 
