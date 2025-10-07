@@ -120,7 +120,9 @@ final class CoverageGuard
             : array_combine($linesChanged, $linesChanged);
 
         $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
-        $traverser = new NodeTraverser($nameResolver, $extractor);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($nameResolver);
+        $traverser->addVisitor($extractor);
 
         $ast = $this->phpParser->parse(implode('', $codeLines));
 
