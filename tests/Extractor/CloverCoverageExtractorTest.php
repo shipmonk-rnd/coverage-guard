@@ -11,9 +11,6 @@ use ShipMonk\CoverageGuard\XmlLoader;
 final class CloverCoverageExtractorTest extends TestCase
 {
 
-    /**
-     * @throws ErrorException
-     */
     #[DataProvider('provideCoverageFiles')]
     public function testExtractsCoverageFromCloverXml(string $filePath): void
     {
@@ -31,9 +28,6 @@ final class CloverCoverageExtractorTest extends TestCase
         ], $fileCoverage);
     }
 
-    /**
-     * @throws ErrorException
-     */
     public function testThrowsExceptionForInvalidXml(): void
     {
         $extractor = new CloverCoverageExtractor(new XmlLoader());

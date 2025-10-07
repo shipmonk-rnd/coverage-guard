@@ -10,9 +10,6 @@ use ShipMonk\CoverageGuard\XmlLoader;
 final class CoberturaCoverageExtractorTest extends TestCase
 {
 
-    /**
-     * @throws ErrorException
-     */
     public function testExtractsCoverageFromCoberturaXml(): void
     {
         $extractor = new CoberturaCoverageExtractor(new XmlLoader());
@@ -29,9 +26,6 @@ final class CoberturaCoverageExtractorTest extends TestCase
         ], $fileCoverage);
     }
 
-    /**
-     * @throws ErrorException
-     */
     public function testThrowsExceptionForInvalidXml(): void
     {
         $extractor = new CoberturaCoverageExtractor(new XmlLoader());

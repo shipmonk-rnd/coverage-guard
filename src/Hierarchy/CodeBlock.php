@@ -2,7 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use ShipMonk\CoverageGuard\Exception\ErrorException;
+use LogicException;
 use function array_filter;
 use function count;
 
@@ -42,13 +42,11 @@ abstract class CodeBlock
 
     /**
      * @param int $requiredPercentage 0-100
-     *
-     * @throws ErrorException
      */
     public function isCoveredAtLeastByPercent(int $requiredPercentage): bool
     {
         if ($requiredPercentage < 0 || $requiredPercentage > 100) {
-            throw new ErrorException('Minimal required percentage must be between 0 and 100');
+            throw new LogicException('Minimal required percentage must be between 0 and 100');
         }
 
         $executableLines = $this->getExecutableLines();
@@ -103,13 +101,11 @@ abstract class CodeBlock
 
     /**
      * @param int $requiredPercentage 0-100
-     *
-     * @throws ErrorException
      */
     public function isChangedAtLeastByPercent(int $requiredPercentage): bool
     {
         if ($requiredPercentage < 0 || $requiredPercentage > 100) {
-            throw new ErrorException('Minimal required percentage must be between 0 and 100');
+            throw new LogicException('Minimal required percentage must be between 0 and 100');
         }
 
         $executableLines = $this->getExecutableLines();
