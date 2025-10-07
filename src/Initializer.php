@@ -2,7 +2,7 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use LogicException;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function count;
 use function exec;
 use function function_exists;
@@ -19,6 +19,8 @@ final class Initializer
 
     /**
      * @param list<string> $argv
+     *
+     * @throws ErrorException
      */
     public function initialize(
         string $cwd,
@@ -26,7 +28,7 @@ final class Initializer
     ): InitializationResult
     {
         if (!isset($argv[1])) {
-            throw new LogicException('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
+            throw new ErrorException('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
         }
 
         $options = $this->parseOptions($argv, ['patch', 'config']);
@@ -35,19 +37,25 @@ final class Initializer
         $configFilePath = $options['config'] ?? null;
 
         if (!is_file($coverageFile)) {
-            throw new LogicException("Coverage file not found: {$coverageFile}");
+            throw new ErrorException("Coverage file not found: {$coverageFile}");
         }
 
-        if ($patchFile !== null && !is_file($patchFile)) {
-            throw new LogicException("Patch file not found: {$patchFile}");
+        if ($patchFile !== null) {
+            if (!is_file($patchFile)) {
+                throw new ErrorException("Patch file not found: {$patchFile}");
+            }
+
+            if (!str_ends_with($patchFile, '.patch')) {
+                throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch extension");
+            }
         }
 
         if ($configFilePath !== null) {
             if (!is_file($configFilePath)) {
-                throw new LogicException("Provided config file not found: '{$configFilePath}'");
+                throw new ErrorException("Provided config file not found: '{$configFilePath}'");
             }
             if (!str_ends_with($configFilePath, '.php')) {
-                throw new LogicException("Provided config file must have php extension: '{$configFilePath}'");
+                throw new ErrorException("Provided config file must have php extension: '{$configFilePath}'");
             }
         } else {
             $configFilePath = $cwd . '/coverage-guard.php';
@@ -72,6 +80,8 @@ final class Initializer
      * @param list<string> $argv
      * @param list<string> $optionNames
      * @return array<string, string|null>
+     *
+     * @throws ErrorException
      */
     private function parseOptions(
         array $argv,
@@ -104,7 +114,7 @@ final class Initializer
             foreach ($optionNames as $optionName) {
                 if ($current === '--' . $optionName) {
                     if ($next === null) {
-                        throw new LogicException("Option --{$optionName} requires a value");
+                        throw new ErrorException("Option --{$optionName} requires a value");
                     }
                     $options[$optionName] = $next;
                     $i++;
@@ -114,10 +124,10 @@ final class Initializer
 
             // If we reach here, it's an unknown option or argument
             if (str_starts_with($current, '-')) {
-                throw new LogicException("Unknown option: {$current}");
+                throw new ErrorException("Unknown option: {$current}");
             }
 
-            throw new LogicException("Unknown argument: {$current}");
+            throw new ErrorException("Unknown argument: {$current}");
         }
 
         return $options;
@@ -149,6 +159,9 @@ final class Initializer
         return null;
     }
 
+    /**
+     * @throws ErrorException
+     */
     private function loadConfig(string $configFile): Config
     {
         $loadedConfig = static function () use ($configFile): mixed {
@@ -158,7 +171,7 @@ final class Initializer
         $result = $loadedConfig();
 
         if (!$result instanceof Config) {
-            throw new LogicException("Config file '$configFile' must return an instance of " . Config::class);
+            throw new ErrorException("Config file '$configFile' must return an instance of " . Config::class);
         }
 
         return $result;

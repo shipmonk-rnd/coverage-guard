@@ -10,6 +10,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
@@ -54,6 +55,9 @@ final class CoverageGuard
         $this->phpParser = (new ParserFactory())->createForHostVersion();
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function checkCoverage(
         string $coverageFile,
         ?string $patchFile = null,
@@ -131,26 +135,24 @@ final class CoverageGuard
 
     /**
      * @return array<string, list<int>>
+     *
+     * @throws ErrorException
      */
     private function getPatchChangedLines(string $patchFile): array
     {
-        if (!str_ends_with($patchFile, '.patch')) {
-            throw new LogicException("Unknown patch file format: {$patchFile}, expecting .patch extension");
-        }
-
         if (!InstalledVersions::isInstalled('sebastian/diff')) {
-            throw new LogicException('In order to use --patch mode, you need to install sebastian/diff');
+            throw new ErrorException('In order to use --patch mode, you need to install sebastian/diff');
         }
 
         $gitRoot = $this->config->getGitRoot();
         $patchContent = file_get_contents($patchFile);
 
         if ($gitRoot === null) {
-            throw new LogicException('In order to process patch files, you need to be inside git repository folder, install git or use $config->setGitRoot(..).');
+            throw new ErrorException('In order to process patch files, you need to be inside git repository folder, install git or use $config->setGitRoot(..).');
         }
 
         if ($patchContent === false) {
-            throw new LogicException("Failed to read patch file: {$patchFile}");
+            throw new ErrorException("Failed to read patch file: {$patchFile}");
         }
 
         $patch = (new DiffParser())->parse($patchContent);
@@ -161,7 +163,7 @@ final class CoverageGuard
             $absolutePath = $gitRoot . substr($diffTo, 2);
 
             if (!is_file($absolutePath)) {
-                throw new LogicException("File '{$absolutePath}' present in patch file '{$patchFile}' was not found. Is the patch up-to-date?");
+                throw new ErrorException("File '{$absolutePath}' present in patch file '{$patchFile}' was not found. Is the patch up-to-date?");
             }
 
             $realPath = $this->realpath($absolutePath);
@@ -191,6 +193,8 @@ final class CoverageGuard
 
     /**
      * @return array<string, array<int, int>> file_path => [executable_line => hits]
+     *
+     * @throws ErrorException
      */
     private function getCoverage(string $coverageFile): array
     {
@@ -202,7 +206,7 @@ final class CoverageGuard
 
             if (!is_file($newFilePath)) {
                 $infix = $newFilePath === $filePath ? '' : " (mapped from {$filePath})";
-                throw new LogicException("File '$newFilePath'$infix present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
+                throw new ErrorException("File '$newFilePath'$infix present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
             }
 
             $realPath = $this->realpath($newFilePath);
@@ -213,6 +217,9 @@ final class CoverageGuard
         return $remappedFilesData;
     }
 
+    /**
+     * @throws ErrorException
+     */
     private function createExtractor(string $coverageFile): CoverageExtractor
     {
         if (str_ends_with($coverageFile, '.cov')) {
@@ -223,9 +230,12 @@ final class CoverageGuard
             return $this->detectExtractorForXml($coverageFile);
         }
 
-        throw new LogicException("Unknown coverage file format: '{$coverageFile}'. Expecting .cov or .xml");
+        throw new ErrorException("Unknown coverage file format: '{$coverageFile}'. Expecting .cov or .xml");
     }
 
+    /**
+     * @throws ErrorException
+     */
     private function detectExtractorForXml(
         string $xmlFile,
     ): CoverageExtractor
@@ -234,7 +244,7 @@ final class CoverageGuard
         $content = file_get_contents($xmlFile);
 
         if ($content === false) {
-            throw new LogicException("Failed to read file: {$xmlFile}");
+            throw new ErrorException("Failed to read file: {$xmlFile}");
         }
 
         if (str_contains($content, 'cobertura')) {
@@ -255,11 +265,14 @@ final class CoverageGuard
         return $filePath;
     }
 
+    /**
+     * @throws ErrorException
+     */
     private function realpath(string $path): string
     {
         $realpath = realpath($path);
         if ($realpath === false) {
-            throw new LogicException("Could not realpath '$path'");
+            throw new ErrorException("Could not realpath '$path'");
         }
         return $realpath;
     }

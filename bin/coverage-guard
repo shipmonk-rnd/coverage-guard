@@ -2,6 +2,7 @@
 <?php declare(strict_types=1);
 
 use ShipMonk\CoverageGuard\CoverageGuard;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Initializer;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
@@ -37,8 +38,14 @@ try {
     $exitCode = $formatter->formatReport($coverageReport);
     exit($exitCode);
 
-} catch (Throwable $e) { // @phpstan-ignore catch.neverThrown
-    $printer->printLine('⚠️  Error: ' . $e->getMessage());
+} catch (ErrorException $e) {
+    $printer->printLine('');
+    $printer->printLine('⚠️  <orange>Error:</orange> ' . $e->getMessage());
+    $printer->printLine('');
+    exit(1);
+
+} catch (Throwable $e) {
+    $printer->printLine('‼️  <red>FATAL:</red> ' . $e->getMessage());
     $printer->printLine($e->getTraceAsString());
     exit(1);
 }

@@ -2,8 +2,8 @@
 
 namespace Extractor;
 
-use LogicException;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
 
@@ -30,7 +30,7 @@ final class CoberturaCoverageExtractorTest extends TestCase
     {
         $extractor = new CoberturaCoverageExtractor(new XmlLoader());
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Failed to parse XML file');
 
         $extractor->getCoverage(__DIR__ . '/../fixtures/Sample.php'); // not an XML file

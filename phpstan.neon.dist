@@ -59,3 +59,9 @@ parameters:
                 - new.internalClass
                 - method.internalClass
             path: tests/Extractor/PhpUnitCoverageExtractorTest.php
+
+        -
+            identifiers:
+                - missingType.checkedException
+                - shipmonk.checkedExceptionInCallable
+            path: tests/
