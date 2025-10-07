@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use SimpleXMLElement;
 use function extension_loaded;
 use function libxml_clear_errors;
@@ -13,6 +14,9 @@ use function simplexml_load_file;
 final class XmlLoader
 {
 
+    /**
+     * @throws ErrorException
+     */
     public function readXml(string $xmlFile): SimpleXMLElement
     {
         if (!extension_loaded('simplexml')) {
@@ -25,7 +29,7 @@ final class XmlLoader
         if ($xml === false) {
             $libXmlError = libxml_get_last_error();
             $libXmlErrorMessage = $libXmlError === false ? '' : ' Error: ' . $libXmlError->message;
-            throw new LogicException("Failed to parse XML file: {$xmlFile}." . $libXmlErrorMessage);
+            throw new ErrorException("Failed to parse XML file: {$xmlFile}." . $libXmlErrorMessage);
         }
 
         libxml_clear_errors();

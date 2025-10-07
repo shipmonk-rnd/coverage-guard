@@ -7,6 +7,7 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Data\ProcessedCodeCoverageData;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use SebastianBergmann\CodeCoverage\Filter;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
 use function file_put_contents;
 use function serialize;
@@ -16,6 +17,9 @@ use const PHP_EOL;
 final class PhpUnitCoverageExtractorTest extends TestCase
 {
 
+    /**
+     * @throws ErrorException
+     */
     public function testValidCovFile(): void
     {
         $tmp = sys_get_temp_dir();

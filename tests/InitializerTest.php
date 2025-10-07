@@ -2,8 +2,8 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use LogicException;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 
 final class InitializerTest extends TestCase
 {
@@ -23,7 +23,7 @@ final class InitializerTest extends TestCase
     {
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
 
         $initializer->initialize(__DIR__, ['coverage-guard']);
@@ -33,7 +33,7 @@ final class InitializerTest extends TestCase
     {
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Coverage file not found: non-existent.xml');
 
         $initializer->initialize(__DIR__, ['coverage-guard', 'non-existent.xml']);
@@ -44,7 +44,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Provided config file not found: 'non-existent-config.php'");
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', 'non-existent-config.php']);
@@ -55,7 +55,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Provided config file not found: 'non-existent-config.php'");
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config=non-existent-config.php']);
@@ -66,7 +66,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Patch file not found: non-existent.patch');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--patch=non-existent.patch']);
@@ -77,7 +77,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown option: --unknown');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--unknown']);
@@ -88,7 +88,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown option: --unknown=value');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--unknown=value']);
@@ -99,7 +99,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown option: -u');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '-u']);
@@ -110,7 +110,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown argument: extra-arg');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, 'extra-arg']);
@@ -121,7 +121,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown argument: arg1');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, 'arg1', 'arg2']);
@@ -132,7 +132,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Option --config requires a value');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config']);
@@ -143,7 +143,7 @@ final class InitializerTest extends TestCase
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Option --patch requires a value');
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--patch']);
@@ -166,7 +166,7 @@ final class InitializerTest extends TestCase
         $configFile = __DIR__ . '/fixtures/invalid-config.php';
         $initializer = new Initializer();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Config file '$configFile' must return an instance of " . Config::class);
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);

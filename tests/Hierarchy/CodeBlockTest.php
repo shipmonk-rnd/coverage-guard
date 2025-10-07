@@ -2,8 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use LogicException;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 
 final class CodeBlockTest extends TestCase
 {
@@ -165,6 +165,9 @@ final class CodeBlockTest extends TestCase
         self::assertTrue($block->isFullyUncovered());
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsCoveredAtLeastByPercentWith100Percent(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
@@ -175,6 +178,9 @@ final class CodeBlockTest extends TestCase
         self::assertTrue($block->isCoveredAtLeastByPercent(100));
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsCoveredAtLeastByPercentWith50Percent(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
@@ -186,6 +192,9 @@ final class CodeBlockTest extends TestCase
         self::assertFalse($block->isCoveredAtLeastByPercent(51));
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsCoveredAtLeastByPercentWithNoExecutableLines(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
@@ -195,25 +204,31 @@ final class CodeBlockTest extends TestCase
         self::assertFalse($block->isCoveredAtLeastByPercent(0));
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsCoveredAtLeastByPercentThrowsExceptionForInvalidPercentage(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
         ]);
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Minimal required percentage must be between 0 and 100');
 
         $block->isCoveredAtLeastByPercent(101);
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsCoveredAtLeastByPercentThrowsExceptionForNegativePercentage(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
         ]);
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Minimal required percentage must be between 0 and 100');
 
         $block->isCoveredAtLeastByPercent(-1);
@@ -279,6 +294,9 @@ final class CodeBlockTest extends TestCase
         self::assertFalse($block->isChanged());
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsChangedAtLeastByPercentWith100Percent(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
@@ -289,6 +307,9 @@ final class CodeBlockTest extends TestCase
         self::assertTrue($block->isChangedAtLeastByPercent(100));
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsChangedAtLeastByPercentWith50Percent(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
@@ -300,25 +321,31 @@ final class CodeBlockTest extends TestCase
         self::assertFalse($block->isChangedAtLeastByPercent(51));
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsChangedAtLeastByPercentThrowsExceptionForInvalidPercentage(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
         ]);
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Minimal required percentage must be between 0 and 100');
 
         $block->isChangedAtLeastByPercent(101);
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function testIsChangedAtLeastByPercentThrowsExceptionForNegativePercentage(): void
     {
         $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
         ]);
 
-        $this->expectException(LogicException::class);
+        $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Minimal required percentage must be between 0 and 100');
 
         $block->isChangedAtLeastByPercent(-1);

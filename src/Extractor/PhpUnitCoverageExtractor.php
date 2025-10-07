@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard\Extractor;
 use Composer\InstalledVersions;
 use LogicException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function count;
 use function get_debug_type;
 use function is_array;
@@ -14,11 +15,13 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
 
     /**
      * @return array<string, array<int, int>> file_path => [executable_line => hits]
+     *
+     * @throws ErrorException
      */
     public function getCoverage(string $coverageFile): array
     {
         if (!InstalledVersions::isInstalled('phpunit/php-code-coverage')) {
-            throw new LogicException('In order to use .cov coverage files, you need to install phpunit/php-code-coverage');
+            throw new ErrorException('In order to use .cov coverage files, you need to install phpunit/php-code-coverage');
         }
 
         $coverage = (static function (string $file): mixed {
@@ -26,7 +29,7 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
         })($coverageFile);
 
         if (!$coverage instanceof CodeCoverage) {
-            throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected serialized CodeCoverage instance, got " . get_debug_type($coverage));
+            throw new ErrorException("Invalid coverage file: '{$coverageFile}'. Expected serialized CodeCoverage instance, got " . get_debug_type($coverage));
         }
 
         $result = [];

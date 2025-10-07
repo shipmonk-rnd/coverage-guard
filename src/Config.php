@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function file_exists;
 use function is_dir;
@@ -31,26 +32,32 @@ final class Config
     {
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function setGitRoot(string $gitRoot): self
     {
         if (!is_dir($gitRoot)) {
-            throw new LogicException("Provided git root '$gitRoot' is not a directory");
+            throw new ErrorException("Provided git root '$gitRoot' is not a directory");
         }
 
         $this->gitRoot = $this->realpath($gitRoot) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
+    /**
+     * @throws ErrorException
+     */
     public function addCoveragePathMapping(
         string $originalPathInCoverageFile,
         string $existingPathToUseInstead,
     ): self
     {
         if (!file_exists($existingPathToUseInstead)) {
-            throw new LogicException("Provided new path '$existingPathToUseInstead' does not exist");
+            throw new ErrorException("Provided new path '$existingPathToUseInstead' does not exist");
         }
         if (!is_dir($existingPathToUseInstead)) {
-            throw new LogicException("Provided new path '$existingPathToUseInstead' is not a directory");
+            throw new ErrorException("Provided new path '$existingPathToUseInstead' is not a directory");
         }
 
         $this->coveragePathMapping[$originalPathInCoverageFile] = $existingPathToUseInstead;
