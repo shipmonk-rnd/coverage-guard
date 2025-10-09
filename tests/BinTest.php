@@ -44,11 +44,14 @@ final class BinTest extends TestCase
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
         $coverageFile = __DIR__ . '/fixtures/clover_with_package.xml';
+        $configFile = __DIR__ . '/fixtures/config-for-bintest-no-rule.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
             escapeshellarg($coverageFile),
+            '--config',
+            escapeshellarg($configFile),
             '2>&1',
         ]);
 

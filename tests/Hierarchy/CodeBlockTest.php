@@ -324,17 +324,27 @@ final class CodeBlockTest extends TestCase
         $block->isChangedAtLeastByPercent(-1);
     }
 
+    public function testMethodReflectionCanBeRetrieved(): void
+    {
+        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
+        ]);
+
+        self::assertSame('createBlock', $block->getMethodReflection()->getShortName());
+    }
+
     /**
      * @param non-empty-list<LineOfCode> $lines
      */
     private function createBlock(
         string $filePath,
         array $lines,
-    ): CodeBlock
+    ): ClassMethodBlock
     {
         return new ClassMethodBlock(
-            className: 'TestClass',
-            methodName: 'testMethod',
+            className: self::class,
+            methodName: 'createBlock',
             filePath: $filePath,
             lines: $lines,
         );
