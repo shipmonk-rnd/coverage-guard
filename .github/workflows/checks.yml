@@ -27,13 +27,7 @@ jobs:
 
             -
                 name: Run checks
-                env:
-                    XDEBUG_MODE: coverage
                 run: composer check
-
-            -
-                name: Output line coverage
-                run: head cache/coverage/coverage.txt | grep Lines
 
     tests:
         runs-on: ubuntu-latest
