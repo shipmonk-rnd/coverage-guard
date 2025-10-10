@@ -213,10 +213,10 @@ final class CoverageGuard
         foreach ($coverages as $fileCoverage) {
             $filePath = $fileCoverage->filePath;
             $newFilePath = $this->mapCoverageFilePath($filePath);
-            $filPathMappingInfo = $newFilePath === $filePath ? '' : " (mapped from {$filePath})";
+            $pathMappingInfo = $newFilePath === $filePath ? '' : " (mapped from '{$filePath}')";
 
             if (!is_file($newFilePath)) {
-                throw new ErrorException("File '$newFilePath'$filPathMappingInfo referenced in coverage file '$coverageFile' was not found. Is the report up-to-date?");
+                throw new ErrorException("File '$newFilePath'$pathMappingInfo referenced in coverage file '$coverageFile' was not found. Is the report up-to-date?");
             }
 
             $realPath = $this->realpath($newFilePath);
@@ -225,18 +225,14 @@ final class CoverageGuard
 
             // integrity checks follow
             if ($fileCoverage->expectedLinesCount !== null && $fileCoverage->expectedLinesCount !== $codeLinesCount) {
-                throw new ErrorException("Coverage file '{$coverageFile}' refers to file '{$realPath}'{$filPathMappingInfo} with {$fileCoverage->expectedLinesCount} lines of code, but the actual file has {$codeLinesCount} lines of code.");
+                throw new ErrorException("Coverage file '{$coverageFile}' refers to file '{$realPath}'{$pathMappingInfo} with {$fileCoverage->expectedLinesCount} lines of code, but the actual file has {$codeLinesCount} lines of code. Is the report up-to-date?");
             }
 
             foreach ($fileCoverage->executableLines as $executableLine) {
                 $lineNumber = $executableLine->lineNumber;
 
                 if (!isset($codeLines[$lineNumber - 1])) {
-                    throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}', but such line does not exist.");
-                }
-
-                if ($executableLine->infix !== null && !str_contains($codeLines[$lineNumber - 1], $executableLine->infix)) {
-                    throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}', but such line does not exist.");
+                    throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}'{$pathMappingInfo}, but such line does not exist. Is the report up-to-date?");
                 }
             }
 

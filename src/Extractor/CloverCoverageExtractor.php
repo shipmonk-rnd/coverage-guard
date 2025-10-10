@@ -40,8 +40,7 @@ final class CloverCoverageExtractor implements CoverageExtractor
             foreach ($fileNode->line as $lineNode) {
                 $lineNumber = (int) $lineNode['num'];
                 $hitCount = (int) $lineNode['count'];
-                $infix = (string) $lineNode['type'] === 'method' ? (string) $lineNode['name'] : null;
-                $executableLines[] = new ExecutableLine($lineNumber, $hitCount, $infix);
+                $executableLines[] = new ExecutableLine($lineNumber, $hitCount);
             }
 
             $coverage[] = new FileCoverage($filePath, $executableLines, $linesOfCode);
