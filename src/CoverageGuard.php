@@ -190,7 +190,9 @@ final class CoverageGuard
                     $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
                     $lineContent = method_exists($line, 'content') ? $line->content() : $line->getContent();
 
-                    if ($lineType === Line::UNCHANGED || $lineType === Line::ADDED) {
+                    $isBuggedLine = str_starts_with($lineContent, 'new file mode'); // https://github.com/sebastianbergmann/diff/issues/133
+
+                    if (!$isBuggedLine && ($lineType === Line::UNCHANGED || $lineType === Line::ADDED)) {
                         if (!isset($actualFileLines[$lineNumber - 1])) {
                             throw new ErrorException("Patch file '{$patchFile}' refers to line #{$lineNumber} of file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
                         }
@@ -238,7 +240,7 @@ final class CoverageGuard
 
             $realPath = $this->realpath($newFilePath);
             $codeLines = $this->readFileLines($realPath);
-            $codeLinesCount = count($codeLines) + 1;
+            $codeLinesCount = count($codeLines);
 
             // integrity checks follow
             if ($fileCoverage->expectedLinesCount !== null && $fileCoverage->expectedLinesCount !== $codeLinesCount) {
@@ -331,6 +333,7 @@ final class CoverageGuard
         if ($lines === false) {
             throw new LogicException("Failed to read file: {$file}");
         }
+        $lines[] = '';
 
         return $lines;
     }
