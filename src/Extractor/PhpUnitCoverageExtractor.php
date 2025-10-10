@@ -5,6 +5,8 @@ namespace ShipMonk\CoverageGuard\Extractor;
 use Composer\InstalledVersions;
 use LogicException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
+use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function count;
 use function get_debug_type;
@@ -14,8 +16,6 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
 {
 
     /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
-     *
      * @throws ErrorException
      */
     public function getCoverage(string $coverageFile): array
@@ -40,13 +40,16 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
                 throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array under '{$filePath}' key, got " . get_debug_type($fileCoverage));
             }
 
+            $executableLines = [];
             foreach ($fileCoverage as $lineNumber => $tests) {
                 if (!is_array($tests)) {
                     throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array under {$filePath} and #$lineNumber, got " . get_debug_type($tests));
                 }
 
-                $result[(string) $filePath][(int) $lineNumber] = count($tests);
+                $executableLines[] = new ExecutableLine((int) $lineNumber, count($tests));
             }
+
+            $result[] = new FileCoverage((string) $filePath, $executableLines);
         }
 
         return $result;

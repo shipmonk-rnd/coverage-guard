@@ -11,19 +11,11 @@ use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
-use function array_combine;
 use function assert;
-use function count;
-use function file;
 use function range;
 
 final class CodeBlockAnalyser extends NodeVisitorAbstract
 {
-
-    /**
-     * @var array<int, string>
-     */
-    private readonly array $linesContent;
 
     private ?string $currentClass = null;
 
@@ -35,6 +27,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     /**
      * @param array<int, int> $linesChanged line => line
      * @param array<int, int> $linesCoverage executable_line => hits
+     * @param array<int, string> $linesContents
      * @param list<CoverageRule> $rules
      */
     public function __construct(
@@ -42,14 +35,10 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         private readonly string $filePath,
         private readonly array $linesChanged,
         private readonly array $linesCoverage,
+        private readonly array $linesContents,
         private readonly array $rules,
     )
     {
-        $lines = file($this->filePath);
-        if ($lines === false) {
-            throw new LogicException("Failed to read file: {$this->filePath}");
-        }
-        $this->linesContent = array_combine(range(1, count($lines)), $lines);
     }
 
     public function enterNode(Node $node): ?int
@@ -112,7 +101,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     {
         $executableLines = [];
         foreach (range($startLine, $endLine) as $lineNumber) {
-            if (!isset($this->linesContent[$lineNumber])) {
+            if (!isset($this->linesContents[$lineNumber])) {
                 throw new LogicException("Line number #{$lineNumber} of file '{$this->filePath}' is expected to exist.");
             }
 
@@ -121,7 +110,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
                 executable: isset($this->linesCoverage[$lineNumber]),
                 covered: isset($this->linesCoverage[$lineNumber]) && $this->linesCoverage[$lineNumber] > 0,
                 changed: isset($this->linesChanged[$lineNumber]),
-                contents: $this->linesContent[$lineNumber],
+                contents: $this->linesContents[$lineNumber],
             );
         }
         return $executableLines;

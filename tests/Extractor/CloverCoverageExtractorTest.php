@@ -4,9 +4,12 @@ namespace Extractor;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
+use function array_combine;
+use function array_map;
 
 final class CloverCoverageExtractorTest extends TestCase
 {
@@ -17,15 +20,21 @@ final class CloverCoverageExtractorTest extends TestCase
         $extractor = new CloverCoverageExtractor(new XmlLoader());
         $coverage = $extractor->getCoverage($filePath);
 
-        self::assertArrayHasKey('tests/fixtures/Sample.php', $coverage);
-        $fileCoverage = $coverage['tests/fixtures/Sample.php'];
+        self::assertNotEmpty($coverage);
+        self::assertSame('tests/fixtures/Sample.php', $coverage[0]->filePath);
+        $fileCoverage = $coverage[0];
+
+        $lineNumberToHitCount = array_combine(
+            array_map(static fn (ExecutableLine $line) => $line->lineNumber, $fileCoverage->executableLines),
+            array_map(static fn (ExecutableLine $line) => $line->hits, $fileCoverage->executableLines),
+        );
 
         self::assertSame([
             8 => 1,
             10 => 1,
             13 => 0,
             15 => 0,
-        ], $fileCoverage);
+        ], $lineNumberToHitCount);
     }
 
     public function testThrowsExceptionForInvalidXml(): void

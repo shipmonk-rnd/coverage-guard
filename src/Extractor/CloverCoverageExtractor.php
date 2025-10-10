@@ -2,20 +2,20 @@
 
 namespace ShipMonk\CoverageGuard\Extractor;
 
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
+use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\XmlLoader;
 
 final class CloverCoverageExtractor implements CoverageExtractor
 {
 
     public function __construct(
-        private XmlLoader $xmlLoader,
+        private readonly XmlLoader $xmlLoader,
     )
     {
     }
 
-    /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
-     */
     public function getCoverage(string $coverageFile): array
     {
         $xml = $this->xmlLoader->readXml($coverageFile);
@@ -24,22 +24,27 @@ final class CloverCoverageExtractor implements CoverageExtractor
         $fileNodes = $xml->xpath('//file');
 
         if ($fileNodes === null) {
-            return $coverage;
+            throw new ErrorException("Unable to find 'file' nodes in clover XML file '$coverageFile'");
         }
 
         foreach ($fileNodes as $fileNode) {
             $filePath = (string) $fileNode['name'];
-            $coverage[$filePath] = [];
+            $linesOfCode = isset($fileNode->metrics) ? (int) $fileNode->metrics['loc'] : null;
 
             if (!isset($fileNode->line)) {
                 continue;
             }
 
+            $executableLines = [];
+
             foreach ($fileNode->line as $lineNode) {
                 $lineNumber = (int) $lineNode['num'];
                 $hitCount = (int) $lineNode['count'];
-                $coverage[$filePath][$lineNumber] = $hitCount;
+                $infix = (string) $lineNode['type'] === 'method' ? (string) $lineNode['name'] : null;
+                $executableLines[] = new ExecutableLine($lineNumber, $hitCount, $infix);
             }
+
+            $coverage[] = new FileCoverage($filePath, $executableLines, $linesOfCode);
         }
 
         return $coverage;

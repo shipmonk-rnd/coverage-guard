@@ -2,6 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Extractor;
 
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
+use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\XmlLoader;
 use SimpleXMLElement;
 use function str_starts_with;
@@ -11,24 +14,21 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
 {
 
     public function __construct(
-        private XmlLoader $xmlLoader,
+        private readonly XmlLoader $xmlLoader,
     )
     {
     }
 
-    /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
-     */
     public function getCoverage(string $coverageFile): array
     {
         $xml = $this->xmlLoader->readXml($coverageFile);
 
         $coverage = [];
-        $source = $this->extractSource($xml);
+        $source = $this->extractSource($xml, $coverageFile);
         $classNodes = $xml->xpath('//class');
 
         if ($classNodes === null) {
-            return $coverage;
+            throw new ErrorException("Unable to find 'class' nodes in cobertura XML file '$coverageFile'");
         }
 
         foreach ($classNodes as $classNode) {
@@ -37,25 +37,31 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             // Combine source path with filename to get full path
             $filePath = $this->resolveFilePath($source, $filename);
 
-            if (!isset($coverage[$filePath])) {
-                $coverage[$filePath] = [];
-            }
-
             if (!isset($classNode->lines->line)) {
                 continue;
             }
 
+            $executableLines = [];
+
             foreach ($classNode->lines->line as $lineNode) {
                 $lineNumber = (int) $lineNode['number'];
                 $hitCount = (int) $lineNode['hits'];
-                $coverage[$filePath][$lineNumber] = $hitCount;
+                $executableLines[] = new ExecutableLine($lineNumber, $hitCount);
             }
+
+            $coverage[] = new FileCoverage($filePath, $executableLines);
         }
 
         return $coverage;
     }
 
-    private function extractSource(SimpleXMLElement $xml): ?string
+    /**
+     * @throws ErrorException
+     */
+    private function extractSource(
+        SimpleXMLElement $xml,
+        string $coverageFile,
+    ): string
     {
         $sourceNodes = $xml->xpath('//sources/source');
 
@@ -65,11 +71,11 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             }
         }
 
-        return null;
+        throw new ErrorException("Unable to find 'source' node in cobertura XML file '$coverageFile'");
     }
 
     private function resolveFilePath(
-        ?string $source,
+        string $source,
         string $filename,
     ): string
     {
@@ -77,11 +83,7 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             return $filename;
         }
 
-        if ($source !== null) {
-            return $source . DIRECTORY_SEPARATOR . $filename;
-        }
-
-        return $filename;
+        return $source . DIRECTORY_SEPARATOR . $filename;
     }
 
 }
