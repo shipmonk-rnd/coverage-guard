@@ -38,6 +38,7 @@ use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function substr;
+use const FILE_IGNORE_NEW_LINES;
 
 final class CoverageGuard
 {
@@ -176,6 +177,7 @@ final class CoverageGuard
             }
 
             $realPath = $this->realpath($absolutePath);
+            $actualFileLines = $this->readFileLines($realPath, withLineEnding: false);
 
             $changes[$realPath] = [];
 
@@ -186,6 +188,22 @@ final class CoverageGuard
 
                 foreach ($chunkLines as $line) {
                     $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
+                    $lineContent = method_exists($line, 'content') ? $line->content() : $line->getContent();
+
+                    // Integrity check: verify that unchanged and added lines match actual file content
+                    if ($lineType === Line::UNCHANGED || $lineType === Line::ADDED) {
+                        if (!isset($actualFileLines[$lineNumber - 1])) {
+                            throw new ErrorException("Patch file '{$patchFile}' refers to line #{$lineNumber} of file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
+                        }
+
+                        $actualLine = $actualFileLines[$lineNumber - 1];
+
+                        if ($lineContent !== $actualLine) {
+                            $lineTypeDescription = $lineType === Line::UNCHANGED ? 'unchanged' : 'added';
+                            throw new ErrorException("Patch file '{$patchFile}' has {$lineTypeDescription} line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nExpected '{$lineContent}'\nFound '{$actualLine}'\n\nIs the patch up-to-date?");
+                        }
+                    }
+
                     if ($lineType === Line::ADDED) {
                         $changes[$realPath][] = $lineNumber;
                     }
@@ -305,9 +323,12 @@ final class CoverageGuard
     /**
      * @return list<string> lines with original line endings
      */
-    private function readFileLines(string $file): array
+    private function readFileLines(
+        string $file,
+        bool $withLineEnding = true,
+    ): array
     {
-        $lines = file($file);
+        $lines = file($file, $withLineEnding ? 0 : FILE_IGNORE_NEW_LINES);
         if ($lines === false) {
             throw new LogicException("Failed to read file: {$file}");
         }

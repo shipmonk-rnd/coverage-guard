@@ -3,7 +3,7 @@ index 1234567..abcdefg 100644
 --- a/tests/fixtures/Sample.php
 +++ b/tests/fixtures/Sample.php
 @@ -10,4 +10,10 @@ class Sample
-         return 42;
+         return 99;
      }
 
 -    // TODO: implement this
