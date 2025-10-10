@@ -231,7 +231,7 @@ final class CoverageGuard
             foreach ($fileCoverage->executableLines as $executableLine) {
                 $lineNumber = $executableLine->lineNumber;
 
-                if (!isset($codeLines[$lineNumber - 1])) {
+                if ($lineNumber > $codeLinesCount) {
                     throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}'{$pathMappingInfo}, but such line does not exist. Is the report up-to-date?");
                 }
             }
