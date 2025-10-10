@@ -10,6 +10,8 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
+use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
@@ -22,6 +24,7 @@ use ShipMonk\CoverageGuard\Rule\DefaultCoverageRule;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
+use function array_map;
 use function count;
 use function file;
 use function file_get_contents;
@@ -98,7 +101,6 @@ final class CoverageGuard
     /**
      * @param list<CoverageRule> $rules
      * @param list<int>|null $linesChanged
-     * @param array<int, int> $linesCoverage executable_line => hits
      * @return list<ReportedError>
      */
     private function getReportedErrors(
@@ -106,20 +108,25 @@ final class CoverageGuard
         bool $patchMode,
         string $file,
         ?array $linesChanged,
-        array $linesCoverage,
+        FileCoverage $fileCoverage,
     ): array
     {
-        $codeLines = file($file);
-        if ($codeLines === false) {
-            throw new LogicException("Failed to read file: {$file}");
-        }
+        $codeLines = $this->readFileLines($file);
+        $lineNumbers = range(1, count($codeLines));
 
         $nameResolver = new NameResolver();
         $linesChangedMap = $linesChanged === null
-            ? array_combine(range(1, count($codeLines)), range(1, count($codeLines)))
+            ? array_combine($lineNumbers, $lineNumbers)
             : array_combine($linesChanged, $linesChanged);
 
-        $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $rules);
+        $linesCoverage = array_combine(
+            array_map(static fn (ExecutableLine $line) => $line->lineNumber, $fileCoverage->executableLines),
+            array_map(static fn (ExecutableLine $line) => $line->hits, $fileCoverage->executableLines),
+        );
+
+        $linesContents = array_combine($lineNumbers, $codeLines);
+
+        $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules);
         $traverser = new NodeTraverser();
         $traverser->addVisitor($nameResolver);
         $traverser->addVisitor($extractor);
@@ -194,29 +201,45 @@ final class CoverageGuard
     }
 
     /**
-     * @return array<string, array<int, int>> file_path => [executable_line => hits]
+     * @return array<string, FileCoverage>
      *
      * @throws ErrorException
      */
     private function getCoverage(string $coverageFile): array
     {
-        $originalCoverageData = $this->createExtractor($coverageFile)->getCoverage($coverageFile);
-        $remappedFilesData = [];
+        $coverages = $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+        $remappedCoverages = [];
 
-        foreach ($originalCoverageData as $filePath => $data) {
+        foreach ($coverages as $fileCoverage) {
+            $filePath = $fileCoverage->filePath;
             $newFilePath = $this->mapCoverageFilePath($filePath);
+            $pathMappingInfo = $newFilePath === $filePath ? '' : " (mapped from '{$filePath}')";
 
             if (!is_file($newFilePath)) {
-                $infix = $newFilePath === $filePath ? '' : " (mapped from {$filePath})";
-                throw new ErrorException("File '$newFilePath'$infix present in coverage data in '$coverageFile' was not found. Is the report up-to-date?");
+                throw new ErrorException("File '$newFilePath'$pathMappingInfo referenced in coverage file '$coverageFile' was not found. Is the report up-to-date?");
             }
 
             $realPath = $this->realpath($newFilePath);
+            $codeLines = $this->readFileLines($realPath);
+            $codeLinesCount = count($codeLines) + 1;
 
-            $remappedFilesData[$realPath] = $data;
+            // integrity checks follow
+            if ($fileCoverage->expectedLinesCount !== null && $fileCoverage->expectedLinesCount !== $codeLinesCount) {
+                throw new ErrorException("Coverage file '{$coverageFile}' refers to file '{$realPath}'{$pathMappingInfo} with {$fileCoverage->expectedLinesCount} lines of code, but the actual file has {$codeLinesCount} lines of code. Is the report up-to-date?");
+            }
+
+            foreach ($fileCoverage->executableLines as $executableLine) {
+                $lineNumber = $executableLine->lineNumber;
+
+                if ($lineNumber > $codeLinesCount) {
+                    throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}'{$pathMappingInfo}, but such line does not exist. Is the report up-to-date?");
+                }
+            }
+
+            $remappedCoverages[$realPath] = new FileCoverage($realPath, $fileCoverage->executableLines, $fileCoverage->expectedLinesCount);
         }
 
-        return $remappedFilesData;
+        return $remappedCoverages;
     }
 
     /**
@@ -277,6 +300,19 @@ final class CoverageGuard
             throw new ErrorException("Could not realpath '$path'");
         }
         return $realpath;
+    }
+
+    /**
+     * @return list<string> lines with original line endings
+     */
+    private function readFileLines(string $file): array
+    {
+        $lines = file($file);
+        if ($lines === false) {
+            throw new LogicException("Failed to read file: {$file}");
+        }
+
+        return $lines;
     }
 
 }

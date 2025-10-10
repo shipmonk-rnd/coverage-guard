@@ -54,7 +54,9 @@ final class Printer
         $this->print($string . PHP_EOL);
     }
 
-    public function printWarning(string $string): void
+    public function printWarning(
+        string $string,
+    ): void
     {
         $this->printLine('');
         $this->printLine('<orange>Warning:</orange> ' . $string);

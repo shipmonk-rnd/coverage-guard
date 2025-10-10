@@ -2,7 +2,6 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use LogicException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use SimpleXMLElement;
 use function extension_loaded;
@@ -20,7 +19,7 @@ final class XmlLoader
     public function readXml(string $xmlFile): SimpleXMLElement
     {
         if (!extension_loaded('simplexml')) {
-            throw new LogicException('In order to use xml coverage files, you need to enable the simplexml extension');
+            throw new ErrorException('In order to use xml coverage files, you need to enable the simplexml extension');
         }
 
         $libXmlErrorsOld = libxml_use_internal_errors(true);
