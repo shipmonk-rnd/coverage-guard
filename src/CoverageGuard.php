@@ -170,6 +170,12 @@ final class CoverageGuard
 
         foreach ($patch as $diff) {
             $diffTo = method_exists($diff, 'to') ? $diff->to() : $diff->getTo();
+            if ($diffTo === '/dev/null') {
+                continue; // deleted file
+            }
+            if (!str_starts_with($diffTo, 'b/')) {
+                throw new ErrorException("Patch file '{$patchFile}' uses unsupported prefix in '{$diffTo}'. Only standard 'b/' is supported. Please use 'git diff --dst-prefix=b/' to regenerate the patch file.");
+            }
             $absolutePath = $gitRoot . substr($diffTo, 2);
 
             if (!is_file($absolutePath)) {
