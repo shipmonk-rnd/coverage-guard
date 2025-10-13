@@ -190,18 +190,15 @@ final class CoverageGuard
                     $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
                     $lineContent = method_exists($line, 'content') ? $line->content() : $line->getContent();
 
-                    $isBuggedLine = str_starts_with($lineContent, 'new file mode'); // https://github.com/sebastianbergmann/diff/issues/133
-
-                    if (!$isBuggedLine && ($lineType === Line::UNCHANGED || $lineType === Line::ADDED)) {
+                    if ($lineType === Line::ADDED) {
                         if (!isset($actualFileLines[$lineNumber - 1])) {
-                            throw new ErrorException("Patch file '{$patchFile}' refers to line #{$lineNumber} of file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
+                            throw new ErrorException("Patch file '{$patchFile}' refers to added line #{$lineNumber} of file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
                         }
 
                         $actualLine = $actualFileLines[$lineNumber - 1];
 
                         if ($lineContent !== $actualLine) {
-                            $lineTypeDescription = $lineType === Line::UNCHANGED ? 'unchanged' : 'added';
-                            throw new ErrorException("Patch file '{$patchFile}' has {$lineTypeDescription} line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nExpected '{$lineContent}'\nFound '{$actualLine}'\n\nIs the patch up-to-date?");
+                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nExpected '{$lineContent}'\nFound '{$actualLine}'\n\nIs the patch up-to-date?");
                         }
                     }
 

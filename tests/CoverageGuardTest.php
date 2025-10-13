@@ -80,18 +80,7 @@ final class CoverageGuardTest extends TestCase
         $sampleFile = __DIR__ . '/fixtures/Sample.php';
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("Patch file '{$patchFile}' refers to line #95 of file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
-
-        $this->checkCoverageWithPatch($patchFile);
-    }
-
-    public function testPatchIntegrityFailsWhenUnchangedLineContentMismatches(): void
-    {
-        $patchFile = __DIR__ . '/fixtures/sample-unchanged-mismatch.patch';
-        $sampleFile = __DIR__ . '/fixtures/Sample.php';
-
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("Patch file '{$patchFile}' has unchanged line #10 that does not match actual content of file '{$sampleFile}'.\nExpected '        return 99;'\nFound '        return 42;'\n\nIs the patch up-to-date?");
+        $this->expectExceptionMessage("Patch file '{$patchFile}' refers to added line #98 of file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
 
         $this->checkCoverageWithPatch($patchFile);
     }
