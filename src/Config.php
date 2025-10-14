@@ -28,6 +28,8 @@ final class Config
      */
     private array $rules = [];
 
+    private ?string $editorUrl = null;
+
     public function __construct()
     {
     }
@@ -70,6 +72,25 @@ final class Config
         return $this;
     }
 
+    /**
+     * Set the editor URL pattern for making file paths clickable in CLI output via OSC 8 hyperlink
+     *
+     * Available placeholders:
+     * - {file} - Absolute file path
+     * - {relFile} - Relative file path (from current working directory)
+     * - {line} - Line number
+     *
+     * Common editor URL patterns:
+     * - PHPStorm: phpstorm://open?file={file}&line={line}
+     * - VS Code: vscode://file/{file}:{line}
+     * - Sublime: subl://open?url=file://{file}&line={line}
+     */
+    public function setEditorUrl(string $editorUrl): self
+    {
+        $this->editorUrl = $editorUrl;
+        return $this;
+    }
+
     public function getGitRoot(): ?string
     {
         return $this->gitRoot;
@@ -89,6 +110,11 @@ final class Config
     public function getRules(): array
     {
         return $this->rules;
+    }
+
+    public function getEditorUrl(): ?string
+    {
+        return $this->editorUrl;
     }
 
     private function realpath(string $path): string

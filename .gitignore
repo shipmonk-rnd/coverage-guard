@@ -4,3 +4,4 @@
 /.idea
 /phpstan.neon
 /composer.lock
+/coverage-guard.local.php

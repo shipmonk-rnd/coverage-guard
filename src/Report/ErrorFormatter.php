@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Report;
 
+use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Printer;
@@ -119,13 +120,17 @@ final class ErrorFormatter
 
     private readonly Printer $printer;
 
+    private readonly ?string $editorUrl;
+
     public function __construct(
         string $cwd,
         Printer $printer,
+        Config $config,
     )
     {
         $this->cwd = rtrim($cwd, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->printer = $printer;
+        $this->editorUrl = $config->getEditorUrl();
     }
 
     public function formatReport(CoverageReport $report): int
@@ -160,9 +165,15 @@ final class ErrorFormatter
         $coverageError = $reportedError->error;
 
         $relativePath = $this->relativizePath($codeBlock->getFilePath());
+        $fileLocation = "{$relativePath}:{$codeBlock->getStartLineNumber()}";
+        $clickableFileLocation = $this->makeClickable(
+            $fileLocation,
+            $codeBlock->getFilePath(),
+            $codeBlock->getStartLineNumber(),
+        );
 
         $this->printer->printLine('┌─────────────────────────────────────────────────────────────────────────────────');
-        $this->printer->printLine("│ {$relativePath}:{$codeBlock->getStartLineNumber()}");
+        $this->printer->printLine("│ {$clickableFileLocation}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine("│ {$coverageError->getMessage()}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
@@ -175,6 +186,26 @@ final class ErrorFormatter
     private function relativizePath(string $path): string
     {
         return str_replace($this->cwd, '', $path);
+    }
+
+    private function makeClickable(
+        string $text,
+        string $filePath,
+        int $line,
+    ): string
+    {
+        if ($this->editorUrl === null) {
+            return $text;
+        }
+
+        $url = str_replace(
+            ['{relFile}', '{file}', '{line}'],
+            [$this->relativizePath($filePath), $filePath, (string) $line],
+            $this->editorUrl,
+        );
+
+        // OSC 8 hyperlink
+        return "\033]8;;{$url}\033\\{$text}\033]8;;\033\\";
     }
 
     private function formatBlock(

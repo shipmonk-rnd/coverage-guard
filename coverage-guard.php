@@ -34,4 +34,9 @@ $config->addRule(new class implements CoverageRule {
 
 });
 
+$localConfig = __DIR__ . '/coverage-guard.local.php';
+if (is_file($localConfig)) {
+    require $localConfig; // handy for $config->setEditorUrl()
+}
+
 return $config;
