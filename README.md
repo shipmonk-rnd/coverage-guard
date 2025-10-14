@@ -96,6 +96,10 @@ $config->addCoveragePathMapping('/absolute/ci/prefix', __DIR__);
 // It gets autodetected if cwd is beside /.git/ or if git binary is available
 $config->setGitRoot(__DIR__);
 
+// Make CLI file paths clickable to your IDE
+// Available placeholders: {file}, {relFile}, {line}
+$config->setEditorUrl('phpstorm://open?file={file}&line={line}');
+
 return $config;
 ```
 

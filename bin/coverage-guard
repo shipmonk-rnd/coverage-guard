@@ -31,7 +31,7 @@ try {
     $initializer = new Initializer();
     $initResult = $initializer->initialize($cwd, $argv);
 
-    $formatter = new ErrorFormatter($cwd, $printer);
+    $formatter = new ErrorFormatter($cwd, $printer, $initResult->config);
     $guard = new CoverageGuard($initResult->config, $printer);
     $coverageReport = $guard->checkCoverage($initResult->coverageFile, $initResult->patchFile);
 
