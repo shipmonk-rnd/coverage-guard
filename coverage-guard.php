@@ -6,11 +6,13 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 
-
 $config = new Config();
 $config->addRule(new class implements CoverageRule {
 
-    public function inspect(CodeBlock $codeBlock, bool $patchMode): ?CoverageError
+    public function inspect(
+        CodeBlock $codeBlock,
+        bool $patchMode,
+    ): ?CoverageError
     {
         if (!$codeBlock instanceof ClassMethodBlock) {
             return null;
@@ -27,6 +29,9 @@ $config->addRule(new class implements CoverageRule {
         return null;
     }
 
+    /**
+     * @param ReflectionClass<object> $classReflection
+     */
     private function isPublicApiClass(ReflectionClass $classReflection): bool
     {
         return $classReflection->getDocComment() !== false && str_contains($classReflection->getDocComment(), '@api');
