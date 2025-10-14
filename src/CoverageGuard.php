@@ -230,7 +230,12 @@ final class CoverageGuard
     private function getCoverage(string $coverageFile): array
     {
         $coverages = $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+        $foundHit = false;
         $remappedCoverages = [];
+
+        if ($coverages === []) {
+            throw new ErrorException("Coverage file '{$coverageFile}' does not contain any coverage data. Is it valid PHPUnit coverage file?");
+        }
 
         foreach ($coverages as $fileCoverage) {
             $filePath = $fileCoverage->filePath;
@@ -256,9 +261,18 @@ final class CoverageGuard
                 if ($lineNumber > $codeLinesCount) {
                     throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}'{$pathMappingInfo}, but such line does not exist. Is the report up-to-date?");
                 }
+
+                if (!$foundHit && $executableLine->hits > 0) {
+                    $foundHit = true;
+                }
             }
 
             $remappedCoverages[$realPath] = new FileCoverage($realPath, $fileCoverage->executableLines, $fileCoverage->expectedLinesCount);
+        }
+
+        if (!$foundHit) {
+            throw new ErrorException("Coverage file '{$coverageFile}' does not contain any executed line. Looks like no tests were run.");
+
         }
 
         return $remappedCoverages;
