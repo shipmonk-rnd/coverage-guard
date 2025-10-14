@@ -10,6 +10,8 @@ includes:
 parameters:
     paths:
         - bin/coverage-guard
+        - coverage-guard.php
+        - composer-dependency-analyser.php
         - src
         - tests
     excludePaths:

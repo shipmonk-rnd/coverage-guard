@@ -9,6 +9,8 @@
     <file>src/</file>
     <file>tests/</file>
     <file>bin/</file>
+    <file>coverage-guard.php</file>
+    <file>composer-dependency-analyser.php</file>
 
     <exclude-pattern>tests/fixtures/*</exclude-pattern>
 
