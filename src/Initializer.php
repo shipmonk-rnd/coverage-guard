@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard;
 
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use Throwable;
 use function count;
 use function exec;
 use function function_exists;
@@ -168,7 +169,14 @@ final class Initializer
             return require $configFile;
         };
 
-        $result = $loadedConfig();
+        try {
+            $result = $loadedConfig();
+        } catch (Throwable $e) {
+            $line = $e->getLine();
+            $file = $e->getFile();
+            $position = $file === $configFile ? "line $line" : "$file:$line";
+            throw new ErrorException($e::class . " while loading config file '$configFile' at $position. " . $e->getMessage(), $e);
+        }
 
         if (!$result instanceof Config) {
             throw new ErrorException("Config file '$configFile' must return an instance of " . Config::class);

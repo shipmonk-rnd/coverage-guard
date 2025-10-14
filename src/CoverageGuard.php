@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard;
 
 use Composer\InstalledVersions;
 use LogicException;
+use PhpParser\Error as ParseError;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
@@ -103,6 +104,8 @@ final class CoverageGuard
      * @param list<CoverageRule> $rules
      * @param list<int>|null $linesChanged
      * @return list<ReportedError>
+     *
+     * @throws ErrorException
      */
     private function getReportedErrors(
         array $rules,
@@ -132,10 +135,15 @@ final class CoverageGuard
         $traverser->addVisitor($nameResolver);
         $traverser->addVisitor($extractor);
 
-        $ast = $this->phpParser->parse(implode('', $codeLines));
+        try {
+            /** @throws ParseError */
+            $ast = $this->phpParser->parse(implode('', $codeLines));
+        } catch (ParseError $e) {
+            throw new ErrorException("Failed to parse PHP code in file {$file}: {$e->getMessage()}", $e);
+        }
 
         if ($ast === null) {
-            throw new LogicException("Failed to parse PHP code in file {$file}");
+            throw new LogicException("Failed to parse PHP code in file {$file}. Should never happen as Throwing error handler is used.");
         }
 
         $traverser->traverse($ast);

@@ -45,7 +45,7 @@ try {
     exit(1);
 
 } catch (Throwable $e) {
-    $printer->printLine('‼️  <red>FATAL:</red> ' . $e->getMessage());
+    $printer->printLine('‼️  <red>FATAL:</red> ' . $e::class . ': ' . $e->getMessage());
     $printer->printLine($e->getTraceAsString());
     exit(1);
 }
