@@ -9,7 +9,7 @@ index 1234567..abcdefg 100644
 -    // TODO: implement this
 +    public function untestedMethod(): string
 +    {
-+        return 'hello';
++        return 'goodbye';
 +    }
 +
  }
