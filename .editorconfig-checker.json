@@ -1,0 +1,8 @@
+{
+  "Exclude": [
+    "tests/fixtures/SampleWindows.php",
+    "tests/fixtures/SampleNoNewline.php",
+    "tests/fixtures/clover-windows.xml",
+    "tests/fixtures/sample-windows.patch"
+  ]
+}
