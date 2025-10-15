@@ -8,7 +8,6 @@ use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\XmlLoader;
 use SimpleXMLElement;
 use function str_starts_with;
-use const DIRECTORY_SEPARATOR;
 
 final class CoberturaCoverageExtractor implements CoverageExtractor
 {
@@ -83,7 +82,7 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             return $filename;
         }
 
-        return $source . DIRECTORY_SEPARATOR . $filename;
+        return $source . '/' . $filename;
     }
 
 }

@@ -9,6 +9,8 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function fopen;
+use function str_replace;
+use const DIRECTORY_SEPARATOR;
 
 final class CoverageGuardTest extends TestCase
 {
@@ -76,8 +78,8 @@ final class CoverageGuardTest extends TestCase
 
     public function testPatchIntegrityFailsWhenLineNumberExceedsFileLength(): void
     {
-        $patchFile = __DIR__ . '/fixtures/sample-line-out-of-bounds.patch';
-        $sampleFile = __DIR__ . '/fixtures/Sample.php';
+        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/sample-line-out-of-bounds.patch');
+        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Patch file '{$patchFile}' refers to added line #98 of file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
@@ -87,8 +89,8 @@ final class CoverageGuardTest extends TestCase
 
     public function testPatchIntegrityFailsWhenAddedLineContentMismatches(): void
     {
-        $patchFile = __DIR__ . '/fixtures/sample-added-mismatch.patch';
-        $sampleFile = __DIR__ . '/fixtures/Sample.php';
+        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/sample-added-mismatch.patch');
+        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Patch file '{$patchFile}' has added line #15 that does not match actual content of file '{$sampleFile}'.\nExpected '        return 'goodbye';'\nFound '        return 'hello';'\n\nIs the patch up-to-date?");

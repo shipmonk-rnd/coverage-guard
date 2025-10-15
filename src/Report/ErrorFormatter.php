@@ -18,6 +18,7 @@ use function strlen;
 use function substr;
 use function token_get_all;
 use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 use const PHP_INT_MAX;
 use const STR_PAD_LEFT;
 use const T_ABSTRACT;
@@ -257,10 +258,10 @@ final class ErrorFormatter
             $output .= $bgColor . ' ' . $lineNumberFormatted . ' ' . self::COLOR_RESET;
             $output .= ' ' . $changeIndicator . ' ' . $coverageIndicator . ' ';
             $output .= $highlightedContent;
-            $output .= "\n";
+            $output .= PHP_EOL;
         }
 
-        return rtrim($output, "\n");
+        return rtrim($output, PHP_EOL);
     }
 
     private function highlightLine(
@@ -268,7 +269,7 @@ final class ErrorFormatter
     ): string
     {
         if (!extension_loaded('tokenizer') || $this->printer->hasDisabledColors()) {
-            return rtrim($lineContent, "\n");
+            return $lineContent;
         }
 
         $tokens = token_get_all("<?php\n{$lineContent}");

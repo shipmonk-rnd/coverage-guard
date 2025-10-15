@@ -40,6 +40,7 @@ use function str_starts_with;
 use function strlen;
 use function substr;
 use const FILE_IGNORE_NEW_LINES;
+use const PHP_EOL;
 
 final class CoverageGuard
 {
@@ -115,7 +116,7 @@ final class CoverageGuard
         FileCoverage $fileCoverage,
     ): array
     {
-        $codeLines = $this->readFileLines($file);
+        $codeLines = $this->readFileLines($file, withLineEnding: false);
         $lineNumbers = range(1, count($codeLines));
 
         $nameResolver = new NameResolver();
@@ -137,7 +138,7 @@ final class CoverageGuard
 
         try {
             /** @throws ParseError */
-            $ast = $this->phpParser->parse(implode('', $codeLines));
+            $ast = $this->phpParser->parse(implode(PHP_EOL, $codeLines));
         } catch (ParseError $e) {
             throw new ErrorException("Failed to parse PHP code in file {$file}: {$e->getMessage()}", $e);
         }

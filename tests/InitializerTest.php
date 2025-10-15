@@ -4,6 +4,8 @@ namespace ShipMonk\CoverageGuard;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use function str_replace;
+use const DIRECTORY_SEPARATOR;
 
 final class InitializerTest extends TestCase
 {
@@ -157,7 +159,7 @@ final class InitializerTest extends TestCase
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
 
-        self::assertSame(__DIR__ . '/fixtures/', $result->config->getGitRoot());
+        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
     }
 
     public function testLoadConfigFailsWhenConfigFileReturnsNonConfigInstance(): void
