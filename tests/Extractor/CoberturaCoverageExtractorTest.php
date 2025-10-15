@@ -9,8 +9,6 @@ use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
 use function array_combine;
 use function array_map;
-use function str_replace;
-use const DIRECTORY_SEPARATOR;
 
 final class CoberturaCoverageExtractorTest extends TestCase
 {
@@ -21,7 +19,7 @@ final class CoberturaCoverageExtractorTest extends TestCase
         $coverage = $extractor->getCoverage(__DIR__ . '/../fixtures/cobertura.xml');
 
         self::assertNotEmpty($coverage);
-        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, 'tests/fixtures/Sample.php'), $coverage[0]->filePath);
+        self::assertSame('tests/fixtures/Sample.php', $coverage[0]->filePath);
         $fileCoverage = $coverage[0];
 
         $lineNumberToHitCount = array_combine(
