@@ -98,6 +98,17 @@ final class CoverageGuardTest extends TestCase
         $this->checkCoverageWithPatch($patchFile);
     }
 
+    public function testHandlesFileWithMissingNewlineAtEof(): void
+    {
+        $guard = $this->createCoverageGuard();
+        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml');
+
+        // The test passes if no exception is thrown about line count mismatch
+        self::assertSame([], $report->reportedErrors);
+        self::assertCount(1, $report->analysedFiles);
+        self::assertFalse($report->patchMode);
+    }
+
     private function checkCoverageWithPatch(string $patchFile): void
     {
         $guard = $this->createCoverageGuard();

@@ -34,12 +34,12 @@ use function is_file;
 use function method_exists;
 use function range;
 use function realpath;
+use function rtrim;
 use function str_contains;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function substr;
-use const FILE_IGNORE_NEW_LINES;
 use const PHP_EOL;
 
 final class CoverageGuard
@@ -116,7 +116,7 @@ final class CoverageGuard
         FileCoverage $fileCoverage,
     ): array
     {
-        $codeLines = $this->readFileLines($file, withLineEnding: false);
+        $codeLines = $this->readFileLines($file);
         $lineNumbers = range(1, count($codeLines));
 
         $nameResolver = new NameResolver();
@@ -192,7 +192,7 @@ final class CoverageGuard
             }
 
             $realPath = $this->realpath($absolutePath);
-            $actualFileLines = $this->readFileLines($realPath, withLineEnding: false);
+            $actualFileLines = $this->readFileLines($realPath);
 
             $changes[$realPath] = [];
 
@@ -348,20 +348,27 @@ final class CoverageGuard
     }
 
     /**
-     * @return list<string> lines with original line endings
+     * @return list<string>
      */
-    private function readFileLines(
-        string $file,
-        bool $withLineEnding = true,
-    ): array
+    private function readFileLines(string $file): array
     {
-        $lines = file($file, $withLineEnding ? 0 : FILE_IGNORE_NEW_LINES);
+        $lines = file($file);
         if ($lines === false) {
             throw new LogicException("Failed to read file: {$file}");
         }
-        $lines[] = '';
 
-        return $lines;
+        if ($lines === []) {
+            return [];
+        }
+
+        $lastLineIndex = count($lines) - 1;
+        $lastLine = $lines[$lastLineIndex];
+
+        if (rtrim($lastLine, "\n\r") !== $lastLine) {
+            $lines[] = ''; // if last line ends with newline, add empty line to ensure expected number of lines is reached
+        }
+
+        return array_map(static fn (string $line): string => rtrim($line, "\n\r"), $lines);
     }
 
 }
