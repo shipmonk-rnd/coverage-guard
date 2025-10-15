@@ -26,24 +26,7 @@ final class CoverageGuardTest extends TestCase
     ): void
     {
         $config = $this->createConfig();
-        $config->addRule(new class implements CoverageRule {
-
-            public function inspect(
-                CodeBlock $codeBlock,
-                bool $patchMode,
-            ): ?CoverageError
-            {
-                if (
-                    $codeBlock->isFullyUncovered()
-                    && $codeBlock->isFullyChanged()
-                ) {
-                    return CoverageError::message('Not 100% covered');
-                }
-
-                return null;
-            }
-
-        });
+        $config->addRule($this->createFullyUncoveredAndFullyChangedRule());
 
         if ($adjustConfig !== null) {
             $adjustConfig($config);
@@ -109,6 +92,25 @@ final class CoverageGuardTest extends TestCase
         self::assertFalse($report->patchMode);
     }
 
+    public function testHandlesWindowsNewlines(): void
+    {
+        $config = $this->createConfig();
+        $config->addRule($this->createFullyUncoveredAndFullyChangedRule());
+
+        $guard = $this->createCoverageGuard($config);
+
+        $report = $guard->checkCoverage(
+            __DIR__ . '/fixtures/clover-windows.xml',
+            __DIR__ . '/fixtures/sample-windows.patch',
+        );
+        $errors = $report->reportedErrors;
+
+        self::assertCount(1, $errors);
+        self::assertSame('Not 100% covered', $errors[0]->error->getMessage());
+        self::assertStringEndsWith('SampleWindows.php', $errors[0]->codeBlock->getFilePath());
+        self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
+    }
+
     private function checkCoverageWithPatch(string $patchFile): void
     {
         $guard = $this->createCoverageGuard();
@@ -135,6 +137,28 @@ final class CoverageGuardTest extends TestCase
         $config ??= $this->createConfig();
 
         return new CoverageGuard($config, $printer);
+    }
+
+    private function createFullyUncoveredAndFullyChangedRule(): CoverageRule
+    {
+        return new class implements CoverageRule {
+
+            public function inspect(
+                CodeBlock $codeBlock,
+                bool $patchMode,
+            ): ?CoverageError
+            {
+                if (
+                    $codeBlock->isFullyUncovered()
+                    && $codeBlock->isFullyChanged()
+                ) {
+                    return CoverageError::message('Not 100% covered');
+                }
+
+                return null;
+            }
+
+        };
     }
 
 }
