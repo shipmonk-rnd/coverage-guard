@@ -13,7 +13,9 @@ use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use function fopen;
 use function rewind;
+use function str_replace;
 use function stream_get_contents;
+use const DIRECTORY_SEPARATOR;
 
 final class ErrorFormatterTest extends TestCase
 {
@@ -34,7 +36,7 @@ final class ErrorFormatterTest extends TestCase
         self::assertStringContainsString('1', $result); // Line number
         self::assertStringContainsString('+', $result); // Change indicator
         self::assertStringContainsString('test.php', $result); // path was relativized
-        self::assertStringNotContainsString('/tmp/test.php', $result); // path was relativized
+        self::assertStringNotContainsString(str_replace('/', DIRECTORY_SEPARATOR, '/tmp/test.php'), $result); // path was relativized
     }
 
     public function testClickableFilepathWhenEditorUrlSet(): void
