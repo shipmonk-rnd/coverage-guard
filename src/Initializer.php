@@ -57,6 +57,8 @@ final class Initializer
             'config' => true,
             'verbose' => false,
             'help' => false,
+            'color' => false,
+            'no-color' => false,
         ]);
 
         if (array_key_exists('help', $options)) {
