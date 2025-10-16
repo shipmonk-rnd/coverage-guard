@@ -3,7 +3,9 @@
 namespace ShipMonk\CoverageGuard;
 
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Exception\HelpException;
 use Throwable;
+use function array_key_exists;
 use function count;
 use function exec;
 use function function_exists;
@@ -22,20 +24,47 @@ final class Initializer
      * @param list<string> $argv
      *
      * @throws ErrorException
+     * @throws HelpException
      */
     public function initialize(
         string $cwd,
         array $argv,
     ): InitializationResult
     {
-        if (!isset($argv[1])) {
-            throw new ErrorException('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
+        $usageMessage = "Usage: vendor/bin/coverage-guard <clover.xml>\n\n" .
+            "Arguments:\n" .
+            "  <white><clover.xml></white>                 Path to PHPUnit coverage file (.xml or .cov)\n\n" .
+            "Options:\n" .
+            "  <white>--patch</white> <changes.patch>      Check only changed files in the patch\n" .
+            "  <white>--config</white> <config.php>        Path to config file (default: coverage-guard.php)\n" .
+            "  <white>--verbose</white>                    Show detailed processing information\n" .
+            '  <white>--help</white>                       Show this help message';
+
+        $argument = $argv[1] ?? null;
+
+        if ($argument === null) {
+            throw new ErrorException('Missing coverage file argument. Use e.g. <white>vendor/bin/coverage-guard clover.xml</white>');
         }
 
-        $options = $this->parseOptions($argv, ['patch', 'config']);
-        $coverageFile = $argv[1];
+        if ($argument === '--help') {
+            throw new HelpException($usageMessage);
+        }
+
+        $options = $this->parseOptions($argv, [
+            'patch' => true,
+            'config' => true,
+            'verbose' => false,
+            'help' => false,
+        ]);
+
+        if (array_key_exists('help', $options)) {
+            throw new HelpException($usageMessage);
+        }
+
+        $coverageFile = $argument;
         $patchFile = $options['patch'] ?? null;
         $configFilePath = $options['config'] ?? null;
+        $verbose = array_key_exists('verbose', $options);
 
         if (!is_file($coverageFile)) {
             throw new ErrorException("Coverage file not found: {$coverageFile}");
@@ -62,6 +91,8 @@ final class Initializer
             $configFilePath = $cwd . '/coverage-guard.php';
         }
 
+        $cliOptions = new CliOptions($coverageFile, $patchFile, $configFilePath, $verbose);
+
         $config = is_file($configFilePath)
             ? $this->loadConfig($configFilePath)
             : new Config();
@@ -74,19 +105,19 @@ final class Initializer
             }
         }
 
-        return new InitializationResult($coverageFile, $patchFile, $config);
+        return new InitializationResult($cliOptions, $config);
     }
 
     /**
      * @param list<string> $argv
-     * @param list<string> $optionNames
+     * @param array<string, bool> $optionConfig Map of option name => requires value
      * @return array<string, string|null>
      *
      * @throws ErrorException
      */
     private function parseOptions(
         array $argv,
-        array $optionNames,
+        array $optionConfig,
     ): array
     {
         $options = [];
@@ -101,7 +132,7 @@ final class Initializer
             $current = $argv[$i];
 
             // Check for --option=value syntax
-            foreach ($optionNames as $optionName) {
+            foreach ($optionConfig as $optionName => $requiresValue) {
                 $prefix = '--' . $optionName . '=';
                 if (str_starts_with($current, $prefix)) {
                     $options[$optionName] = substr($current, strlen($prefix));
@@ -109,11 +140,15 @@ final class Initializer
                 }
             }
 
-            // Check for --option value syntax
+            // Check for --option value syntax or boolean flags
             $next = $argv[$i + 1] ?? null;
 
-            foreach ($optionNames as $optionName) {
+            foreach ($optionConfig as $optionName => $requiresValue) {
                 if ($current === '--' . $optionName) {
+                    if (!$requiresValue) {
+                        $options[$optionName] = null; // boolean flag is set
+                        continue 2;
+                    }
                     if ($next === null) {
                         throw new ErrorException("Option --{$optionName} requires a value");
                     }

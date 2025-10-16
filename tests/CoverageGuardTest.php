@@ -9,7 +9,9 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function fopen;
+use function rewind;
 use function str_replace;
+use function stream_get_contents;
 use const DIRECTORY_SEPARATOR;
 
 final class CoverageGuardTest extends TestCase
@@ -44,15 +46,15 @@ final class CoverageGuardTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{list<string>}>
+     * @return iterable<string, array{array{string, string|null, bool}}>
      */
     public static function provideArgs(): iterable
     {
-        yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch']];
-        yield 'without patch' => [[__DIR__ . '/fixtures/clover.xml']];
+        yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', false]];
+        yield 'without patch' => [[__DIR__ . '/fixtures/clover.xml', null, false]];
 
         yield 'with path mapping' => [
-            [__DIR__ . '/fixtures/clover_with_absolute_paths.xml'],
+            [__DIR__ . '/fixtures/clover_with_absolute_paths.xml', null, false],
             static function (Config $config): void {
                 $config->addCoveragePathMapping('/some/ci/path/root', __DIR__ . '/..');
             },
@@ -84,7 +86,7 @@ final class CoverageGuardTest extends TestCase
     public function testHandlesFileWithMissingNewlineAtEof(): void
     {
         $guard = $this->createCoverageGuard();
-        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml');
+        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml', patchFile: null, verbose: true);
 
         // The test passes if no exception is thrown about line count mismatch
         self::assertSame([], $report->reportedErrors);
@@ -102,6 +104,7 @@ final class CoverageGuardTest extends TestCase
         $report = $guard->checkCoverage(
             __DIR__ . '/fixtures/clover-windows.xml',
             __DIR__ . '/fixtures/sample-windows.patch',
+            false,
         );
         $errors = $report->reportedErrors;
 
@@ -111,6 +114,48 @@ final class CoverageGuardTest extends TestCase
         self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
+    public function testVerboseModeWithoutPatchShowsFilesAndCoverage(): void
+    {
+        $stream = fopen('php://memory', 'rw');
+        self::assertNotFalse($stream);
+
+        $printer = new Printer($stream, noColor: true); // No color for easier assertions
+        $config = $this->createConfig();
+        $pathHelper = new PathHelper(__DIR__ . '/../');
+        $guard = new CoverageGuard($config, $printer, $pathHelper);
+
+        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', patchFile: null, verbose: true);
+
+        rewind($stream);
+        $output = stream_get_contents($stream);
+        self::assertNotFalse($output);
+
+        self::assertStringContainsString('Info: Checking files listed in coverage report:', $output);
+        self::assertStringContainsString('tests/fixtures/Sample.php', $output);
+        self::assertStringContainsString('%', $output); // Coverage percentage
+    }
+
+    public function testVerboseModeWithPatchShowsFilesAndSkipped(): void
+    {
+        $stream = fopen('php://memory', 'rw');
+        self::assertNotFalse($stream);
+
+        $printer = new Printer($stream, noColor: true); // No color for easier assertions
+        $config = $this->createConfig();
+        $pathHelper = new PathHelper(__DIR__ . '/../');
+        $guard = new CoverageGuard($config, $printer, $pathHelper);
+
+        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', verbose: true);
+
+        rewind($stream);
+        $output = stream_get_contents($stream);
+        self::assertNotFalse($output);
+
+        self::assertStringContainsString('Info: Checking files listed in patch file:', $output);
+        self::assertStringContainsString('tests/fixtures/Sample.php', $output);
+        self::assertStringContainsString('%', $output); // Coverage percentage
+    }
+
     private function checkCoverageWithPatch(string $patchFile): void
     {
         $guard = $this->createCoverageGuard();
@@ -118,6 +163,7 @@ final class CoverageGuardTest extends TestCase
         $guard->checkCoverage(
             __DIR__ . '/fixtures/clover.xml',
             $patchFile,
+            false,
         );
     }
 
@@ -135,8 +181,9 @@ final class CoverageGuardTest extends TestCase
 
         $printer = new Printer($stream, noColor: false);
         $config ??= $this->createConfig();
+        $pathHelper = new PathHelper(__DIR__ . '/../');
 
-        return new CoverageGuard($config, $printer);
+        return new CoverageGuard($config, $printer, $pathHelper);
     }
 
     private function createFullyUncoveredAndFullyChangedRule(): CoverageRule

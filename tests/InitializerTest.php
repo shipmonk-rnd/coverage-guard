@@ -17,8 +17,8 @@ final class InitializerTest extends TestCase
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
 
-        self::assertSame($coverageFile, $result->coverageFile);
-        self::assertNull($result->patchFile);
+        self::assertSame($coverageFile, $result->cliOptions->coverageFile);
+        self::assertNull($result->cliOptions->patchFile);
     }
 
     public function testInitializeFailsWhenNoArgumentsProvided(): void
@@ -26,7 +26,7 @@ final class InitializerTest extends TestCase
         $initializer = new Initializer();
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
+        $this->expectExceptionMessageMatches('/Missing coverage file argument\./');
 
         $initializer->initialize(__DIR__, ['coverage-guard']);
     }
@@ -172,6 +172,38 @@ final class InitializerTest extends TestCase
         $this->expectExceptionMessage("Config file '$configFile' must return an instance of " . Config::class);
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
+    }
+
+    public function testInitializeWithVerboseFlag(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--verbose']);
+
+        self::assertTrue($result->cliOptions->verbose, 'Verbose flag should be true when --verbose is provided');
+    }
+
+    public function testInitializeWithoutVerboseFlag(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
+
+        self::assertFalse($result->cliOptions->verbose, 'Verbose flag should be false when --verbose is not provided');
+    }
+
+    public function testInitializeWithVerboseFlagAndOtherOptions(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $configFile = __DIR__ . '/fixtures/valid-config.php';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile, '--verbose']);
+
+        self::assertTrue($result->cliOptions->verbose, 'Verbose flag should be true when --verbose is provided with other options');
+        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
     }
 
 }

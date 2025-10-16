@@ -6,8 +6,7 @@ final class InitializationResult
 {
 
     public function __construct(
-        public readonly string $coverageFile,
-        public readonly ?string $patchFile,
+        public readonly CliOptions $cliOptions,
         public readonly Config $config,
     )
     {

@@ -51,13 +51,17 @@ final class CoverageGuard
 
     private Config $config;
 
+    private PathHelper $pathHelper;
+
     public function __construct(
         Config $config,
         Printer $printer,
+        PathHelper $pathHelper,
     )
     {
         $this->printer = $printer;
         $this->config = $config;
+        $this->pathHelper = $pathHelper;
         $this->phpParser = (new ParserFactory())->createForHostVersion();
     }
 
@@ -66,7 +70,8 @@ final class CoverageGuard
      */
     public function checkCoverage(
         string $coverageFile,
-        ?string $patchFile = null,
+        ?string $patchFile,
+        bool $verbose,
     ): CoverageReport
     {
         $patchMode = $patchFile !== null;
@@ -85,15 +90,30 @@ final class CoverageGuard
         $analysedFiles = [];
         $reportedErrors = [];
 
+        if ($verbose) {
+            $where = $patchMode ? 'patch file' : 'coverage report';
+            $this->printer->printLine("Info: <white>Checking files listed in $where:</white>\n");
+        }
+
         foreach ($changesPerFile as $file => $changedLinesOrNull) {
             if (!isset($coveragePerFile[$file])) {
+                if ($patchMode && $verbose) {
+                    $relativePath = $this->pathHelper->relativizePath($file);
+                    $this->printer->printLine("<orange>{$relativePath}</orange> - skipped (not in coverage report)");
+                }
                 continue;
             }
 
             $analysedFiles[] = $file;
-            $linesCoverage = $coveragePerFile[$file];
+            $fileCoverage = $coveragePerFile[$file];
 
-            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $linesCoverage) as $reportedError) {
+            if ($verbose) {
+                $relativePath = $this->pathHelper->relativizePath($file);
+                $coveragePerc = $fileCoverage->getCoveragePercentage();
+                $this->printer->printLine("<white>{$relativePath}</white> - $coveragePerc%");
+            }
+
+            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {
                 $reportedErrors[] = $reportedError;
             }
         }
