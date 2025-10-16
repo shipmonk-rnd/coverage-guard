@@ -18,7 +18,8 @@ final class PathHelper
 
     public function relativizePath(string $path): string
     {
-        return str_replace($this->cwd, '', $path);
+        $relativePath = str_replace($this->cwd, '', $path);
+        return str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
     }
 
 }
