@@ -109,6 +109,8 @@ You can also use a custom config file by `--config config.php`.
 
 - `--patch <branch-diff.patch>` verify only changed code
 - `--config <path/to/coverage-guard.php>` specify a custom config filepath
+- `--verbose` show detailed processing information
+- `--help` show help message
 
 Even `--option=value` syntax is supported.
 
