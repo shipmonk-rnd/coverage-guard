@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard\Report;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
+use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use function count;
 use function extension_loaded;
@@ -17,7 +18,6 @@ use function str_replace;
 use function strlen;
 use function substr;
 use function token_get_all;
-use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 use const PHP_INT_MAX;
 use const STR_PAD_LEFT;
@@ -117,19 +117,19 @@ final class ErrorFormatter
     private const BG_COVERED = "\033[48;5;22m"; // Dark green background
     private const BG_UNCOVERED = "\033[48;5;52m"; // Dark red background
 
-    private readonly string $cwd;
+    private readonly PathHelper $pathHelper;
 
     private readonly Printer $printer;
 
     private readonly ?string $editorUrl;
 
     public function __construct(
-        string $cwd,
+        PathHelper $pathHelper,
         Printer $printer,
         Config $config,
     )
     {
-        $this->cwd = rtrim($cwd, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->pathHelper = $pathHelper;
         $this->printer = $printer;
         $this->editorUrl = $config->getEditorUrl();
     }
@@ -165,7 +165,7 @@ final class ErrorFormatter
         $codeBlock = $reportedError->codeBlock;
         $coverageError = $reportedError->error;
 
-        $relativePath = $this->relativizePath($codeBlock->getFilePath());
+        $relativePath = $this->pathHelper->relativizePath($codeBlock->getFilePath());
         $fileLocation = "{$relativePath}:{$codeBlock->getStartLineNumber()}";
         $clickableFileLocation = $this->makeClickable(
             $fileLocation,
@@ -184,11 +184,6 @@ final class ErrorFormatter
         $this->printer->printLine('');
     }
 
-    private function relativizePath(string $path): string
-    {
-        return str_replace($this->cwd, '', $path);
-    }
-
     private function makeClickable(
         string $text,
         string $filePath,
@@ -201,7 +196,7 @@ final class ErrorFormatter
 
         $url = str_replace(
             ['{relFile}', '{file}', '{line}'],
-            [$this->relativizePath($filePath), $filePath, (string) $line],
+            [$this->pathHelper->relativizePath($filePath), $filePath, (string) $line],
             $this->editorUrl,
         );
 

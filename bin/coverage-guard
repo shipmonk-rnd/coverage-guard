@@ -3,7 +3,9 @@
 
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Exception\HelpException;
 use ShipMonk\CoverageGuard\Initializer;
+use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 
@@ -30,13 +32,25 @@ if ($cwd === false) {
 try {
     $initializer = new Initializer();
     $initResult = $initializer->initialize($cwd, $argv);
+    $debug = $initResult->cliOptions->debug;
 
-    $formatter = new ErrorFormatter($cwd, $printer, $initResult->config);
-    $guard = new CoverageGuard($initResult->config, $printer);
-    $coverageReport = $guard->checkCoverage($initResult->coverageFile, $initResult->patchFile);
+    $pathHelper = new PathHelper($cwd);
+    $formatter = new ErrorFormatter($pathHelper, $printer, $initResult->config);
+    $guard = new CoverageGuard($initResult->config, $printer, $pathHelper);
+    $coverageReport = $guard->checkCoverage(
+        $initResult->cliOptions->coverageFile,
+        $initResult->cliOptions->patchFile,
+        $initResult->cliOptions->debug,
+    );
 
     $exitCode = $formatter->formatReport($coverageReport);
     exit($exitCode);
+
+} catch (HelpException $e) {
+    $printer->printLine('');
+    $printer->printLine($e->getMessage());
+    $printer->printLine('');
+    exit(1);
 
 } catch (ErrorException $e) {
     $printer->printLine('');
@@ -45,7 +59,8 @@ try {
     exit(1);
 
 } catch (Throwable $e) {
-    $printer->printLine('‼️  <red>FATAL:</red> ' . $e::class . ': ' . $e->getMessage());
+    $printer->printLine('');
+    $printer->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
     $printer->printLine($e->getTraceAsString());
     exit(1);
 }

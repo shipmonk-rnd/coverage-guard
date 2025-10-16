@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
+use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
@@ -108,7 +109,7 @@ final class ErrorFormatterTest extends TestCase
     ): ErrorFormatter
     {
         return new ErrorFormatter(
-            '/tmp',
+            new PathHelper('/tmp'),
             new Printer($stream, noColor: false),
             $config,
         );

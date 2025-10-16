@@ -17,8 +17,8 @@ final class InitializerTest extends TestCase
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
 
-        self::assertSame($coverageFile, $result->coverageFile);
-        self::assertNull($result->patchFile);
+        self::assertSame($coverageFile, $result->cliOptions->coverageFile);
+        self::assertNull($result->cliOptions->patchFile);
     }
 
     public function testInitializeFailsWhenNoArgumentsProvided(): void
@@ -26,7 +26,7 @@ final class InitializerTest extends TestCase
         $initializer = new Initializer();
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Usage: vendor/bin/coverage-guard <clover-coverage.xml> [--patch <changes.patch>] [--config <coverage-guard.php>]');
+        $this->expectExceptionMessageMatches('/Missing coverage file argument\./');
 
         $initializer->initialize(__DIR__, ['coverage-guard']);
     }
@@ -172,6 +172,38 @@ final class InitializerTest extends TestCase
         $this->expectExceptionMessage("Config file '$configFile' must return an instance of " . Config::class);
 
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
+    }
+
+    public function testInitializeWithDebugFlag(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--debug']);
+
+        self::assertTrue($result->cliOptions->debug, 'Debug flag should be true when --debug is provided');
+    }
+
+    public function testInitializeWithoutDebugFlag(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
+
+        self::assertFalse($result->cliOptions->debug, 'Debug flag should be false when --debug is not provided');
+    }
+
+    public function testInitializeWithDebugFlagAndOtherOptions(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $configFile = __DIR__ . '/fixtures/valid-config.php';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile, '--debug']);
+
+        self::assertTrue($result->cliOptions->debug, 'Debug flag should be true when --debug is provided with other options');
+        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
     }
 
 }
