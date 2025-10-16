@@ -71,7 +71,7 @@ final class CoverageGuard
     public function checkCoverage(
         string $coverageFile,
         ?string $patchFile,
-        bool $debug,
+        bool $verbose,
     ): CoverageReport
     {
         $patchMode = $patchFile !== null;
@@ -90,14 +90,14 @@ final class CoverageGuard
         $analysedFiles = [];
         $reportedErrors = [];
 
-        if ($debug) {
+        if ($verbose) {
             $where = $patchMode ? 'patch file' : 'coverage report';
             $this->printer->printLine("Info: <white>Checking files listed in $where:</white>\n");
         }
 
         foreach ($changesPerFile as $file => $changedLinesOrNull) {
             if (!isset($coveragePerFile[$file])) {
-                if ($patchMode && $debug) {
+                if ($patchMode && $verbose) {
                     $relativePath = $this->pathHelper->relativizePath($file);
                     $this->printer->printLine("<orange>{$relativePath}</orange> - skipped (not in coverage report)");
                 }
@@ -107,7 +107,7 @@ final class CoverageGuard
             $analysedFiles[] = $file;
             $fileCoverage = $coveragePerFile[$file];
 
-            if ($debug) {
+            if ($verbose) {
                 $relativePath = $this->pathHelper->relativizePath($file);
                 $coveragePerc = $fileCoverage->getCoveragePercentage();
                 $this->printer->printLine("<white>{$relativePath}</white> - $coveragePerc%");

@@ -32,7 +32,7 @@ if ($cwd === false) {
 try {
     $initializer = new Initializer();
     $initResult = $initializer->initialize($cwd, $argv);
-    $debug = $initResult->cliOptions->debug;
+    $verbose = $initResult->cliOptions->verbose;
 
     $pathHelper = new PathHelper($cwd);
     $formatter = new ErrorFormatter($pathHelper, $printer, $initResult->config);
@@ -40,7 +40,7 @@ try {
     $coverageReport = $guard->checkCoverage(
         $initResult->cliOptions->coverageFile,
         $initResult->cliOptions->patchFile,
-        $initResult->cliOptions->debug,
+        $initResult->cliOptions->verbose,
     );
 
     $exitCode = $formatter->formatReport($coverageReport);

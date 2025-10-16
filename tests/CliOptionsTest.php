@@ -19,7 +19,7 @@ final class CliOptionsTest extends TestCase
         self::assertSame('coverage.xml', $cliOptions->coverageFile);
         self::assertSame('changes.patch', $cliOptions->patchFile);
         self::assertSame('config.php', $cliOptions->configFile);
-        self::assertTrue($cliOptions->debug);
+        self::assertTrue($cliOptions->verbose);
     }
 
     public function testCliOptionsWithNullPatchFile(): void
@@ -34,10 +34,10 @@ final class CliOptionsTest extends TestCase
         self::assertSame('coverage.xml', $cliOptions->coverageFile);
         self::assertNull($cliOptions->patchFile);
         self::assertSame('config.php', $cliOptions->configFile);
-        self::assertFalse($cliOptions->debug);
+        self::assertFalse($cliOptions->verbose);
     }
 
-    public function testCliOptionsWithDebugEnabled(): void
+    public function testCliOptionsWithVerboseEnabled(): void
     {
         $cliOptions = new CliOptions(
             'coverage.xml',
@@ -46,10 +46,10 @@ final class CliOptionsTest extends TestCase
             true,
         );
 
-        self::assertTrue($cliOptions->debug);
+        self::assertTrue($cliOptions->verbose);
     }
 
-    public function testCliOptionsWithDebugDisabled(): void
+    public function testCliOptionsWithVerboseDisabled(): void
     {
         $cliOptions = new CliOptions(
             'coverage.xml',
@@ -58,7 +58,7 @@ final class CliOptionsTest extends TestCase
             false,
         );
 
-        self::assertFalse($cliOptions->debug);
+        self::assertFalse($cliOptions->verbose);
     }
 
 }

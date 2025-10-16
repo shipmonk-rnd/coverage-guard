@@ -86,7 +86,7 @@ final class CoverageGuardTest extends TestCase
     public function testHandlesFileWithMissingNewlineAtEof(): void
     {
         $guard = $this->createCoverageGuard();
-        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml', patchFile: null, debug: true);
+        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml', patchFile: null, verbose: true);
 
         // The test passes if no exception is thrown about line count mismatch
         self::assertSame([], $report->reportedErrors);
@@ -114,7 +114,7 @@ final class CoverageGuardTest extends TestCase
         self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
-    public function testDebugModeWithoutPatchShowsFilesAndCoverage(): void
+    public function testVerboseModeWithoutPatchShowsFilesAndCoverage(): void
     {
         $stream = fopen('php://memory', 'rw');
         self::assertNotFalse($stream);
@@ -124,7 +124,7 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper(__DIR__ . '/../');
         $guard = new CoverageGuard($config, $printer, $pathHelper);
 
-        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', patchFile: null, debug: true);
+        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', patchFile: null, verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);
@@ -135,7 +135,7 @@ final class CoverageGuardTest extends TestCase
         self::assertStringContainsString('%', $output); // Coverage percentage
     }
 
-    public function testDebugModeWithPatchShowsFilesAndSkipped(): void
+    public function testVerboseModeWithPatchShowsFilesAndSkipped(): void
     {
         $stream = fopen('php://memory', 'rw');
         self::assertNotFalse($stream);
@@ -145,7 +145,7 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper(__DIR__ . '/../');
         $guard = new CoverageGuard($config, $printer, $pathHelper);
 
-        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', debug: true);
+        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);

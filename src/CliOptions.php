@@ -9,7 +9,7 @@ final class CliOptions
         public readonly string $coverageFile,
         public readonly ?string $patchFile,
         public readonly ?string $configFile,
-        public readonly bool $debug,
+        public readonly bool $verbose,
     )
     {
     }

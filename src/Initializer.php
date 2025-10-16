@@ -37,7 +37,7 @@ final class Initializer
             "Options:\n" .
             "  <white>--patch</white> <changes.patch>      Check only changed files in the patch\n" .
             "  <white>--config</white> <config.php>        Path to config file (default: coverage-guard.php)\n" .
-            "  <white>--debug</white>                      Show detailed processing information\n" .
+            "  <white>--verbose</white>                    Show detailed processing information\n" .
             '  <white>--help</white>                       Show this help message';
 
         $argument = $argv[1] ?? null;
@@ -53,7 +53,7 @@ final class Initializer
         $options = $this->parseOptions($argv, [
             'patch' => true,
             'config' => true,
-            'debug' => false,
+            'verbose' => false,
             'help' => false,
         ]);
 
@@ -64,7 +64,7 @@ final class Initializer
         $coverageFile = $argument;
         $patchFile = $options['patch'] ?? null;
         $configFilePath = $options['config'] ?? null;
-        $debug = array_key_exists('debug', $options);
+        $verbose = array_key_exists('verbose', $options);
 
         if (!is_file($coverageFile)) {
             throw new ErrorException("Coverage file not found: {$coverageFile}");
@@ -91,7 +91,7 @@ final class Initializer
             $configFilePath = $cwd . '/coverage-guard.php';
         }
 
-        $cliOptions = new CliOptions($coverageFile, $patchFile, $configFilePath, $debug);
+        $cliOptions = new CliOptions($coverageFile, $patchFile, $configFilePath, $verbose);
 
         $config = is_file($configFilePath)
             ? $this->loadConfig($configFilePath)

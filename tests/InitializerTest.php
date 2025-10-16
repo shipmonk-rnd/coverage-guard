@@ -174,35 +174,35 @@ final class InitializerTest extends TestCase
         $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
     }
 
-    public function testInitializeWithDebugFlag(): void
+    public function testInitializeWithVerboseFlag(): void
     {
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
-        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--debug']);
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--verbose']);
 
-        self::assertTrue($result->cliOptions->debug, 'Debug flag should be true when --debug is provided');
+        self::assertTrue($result->cliOptions->verbose, 'Verbose flag should be true when --verbose is provided');
     }
 
-    public function testInitializeWithoutDebugFlag(): void
+    public function testInitializeWithoutVerboseFlag(): void
     {
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $initializer = new Initializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
 
-        self::assertFalse($result->cliOptions->debug, 'Debug flag should be false when --debug is not provided');
+        self::assertFalse($result->cliOptions->verbose, 'Verbose flag should be false when --verbose is not provided');
     }
 
-    public function testInitializeWithDebugFlagAndOtherOptions(): void
+    public function testInitializeWithVerboseFlagAndOtherOptions(): void
     {
         $coverageFile = __DIR__ . '/fixtures/clover.xml';
         $configFile = __DIR__ . '/fixtures/valid-config.php';
         $initializer = new Initializer();
 
-        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile, '--debug']);
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile, '--verbose']);
 
-        self::assertTrue($result->cliOptions->debug, 'Debug flag should be true when --debug is provided with other options');
+        self::assertTrue($result->cliOptions->verbose, 'Verbose flag should be true when --verbose is provided with other options');
         self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
     }
 
