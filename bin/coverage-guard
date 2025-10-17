@@ -22,7 +22,10 @@ foreach ($autoloadPaths as $autoloadPath) {
 }
 
 $cwd = getcwd();
-$noColor = getenv('NO_COLOR') !== false;
+$noColor = in_array('--no-color', $argv, true)
+    || getenv('NO_COLOR') !== false
+    || (!stream_isatty(STDOUT) && !in_array('--color', $argv, true));
+
 $printer = new Printer(STDOUT, $noColor);
 
 if ($cwd === false) {

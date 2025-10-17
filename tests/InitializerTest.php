@@ -206,4 +206,14 @@ final class InitializerTest extends TestCase
         self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
     }
 
+    public function testInitializeWithColorsFlag(): void
+    {
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $initializer = new Initializer();
+
+        $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--no-color', '--color']);
+
+        self::assertSame($coverageFile, $result->cliOptions->coverageFile);
+    }
+
 }

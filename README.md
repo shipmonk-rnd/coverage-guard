@@ -111,6 +111,8 @@ You can also use a custom config file by `--config config.php`.
 - `--config <path/to/coverage-guard.php>` specify a custom config filepath
 - `--verbose` show detailed processing information
 - `--help` show help message
+- `--no-color` to disable colors (`NO_COLOR` env is also supported)
+- `--color` to force colors even when output is not a TTY
 
 Even `--option=value` syntax is supported.
 

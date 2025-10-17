@@ -38,6 +38,8 @@ final class Initializer
             "  <white>--patch</white> <changes.patch>      Check only changed files in the patch\n" .
             "  <white>--config</white> <config.php>        Path to config file (default: coverage-guard.php)\n" .
             "  <white>--verbose</white>                    Show detailed processing information\n" .
+            "  <white>--no-color</white>                   Disable colored output\n" .
+            "  <white>--color</white>                      Force colored output even when output is not a TTY\n" .
             '  <white>--help</white>                       Show this help message';
 
         $argument = $argv[1] ?? null;
@@ -55,6 +57,8 @@ final class Initializer
             'config' => true,
             'verbose' => false,
             'help' => false,
+            'color' => false,
+            'no-color' => false,
         ]);
 
         if (array_key_exists('help', $options)) {
