@@ -195,6 +195,10 @@ final class ErrorFormatter
             return $text;
         }
 
+        if ($this->printer->hasDisabledColors()) {
+            return $text;
+        }
+
         $url = str_replace(
             ['{relFile}', '{file}', '{line}'],
             [$this->pathHelper->relativizePath($filePath), $filePath, (string) $line],
