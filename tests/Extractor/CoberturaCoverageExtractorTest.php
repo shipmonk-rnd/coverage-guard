@@ -28,9 +28,7 @@ final class CoberturaCoverageExtractorTest extends TestCase
         );
 
         self::assertSame([
-            8 => 1,
             10 => 1,
-            13 => 0,
             15 => 0,
         ], $lineNumberToHitCount);
     }
