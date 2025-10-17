@@ -334,6 +334,23 @@ final class CodeBlockTest extends TestCase
         self::assertSame('createBlock', $block->getMethodReflection()->getShortName());
     }
 
+    public function testMethodReflectionThrowsExceptionForNonExistentMethod(): void
+    {
+        $block = new ClassMethodBlock(
+            className: self::class,
+            methodName: 'nonExistentMethod',
+            filePath: '/path/to/file.php',
+            lines: [
+                new LineOfCode(number: 1, executable: true, covered: false, changed: false, contents: 'code'),
+            ],
+        );
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Could not get reflection for method');
+
+        $block->getMethodReflection();
+    }
+
     /**
      * @param non-empty-list<LineOfCode> $lines
      */
