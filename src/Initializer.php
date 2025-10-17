@@ -79,8 +79,8 @@ final class Initializer
                 throw new ErrorException("Patch file not found: {$patchFile}");
             }
 
-            if (!str_ends_with($patchFile, '.patch')) {
-                throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch extension");
+            if (!str_ends_with($patchFile, '.patch') && !str_ends_with($patchFile, '.diff')) {
+                throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch or .diff extension");
             }
         }
 
