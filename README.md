@@ -23,11 +23,6 @@ vendor/bin/phpunit --coverage-clover clover.xml # Run tests with coverage
 vendor/bin/coverage-guard clover.xml
 ```
 
-### Supported coverage formats
-- PHPUnit clover format (`.xml`, recommended)
-- PHPUnit corbertura format (`.xml`)
-- PHPUnit serialized PHP format (`.cov`)
-
 ## Verifying only changed code
 
 ```sh
@@ -115,6 +110,14 @@ You can also use a custom config file by `--config config.php`.
 - `--color` to force colors even when output is not a TTY
 
 Even `--option=value` syntax is supported.
+
+## Supported coverage formats
+
+| Format | Filesize | Rating     | Notes |
+|--------|----------|----------|-------|
+| **clover** (`.xml`) | 100 % | 🟢 Best  | Usable in [PHPStorm coverage visualization](https://www.jetbrains.com/help/phpstorm/viewing-code-coverage-results.html). Allows better integrity checks. |
+| **cobertura** (`.xml`) | ~150 % | 🟡 OK    | Usable in [GitLab coverage visualization](https://docs.gitlab.com/ci/testing/code_coverage/#coverage-visualization) |
+| **php** (`.cov`) | ~800 % | 🔴 Avoid | May produce warnings on old PHPUnit when xdebug is not active |
 
 ## Contributing
 - Check your code by `composer check`
