@@ -33,7 +33,7 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
         }
 
         $result = [];
-        $lineCoverage = $coverage->getData(true)->lineCoverage();
+        $lineCoverage = $coverage->getData()->lineCoverage();
 
         foreach ($lineCoverage as $filePath => $fileCoverage) {
             if (!is_array($fileCoverage)) {
