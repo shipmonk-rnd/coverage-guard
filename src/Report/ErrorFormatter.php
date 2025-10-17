@@ -138,11 +138,12 @@ final class ErrorFormatter
     {
         $reportedErrors = $report->reportedErrors;
         $analysedFilesCount = count($report->analysedFiles);
+        $plural = $analysedFilesCount > 1 ? 's' : '';
 
         $this->printer->printLine('');
 
         if (count($reportedErrors) === 0) {
-            $this->printer->printLine("✅ No violations found (analysed $analysedFilesCount files)");
+            $this->printer->printLine("✅ No coverage issue found (analysed $analysedFilesCount file$plural)");
             $this->printer->printLine('');
             return 0;
         }
@@ -151,7 +152,7 @@ final class ErrorFormatter
             $this->formatError($reportedError, $report->patchMode);
         }
 
-        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " violations (in $analysedFilesCount analysed files)");
+        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues (in $analysedFilesCount analysed file$plural)");
         $this->printer->printLine('');
 
         return 1;
