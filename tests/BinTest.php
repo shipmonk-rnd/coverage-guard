@@ -82,4 +82,86 @@ final class BinTest extends TestCase
         self::assertStringContainsString('Error', $outputString, 'Expected error message in output');
     }
 
+    public function testBinWithNoColorFlag(): void
+    {
+        $binPath = __DIR__ . '/../bin/coverage-guard';
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $patchFile = __DIR__ . '/fixtures/sample.patch';
+        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+
+        $command = implode(' ', [
+            'php',
+            escapeshellarg($binPath),
+            escapeshellarg($coverageFile),
+            '--patch',
+            escapeshellarg($patchFile),
+            '--config',
+            escapeshellarg($configFile),
+            '--no-color',
+        ]);
+
+        $output = [];
+        $exitCode = null;
+        exec($command, $output, $exitCode);
+
+        $outputString = implode("\n", $output);
+        self::assertStringNotContainsString("\033[", $outputString, 'Expected no ANSI color codes with --no-color');
+        self::assertStringContainsString('Sample.php', $outputString, 'Expected output to mention Sample.php');
+    }
+
+    public function testBinWithColorFlag(): void
+    {
+        $binPath = __DIR__ . '/../bin/coverage-guard';
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $patchFile = __DIR__ . '/fixtures/sample.patch';
+        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+
+        $command = implode(' ', [
+            'php',
+            escapeshellarg($binPath),
+            escapeshellarg($coverageFile),
+            '--patch',
+            escapeshellarg($patchFile),
+            '--config',
+            escapeshellarg($configFile),
+            '--color',
+            '2>&1',
+        ]);
+
+        $output = [];
+        $exitCode = null;
+        exec($command, $output, $exitCode);
+
+        $outputString = implode("\n", $output);
+        self::assertStringContainsString("\033[", $outputString, 'Expected ANSI color codes with --color');
+        self::assertStringContainsString('Sample.php', $outputString, 'Expected output to mention Sample.php');
+    }
+
+    public function testBinDefaultBehaviorWithoutTty(): void
+    {
+        $binPath = __DIR__ . '/../bin/coverage-guard';
+        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $patchFile = __DIR__ . '/fixtures/sample.patch';
+        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+
+        $command = implode(' ', [
+            'php',
+            escapeshellarg($binPath),
+            escapeshellarg($coverageFile),
+            '--patch',
+            escapeshellarg($patchFile),
+            '--config',
+            escapeshellarg($configFile),
+            '2>&1',
+        ]);
+
+        $output = [];
+        $exitCode = null;
+        exec($command, $output, $exitCode);
+
+        $outputString = implode("\n", $output);
+        // When running via exec(), STDOUT is not a TTY, so colors should be disabled by default
+        self::assertStringNotContainsString("\033[", $outputString, 'Expected no ANSI color codes when STDOUT is not a TTY');
+    }
+
 }

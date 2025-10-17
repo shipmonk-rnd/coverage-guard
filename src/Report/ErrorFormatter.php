@@ -229,8 +229,10 @@ final class ErrorFormatter
 
             // Add background color if executable (when colors are enabled)
             $bgColor = '';
+            $resetColor = '';
             if ($isExecutable && !$this->printer->hasDisabledColors()) {
                 $bgColor = $isCovered ? self::BG_COVERED : self::BG_UNCOVERED;
+                $resetColor = self::COLOR_RESET;
             }
 
             // Add change indicator
@@ -250,7 +252,7 @@ final class ErrorFormatter
 
             // Combine all parts: line number + change indicator + content
             $output .= '│ ';
-            $output .= $bgColor . ' ' . $lineNumberFormatted . ' ' . self::COLOR_RESET;
+            $output .= $bgColor . ' ' . $lineNumberFormatted . ' ' . $resetColor;
             $output .= ' ' . $changeIndicator . ' ' . $coverageIndicator . ' ';
             $output .= $highlightedContent;
             $output .= PHP_EOL;
