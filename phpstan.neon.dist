@@ -44,6 +44,14 @@ parameters:
             tests:
                 enabled: true
 
+    shipmonkRules:
+        classSuffixNaming:
+            superclassToSuffixMapping:
+                Exception: Exception
+                PHPUnit\Framework\TestCase: Test
+                ShipMonk\CoverageGuard\Rule\CoverageRule: Rule
+                ShipMonk\CoverageGuard\Extractor\CoverageExtractor: Extractor
+
     ignoreErrors:
         # allow calling internal methods from SebastianBergmann\CodeCoverage
         -
