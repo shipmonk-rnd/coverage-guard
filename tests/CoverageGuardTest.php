@@ -67,7 +67,7 @@ final class CoverageGuardTest extends TestCase
         $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("Patch file '{$patchFile}' refers to added line #98 of file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
+        $this->expectExceptionMessage("Patch file '{$patchFile}' refers to added line #98 with '    public function untestedMethod(): string' contents in file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
 
         $this->checkCoverageWithPatch($patchFile);
     }
@@ -130,7 +130,7 @@ final class CoverageGuardTest extends TestCase
         $output = stream_get_contents($stream);
         self::assertNotFalse($output);
 
-        self::assertStringContainsString('Info: Checking files listed in coverage report:', $output);
+        self::assertStringContainsString('Info: Checking files listed in coverage report', $output);
         self::assertStringContainsString('tests/fixtures/Sample.php', $output);
         self::assertStringContainsString('%', $output); // Coverage percentage
     }
@@ -151,7 +151,7 @@ final class CoverageGuardTest extends TestCase
         $output = stream_get_contents($stream);
         self::assertNotFalse($output);
 
-        self::assertStringContainsString('Info: Checking files listed in patch file:', $output);
+        self::assertStringContainsString('Info: Checking files listed in patch file', $output);
         self::assertStringContainsString('tests/fixtures/Sample.php', $output);
         self::assertStringContainsString('%', $output); // Coverage percentage
     }

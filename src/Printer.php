@@ -58,8 +58,14 @@ final class Printer
         string $string,
     ): void
     {
-        $this->printLine('');
-        $this->printLine('<orange>Warning:</orange> ' . $string);
+        $this->printLine('<orange>Warn:</orange> ' . $string);
+    }
+
+    public function printInfo(
+        string $string,
+    ): void
+    {
+        $this->printLine('<white>Info:</white> ' . $string);
     }
 
     public function print(string $string): void

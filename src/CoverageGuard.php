@@ -92,7 +92,7 @@ final class CoverageGuard
 
         if ($verbose) {
             $where = $patchMode ? 'patch file' : 'coverage report';
-            $this->printer->printLine("Info: <white>Checking files listed in $where:</white>\n");
+            $this->printer->printInfo("Checking files listed in $where");
         }
 
         foreach ($changesPerFile as $file => $changedLinesOrNull) {
@@ -194,10 +194,10 @@ final class CoverageGuard
             throw new ErrorException("Failed to read patch file: {$patchFile}");
         }
 
-        $patch = (new DiffParser())->parse($patchContent);
+        $diffs = (new DiffParser())->parse($patchContent);
         $changes = [];
 
-        foreach ($patch as $diff) {
+        foreach ($diffs as $diff) {
             $diffTo = method_exists($diff, 'to') ? $diff->to() : $diff->getTo();
             if ($diffTo === '/dev/null') {
                 continue; // deleted file
@@ -227,7 +227,7 @@ final class CoverageGuard
 
                     if ($lineType === Line::ADDED) {
                         if (!isset($actualFileLines[$lineNumber - 1])) {
-                            throw new ErrorException("Patch file '{$patchFile}' refers to added line #{$lineNumber} of file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
+                            throw new ErrorException("Patch file '{$patchFile}' refers to added line #{$lineNumber} with '{$lineContent}' contents in file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
                         }
 
                         $actualLine = $actualFileLines[$lineNumber - 1];
@@ -246,6 +246,10 @@ final class CoverageGuard
                     }
                 }
             }
+        }
+
+        if ($diffs === []) {
+            $this->printer->printWarning("Patch file '{$patchFile}' does not contain any changes. Is it valid patch file?");
         }
 
         return $changes;
@@ -301,7 +305,6 @@ final class CoverageGuard
 
         if (!$foundHit) {
             throw new ErrorException("Coverage file '{$coverageFile}' does not contain any executed line. Looks like no tests were run.");
-
         }
 
         return $remappedCoverages;

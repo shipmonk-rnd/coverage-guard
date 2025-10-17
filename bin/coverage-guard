@@ -33,7 +33,7 @@ if ($cwd === false) {
 }
 
 try {
-    $initializer = new Initializer();
+    $initializer = new Initializer($printer);
     $initResult = $initializer->initialize($cwd, $argv);
     $verbose = $initResult->cliOptions->verbose;
 

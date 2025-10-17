@@ -20,6 +20,12 @@ use function trim;
 final class Initializer
 {
 
+    public function __construct(
+        private readonly Printer $printer,
+    )
+    {
+    }
+
     /**
      * @param list<string> $argv
      *
@@ -97,15 +103,23 @@ final class Initializer
 
         $cliOptions = new CliOptions($coverageFile, $patchFile, $configFilePath, $verbose);
 
+        if ($verbose && !array_key_exists('config', $options) && is_file($configFilePath)) {
+            $this->printer->printInfo("Using config file: {$configFilePath}");
+        }
+
         $config = is_file($configFilePath)
             ? $this->loadConfig($configFilePath)
             : new Config();
 
-        if ($config->getGitRoot() === null) {
+        if ($patchFile !== null && $config->getGitRoot() === null) {
             $detectedGitRoot = $this->detectGitRoot($cwd);
 
             if ($detectedGitRoot !== null) {
                 $config->setGitRoot($detectedGitRoot);
+
+                if ($verbose) {
+                    $this->printer->printInfo("Git root autodetected: {$detectedGitRoot}");
+                }
             }
         }
 
