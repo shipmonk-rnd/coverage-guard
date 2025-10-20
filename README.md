@@ -16,14 +16,33 @@ This tool helps ensure that certain code blocks are covered by tests, typically 
 composer require --dev shipmonk/coverage-guard
 ```
 
-## Simple usage
+## Example usage
 
 ```sh
-vendor/bin/phpunit --coverage-clover clover.xml # Run tests with coverage
+# Run tests, collect coverage, generate report:
+XDEBUG_MODE=coverage vendor/bin/phpunit tests --coverage-filter src --coverage-clover clover.xml
+
+# Verify coverage:
 vendor/bin/coverage-guard clover.xml
 ```
 
-## Verifying only changed code
+
+In real application, you will probably use `phpunit.xml` to [configure PHPUnit coverage](https://docs.phpunit.de/en/10.5/code-coverage.html#including-files):
+
+```xml
+<coverage processUncoveredFiles="true">
+    <include>
+        <directory>src</directory>
+    </include>
+    <report>
+        <clover outputFile="clover.xml"/>
+    </report>
+</coverage>
+```
+
+To collect coverage, you can pick traditional [XDebug](https://xdebug.org/docs/install) or performant [PCOV](https://github.com/krakjoe/pcov/blob/develop/INSTALL.md) extension.
+
+## Enforce coverage for new code only
 
 ```sh
 git diff master...HEAD > changes.patch
@@ -100,6 +119,19 @@ return $config;
 
 You can also use a custom config file by `--config config.php`.
 
+
+## What can you enforce?
+The `CodeBlock` class is aware **which line is executable, changed and covered**.
+Also, you can use **reflection** to pinpoint your rules.
+This allows you to setup huge variety of rules, examples:
+
+- All **newly created methods** must have some coverage
+- When a method is **changed by more than 50%,** it must have at least 50% coverage
+- All methods in your codebase **longer than 10 executable lines** must have some coverage
+- All **`Controller` methods** must have at least 50% coverage
+- Every method must be tested unless custom **`#[NoCoverageAllowed]` attribute** is used
+- ...
+
 ## Cli options
 
 - `--patch <branch-diff.patch>` verify only changed code
@@ -113,11 +145,11 @@ Even `--option=value` syntax is supported.
 
 ## Supported coverage formats
 
-| Format | Filesize | Rating     | Notes |
-|--------|----------|----------|-------|
-| **clover** (`.xml`) | 100 % | 🟢 Best  | Usable in [PHPStorm coverage visualization](https://www.jetbrains.com/help/phpstorm/viewing-code-coverage-results.html). Allows better integrity checks. |
-| **cobertura** (`.xml`) | ~150 % | 🟡 OK    | Usable in [GitLab coverage visualization](https://docs.gitlab.com/ci/testing/code_coverage/#coverage-visualization) |
-| **php** (`.cov`) | ~800 % | 🔴 Avoid | May produce warnings on old PHPUnit when xdebug is not active |
+| Format | Filesize        | Rating     | Notes                                                                                                                                                    |
+|--------|-----------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **clover** (`.xml`) | (baseline)      | 🟢 Best  | Usable in [PHPStorm coverage visualization](https://www.jetbrains.com/help/phpstorm/viewing-code-coverage-results.html). Allows better integrity checks. |
+| **cobertura** (`.xml`) | 1.7x bigger     | 🟡 OK    | Usable in [GitLab coverage visualization](https://docs.gitlab.com/ci/testing/code_coverage/#coverage-visualization)                                      |
+| **php** (`.cov`) | 8x - 40x bigger | 🔴 Avoid | May produce warnings on old PHPUnit when xdebug is not active. Good coverage causes HUGE filesizes easily reaching over 100 MB.                          |
 
 ## Contributing
 - Check your code by `composer check`
