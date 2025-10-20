@@ -65,42 +65,16 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
+use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 
 $config = new Config();
 
 // Your main specification of what must be covered
-$config->addRule(new class implements CoverageRule {
-
-    public function inspect(
-        CodeBlock $codeBlock,
-        bool $patchMode, // true when --patch was provided (thus only changed files and methods are analyzed)
-    ): ?CoverageError
-    {
-        if (!$codeBlock instanceof ClassMethodBlock) {
-            return null; // let's analyse only class methods
-        }
-
-        if (
-            $codeBlock->isChangedAtLeastByPercent(50) // important for patch mode, otherwise all lines are considered changed
-            && !$codeBlock->isCoveredAtLeastByPercent(50)
-        ) {
-            $shortClassName = $codeBlock->getMethodReflection() // you can rule based on reflection
-                ->getDeclaringClass()
-                ->getShortName();
-
-            $methodRef = "{$shortClassName}::{$codeBlock->getMethodName()}";
-            $coverage = (int) $codeBlock->getCoveragePercentage();
-            $infix = $patchMode ? ' was significantly changed, but' : '';
-
-            $error = "Method <white>$methodRef</white>$infix has only $coverage %% coverage.";
-
-            return CoverageError::message($error);
-        }
-
-        return null;
-    }
-
-});
+$config->addRule(new EnforceCoverageForMethodsRule(
+    requiredCoveragePercentage: 50,
+    minMethodChangePercentage: 50, // when --patch is provided, check only methods changed by more than 50%
+    minExecutableLines: 5, // only check methods with at least 5 executable lines
+));
 
 // Replace prefix of absolute paths in coverage files
 // Handy if you want to reuse clover.xml generated in CI
@@ -117,7 +91,8 @@ $config->setEditorUrl('phpstorm://open?file={file}&line={line}');
 return $config;
 ```
 
-You can also use a custom config file by `--config config.php`.
+- For more advanced usage, implement `CoverageRule` and pass it to `Config::addRule()` method.
+  - Inspire by prepared [`EnforceCoverageForMethodsRule`](src/Rule/EnforceCoverageForMethodsRule.php) or our own [coverage config](./coverage-guard.php).
 
 
 ## What can you enforce?

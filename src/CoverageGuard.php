@@ -21,7 +21,7 @@ use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
-use ShipMonk\CoverageGuard\Rule\DefaultCoverageRule;
+use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
@@ -82,9 +82,9 @@ final class CoverageGuard
 
         $rules = $this->config->getRules();
         if ($rules === []) {
-            $this->printer->printWarning('No rules configured, will report only long fully untested ' . ($patchMode ? 'and fully changed' : '') . 'methods!');
+            $this->printer->printWarning('No rules configured, will report only long fully untested methods!');
 
-            $rules[] = new DefaultCoverageRule();
+            $rules[] = new EnforceCoverageForMethodsRule(minExecutableLines: 5);
         }
 
         $analysedFiles = [];
