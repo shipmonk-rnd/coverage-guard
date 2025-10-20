@@ -23,7 +23,7 @@ composer require --dev shipmonk/coverage-guard
 XDEBUG_MODE=coverage vendor/bin/phpunit tests --coverage-filter src --coverage-clover clover.xml
 
 # Verify coverage:
-vendor/bin/coverage-guard clover.xml
+vendor/bin/coverage-guard check clover.xml
 ```
 
 
@@ -42,15 +42,68 @@ In real application, you will probably use `phpunit.xml` to [configure PHPUnit c
 
 To collect coverage, you can pick traditional [XDebug](https://xdebug.org/docs/install) or performant [PCOV](https://github.com/krakjoe/pcov/blob/develop/INSTALL.md) extension.
 
-## Enforce coverage for new code only
+## Commands
+
+### check - Enforce coverage rules
+
+Enforce code coverage rules on your codebase.
+
+```sh
+vendor/bin/coverage-guard check <coverage-file> [--patch changes.patch] [--config config.php] [--verbose]
+```
+
+**Enforce coverage for new code only:**
 
 ```sh
 git diff master...HEAD > changes.patch
-vendor/bin/coverage-guard clover.xml --patch changes.patch # Without config, reports only fully new methods with 0% line coverage
+vendor/bin/coverage-guard check clover.xml --patch changes.patch
 ```
 
 - When patch is provided, this tool will only analyse changed files and methods and won't report violations from elsewhere.
 - This allows you to gradually enforce code coverage for new code only.
+
+### merge - Merge coverage files
+
+Merge multiple coverage files into a single file. Useful when running tests in parallel.
+
+```sh
+vendor/bin/coverage-guard merge file1.xml file2.xml file3.xml > merged.xml
+vendor/bin/coverage-guard merge coverage/*.xml --format clover > merged-clover.xml
+```
+
+Options:
+- `--format` - Output format: `clover` or `cobertura` (default: auto-detect from first file)
+
+### convert - Convert between formats
+
+Convert coverage files between Clover and Cobertura formats.
+
+```sh
+vendor/bin/coverage-guard convert cobertura.xml --format clover > clover.xml
+vendor/bin/coverage-guard convert clover.xml --format cobertura > cobertura.xml
+```
+
+Options:
+- `--format` - Output format: `clover` or `cobertura` (required)
+
+### patch-coverage - Calculate patch coverage
+
+Calculate coverage percentage for lines changed in a patch file.
+
+```sh
+git diff master...HEAD > changes.patch
+vendor/bin/coverage-guard patch-coverage clover.xml --patch changes.patch
+```
+
+Output example:
+```
+Patch Coverage Statistics:
+
+  Changed executable lines: 45
+  Covered lines:            38
+  Uncovered lines:          7
+  Coverage:                 84.44%
+```
 
 ## Configuration
 
@@ -107,16 +160,16 @@ This allows you to setup huge variety of rules, examples:
 - Every method must be tested unless custom **`#[NoCoverageAllowed]` attribute** is used
 - ...
 
-## Cli options
+## Global options
 
-- `--patch <branch-diff.patch>` verify only changed code
-- `--config <path/to/coverage-guard.php>` specify a custom config filepath
 - `--verbose` show detailed processing information
 - `--help` show help message
 - `--no-color` to disable colors (`NO_COLOR` env is also supported)
 - `--color` to force colors even when output is not a TTY
 
 Even `--option=value` syntax is supported.
+
+Run `vendor/bin/coverage-guard <command> --help` for command-specific options.
 
 ## Supported coverage formats
 

@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+    <testsuite name="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/phpunit.xml.dist" tests="695" assertions="2704" errors="0" failures="0" skipped="5" time="266.314938">
+        <testsuite tests="695" assertions="2704" errors="0" failures="0" skipped="5" time="266.314938">
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" tests="18" assertions="90" errors="0" failures="0" skipped="0" time="13.987119">
+                <testsuite tests="18" assertions="90" errors="0" failures="0" skipped="0" time="13.987119">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="9.753262"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.248371"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.220540"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.261860"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.244514"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.230956"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.219718"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.263745"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.282013"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.230014"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.238169"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.330186"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.255757"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.246148"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.264184"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.241061"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.230314"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/4a081bde.php" line="25" assertions="5" time="0.226307"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/90904b52.php" tests="4" assertions="11" errors="0" failures="0" skipped="0" time="1.041071">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/90904b52.php" line="20" assertions="2" time="0.229129"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/90904b52.php" line="43" assertions="6" time="0.217756"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/90904b52.php" line="68" assertions="3" time="0.286055"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/90904b52.php" line="113" assertions="0" time="0.308130"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" tests="18" assertions="50" errors="0" failures="0" skipped="0" time="3.735036">
+                <testsuite tests="18" assertions="50" errors="0" failures="0" skipped="0" time="3.735036">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.209366"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="7" time="0.220416"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="7" time="0.214486"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.189254"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.255598"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.168864"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.323047"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.264549"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.212610"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.209777"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.214133"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.206644"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.200922"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.159051"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.186415"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.160908"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="2" time="0.158276"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/82d6337b.php" line="32" assertions="6" time="0.180720"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" tests="31" assertions="31" errors="0" failures="0" skipped="0" time="0.019690">
+                <testsuite tests="14" assertions="14" errors="0" failures="0" skipped="0" time="0.007680">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000613"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000616"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000520"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000506"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000609"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000628"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000599"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000606"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000485"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000497"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000504"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000491"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000507"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="32" assertions="1" time="0.000500"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="44" assertions="1" time="0.000575"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="56" assertions="1" time="0.000642"/>
+                <testsuite tests="10" assertions="10" errors="0" failures="0" skipped="0" time="0.006284">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000936"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000572"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000540"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000534"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000630"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000638"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000524"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000518"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000520"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="66" assertions="1" time="0.000873"/>
+                </testsuite>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.001777">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="78" assertions="1" time="0.000875"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="78" assertions="1" time="0.000902"/>
+                </testsuite>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.001888">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="98" assertions="1" time="0.001008"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="98" assertions="1" time="0.000881"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/76b7b6ce.php" line="109" assertions="1" time="0.000843"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" tests="6" assertions="9" errors="0" failures="0" skipped="0" time="1.267730">
+                <testsuite tests="4" assertions="4" errors="0" failures="0" skipped="0" time="0.818118">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="29" assertions="1" time="0.230671"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="29" assertions="1" time="0.185059"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="29" assertions="1" time="0.195952"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="29" assertions="1" time="0.206437"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="100" assertions="4" time="0.241587"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/813693c0.php" line="178" assertions="1" time="0.208025"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/5d7ec8ee.php" tests="2" assertions="6" errors="0" failures="0" skipped="0" time="0.374154">
+                <testsuite tests="2" assertions="6" errors="0" failures="0" skipped="0" time="0.374154">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/5d7ec8ee.php" line="17" assertions="3" time="0.178358"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/5d7ec8ee.php" line="17" assertions="3" time="0.195796"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/bde62fe4.php" tests="1" assertions="3" errors="0" failures="0" skipped="0" time="0.553133">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/bde62fe4.php" line="23" assertions="3" time="0.553133"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" tests="8" assertions="41" errors="0" failures="0" skipped="0" time="2.304272">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="39" assertions="7" time="0.249405"/>
+                <testsuite tests="2" assertions="9" errors="0" failures="0" skipped="0" time="0.552298">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="130" assertions="2" time="0.185844"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="130" assertions="7" time="0.366453"/>
+                </testsuite>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.527139">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="239" assertions="1" time="0.273108"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="239" assertions="1" time="0.254031"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="323" assertions="9" time="0.237811"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="420" assertions="9" time="0.263706"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/13e49c69.php" line="619" assertions="5" time="0.473914"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" tests="11" assertions="52" errors="0" failures="0" skipped="0" time="3.182455">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="28" assertions="4" time="0.381223"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="109" assertions="4" time="0.332736"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="193" assertions="2" time="0.195879"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="228" assertions="5" time="0.217755"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="295" assertions="5" time="0.227593"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="340" assertions="4" time="0.291300"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="389" assertions="3" time="0.216783"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="435" assertions="5" time="0.328401"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="479" assertions="5" time="0.335197"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="599" assertions="5" time="0.356768"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/15869d88.php" line="682" assertions="10" time="0.298819"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/f85baf20.php" tests="1" assertions="4" errors="0" failures="0" skipped="0" time="0.315571">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/589ab34e/30f4dd43/f85baf20.php" line="15" assertions="4" time="0.315571"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/353cfc34.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.004535">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/353cfc34.php" line="14" assertions="2" time="0.004535"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/fa39bf1f.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.000435">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/fa39bf1f.php" line="12" assertions="2" time="0.000435"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/200bc542.php" tests="2" assertions="6" errors="0" failures="0" skipped="0" time="0.025143">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/200bc542.php" line="20" assertions="5" time="0.013787"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/200bc542.php" line="35" assertions="1" time="0.011356"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/c5e43554.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.002461">
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.002461">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/c5e43554.php" line="19" assertions="1" time="0.001556"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/c5e43554.php" line="19" assertions="1" time="0.000905"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/8ca60d6f.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.083787">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/8ca60d6f.php" line="15" assertions="1" time="0.083787"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/4695dbd7.php" tests="2" assertions="8" errors="0" failures="0" skipped="0" time="0.023369">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/4695dbd7.php" line="20" assertions="4" time="0.012098"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/5819ccd9/e60340c5/4695dbd7.php" line="34" assertions="4" time="0.011271"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" tests="6" assertions="19" errors="0" failures="0" skipped="0" time="3.706176">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="33" assertions="5" time="0.888348"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="87" assertions="1" time="0.329631"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="119" assertions="1" time="0.334199"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="159" assertions="6" time="0.825969"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="234" assertions="4" time="1.278179"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b79ff52f.php" line="297" assertions="2" time="0.049849"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/f2590b3f.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.099359">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/f2590b3f.php" line="14" assertions="1" time="0.099359"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b294cd94.php" tests="1" assertions="16" errors="0" failures="0" skipped="0" time="0.010642">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/b294cd94.php" line="18" assertions="16" time="0.010642"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/482f5658.php" tests="2" assertions="6" errors="0" failures="0" skipped="0" time="0.468005">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/482f5658.php" line="20" assertions="4" time="0.254986"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/482f5658.php" line="88" assertions="2" time="0.213019"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/0884696c.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.353071">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/0884696c.php" line="20" assertions="2" time="0.353071"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/e869d2cd.php" tests="1" assertions="8" errors="0" failures="0" skipped="0" time="1.397472">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/e869d2cd.php" line="26" assertions="8" time="1.397472"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/a5527da3.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="1.075807">
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="1.075807">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/a5527da3.php" line="21" assertions="1" time="0.530696"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/a5527da3.php" line="21" assertions="1" time="0.545111"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" tests="12" assertions="40" errors="0" failures="0" skipped="0" time="4.089863">
+                <testsuite tests="12" assertions="40" errors="0" failures="0" skipped="0" time="4.089863">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.244317"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="5" time="0.385518"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.340243"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.386844"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.254172"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.385801"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.326273"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.374887"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.295076"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="5" time="0.351308"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.362338"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/5ee65620.php" line="26" assertions="3" time="0.383085"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/6e9f1b68.php" tests="3" assertions="5" errors="0" failures="0" skipped="0" time="1.143723">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/6e9f1b68.php" line="17" assertions="1" time="0.541208"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/6e9f1b68.php" line="154" assertions="3" time="0.238001"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/6e9f1b68.php" line="234" assertions="1" time="0.364514"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/badb5054.php" tests="2" assertions="3" errors="0" failures="0" skipped="0" time="0.611005">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/badb5054.php" line="14" assertions="2" time="0.144977"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/badb5054.php" line="35" assertions="1" time="0.466028"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" tests="13" assertions="28" errors="0" failures="0" skipped="0" time="2.703293">
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.754225">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="33" assertions="1" time="0.390254"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="33" assertions="1" time="0.363972"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="198" assertions="1" time="0.195161"/>
+                <testsuite tests="6" assertions="6" errors="0" failures="0" skipped="0" time="1.000778">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.148655"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.160651"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.167109"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.162580"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.177063"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="278" assertions="1" time="0.184718"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="415" assertions="1" time="0.156495"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="466" assertions="9" time="0.284269"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="599" assertions="1" time="0.146920"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/46051c14.php" line="664" assertions="8" time="0.165444"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/7dbcd884.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.207379">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/7dbcd884.php" line="11" assertions="2" time="0.207379"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/c4292277.php" tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.065984">
+                <testsuite tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.065984">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/c4292277.php" line="17" assertions="1" time="0.023405"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/c4292277.php" line="17" assertions="1" time="0.021898"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/c4292277.php" line="17" assertions="1" time="0.020682"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/9bd6fa8e.php" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.314495">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/9bd6fa8e.php" line="18" assertions="2" time="0.135086"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/3bf0d676/9bd6fa8e.php" line="51" assertions="2" time="0.179408"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/028542e8.php" tests="1" assertions="11" errors="0" failures="0" skipped="0" time="0.401403">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/028542e8.php" line="15" assertions="11" time="0.401403"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/971df008.php" tests="1" assertions="4" errors="0" failures="0" skipped="0" time="0.265551">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/971df008.php" line="20" assertions="4" time="0.265551"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8ab7b8.php" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.588501">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8ab7b8.php" line="16" assertions="2" time="0.344942"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8ab7b8.php" line="105" assertions="2" time="0.243559"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" tests="45" assertions="204" errors="0" failures="0" skipped="0" time="21.006564">
+                <testsuite tests="18" assertions="72" errors="0" failures="0" skipped="0" time="3.473190">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.159454"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.163736"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.174572"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.242039"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.234601"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.227302"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.151677"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.170034"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.137469"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.219760"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.224333"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.207184"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.170339"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.154013"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.134365"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.255960"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.207253"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="35" assertions="4" time="0.239098"/>
+                </testsuite>
+                <testsuite tests="12" assertions="48" errors="0" failures="0" skipped="0" time="2.055457">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.156470"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.169298"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.200532"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.159951"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.173307"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.176187"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.172651"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.169433"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.171689"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.154372"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.174547"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="99" assertions="4" time="0.177020"/>
+                </testsuite>
+                <testsuite tests="3" assertions="12" errors="0" failures="0" skipped="0" time="0.494470">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="157" assertions="4" time="0.142457"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="157" assertions="4" time="0.173651"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="157" assertions="4" time="0.178363"/>
+                </testsuite>
+                <testsuite tests="8" assertions="56" errors="0" failures="0" skipped="0" time="1.563859">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="4" time="0.146935"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.234947"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.191953"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.211373"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.221370"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.210441"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="8" time="0.187754"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="209" assertions="4" time="0.159086"/>
+                </testsuite>
+                <testsuite tests="4" assertions="16" errors="0" failures="0" skipped="0" time="13.419588">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="294" assertions="4" time="3.527901"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="294" assertions="4" time="3.441592"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="294" assertions="4" time="3.194056"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bddb33ce.php" line="294" assertions="4" time="3.256038"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" tests="19" assertions="150" errors="0" failures="0" skipped="0" time="3.357963">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="43" assertions="4" time="0.114062"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="74" assertions="7" time="0.118119"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="196" assertions="7" time="0.156622"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="267" assertions="4" time="0.155404"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="344" assertions="8" time="0.288821"/>
+                <testsuite tests="3" assertions="23" errors="0" failures="0" skipped="0" time="0.436693">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="480" assertions="9" time="0.151879"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="480" assertions="5" time="0.137583"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="480" assertions="9" time="0.147232"/>
+                </testsuite>
+                <testsuite tests="3" assertions="15" errors="0" failures="0" skipped="0" time="0.494708">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="528" assertions="5" time="0.138588"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="528" assertions="5" time="0.138437"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="528" assertions="5" time="0.217683"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="572" assertions="4" time="0.182846"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="611" assertions="16" time="0.246837"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="669" assertions="2" time="0.293049"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="745" assertions="16" time="0.176574"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="821" assertions="16" time="0.191808"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="896" assertions="21" time="0.239054"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="977" assertions="5" time="0.099350"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/40eb2326.php" line="1017" assertions="2" time="0.164016"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c283dc22.php" tests="3" assertions="12" errors="0" failures="0" skipped="0" time="0.628389">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c283dc22.php" line="23" assertions="6" time="0.210678"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c283dc22.php" line="80" assertions="2" time="0.227451"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c283dc22.php" line="123" assertions="4" time="0.190259"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" tests="21" assertions="57" errors="0" failures="0" skipped="2" time="7.459807">
+                <testsuite tests="16" assertions="42" errors="0" failures="0" skipped="2" time="6.708711">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="5" time="0.293469"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="5" time="0.288770"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="5" time="0.244611"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="5" time="0.259325"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="1.836106"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="1.832498"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="1" time="0.176969"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="1" time="0.179967"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="0.340216"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="0.316472"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="1" time="0.197547"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="1" time="0.235480"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="0.245138"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="3" time="0.228372"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="0" time="0.018332">
+                        <skipped/>
+                    </testcase>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="25" assertions="0" time="0.015440">
+                        <skipped/>
+                    </testcase>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="215" assertions="7" time="0.231409"/>
+                <testsuite tests="4" assertions="8" errors="0" failures="0" skipped="0" time="0.519687">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="269" assertions="2" time="0.144134"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="269" assertions="2" time="0.124521"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="269" assertions="2" time="0.126326"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5fc7553a.php" line="269" assertions="2" time="0.124705"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/653e7ce2.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.197619">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/653e7ce2.php" line="14" assertions="2" time="0.197619"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" tests="77" assertions="88" errors="0" failures="0" skipped="0" time="19.456518">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="34" assertions="2" time="0.086900"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="72" assertions="1" time="0.099811"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="110" assertions="1" time="0.093993"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="149" assertions="1" time="0.220019"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="203" assertions="3" time="0.300088"/>
+                <testsuite tests="70" assertions="71" errors="0" failures="0" skipped="0" time="18.201191">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="2" time="0.412003"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.331944"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.336018"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.226488"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.350993"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.240380"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.304252"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.215063"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.244843"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.330754"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.283040"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.214831"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.307646"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.299194"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.357615"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.224617"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.329599"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.223630"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.330495"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.227980"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.239038"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.303125"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.297527"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.226760"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.239729"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.303339"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.354346"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.225212"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.304191"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.164774"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.289598"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.155496"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.256843"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.176276"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.181234"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.286682"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.243286"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.201828"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.196746"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.261116"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.301737"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.155809"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.290287"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.159103"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.293190"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.150990"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.261298"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.162616"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.188124"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.277630"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.265780"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.168825"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.190675"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.284199"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.302694"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.145243"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.351658"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.284671"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.349119"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.234028"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.297174"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.220019"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.251446"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.312427"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.296838"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.221781"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.239495"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.310673"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.321553"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="253" assertions="1" time="0.213577"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="432" assertions="1" time="0.194202"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca8282ab.php" line="477" assertions="8" time="0.260314"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" tests="7" assertions="12" errors="0" failures="0" skipped="0" time="1.758114">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="27" assertions="1" time="0.255810"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="45" assertions="2" time="0.317841"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="66" assertions="2" time="0.220251"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="86" assertions="2" time="0.220213"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="125" assertions="1" time="0.232813"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="143" assertions="2" time="0.288213"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/17eb5ad2.php" line="164" assertions="2" time="0.222972"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" tests="7" assertions="46" errors="0" failures="0" skipped="0" time="1.508378">
+                <testsuite tests="3" assertions="15" errors="0" failures="0" skipped="0" time="0.687866">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="26" assertions="5" time="0.272769"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="26" assertions="5" time="0.251041"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="26" assertions="5" time="0.164057"/>
+                </testsuite>
+                <testsuite tests="2" assertions="19" errors="0" failures="0" skipped="0" time="0.475256">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="141" assertions="9" time="0.254063"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="141" assertions="10" time="0.221193"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="219" assertions="6" time="0.163641"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/a0adc200.php" line="273" assertions="6" time="0.181614"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bdbec54c.php" tests="2" assertions="5" errors="0" failures="0" skipped="0" time="1.130287">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bdbec54c.php" line="19" assertions="4" time="0.531684"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/bdbec54c.php" line="130" assertions="1" time="0.598603"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca818146.php" tests="3" assertions="352" errors="0" failures="0" skipped="0" time="0.921643">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca818146.php" line="21" assertions="342" time="0.449177"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca818146.php" line="88" assertions="4" time="0.189853"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/ca818146.php" line="145" assertions="6" time="0.282613"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f1694d4b.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.566565">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f1694d4b.php" line="18" assertions="2" time="0.566565"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/38266de6.php" tests="4" assertions="7" errors="0" failures="0" skipped="0" time="0.598506">
+                <testsuite tests="4" assertions="7" errors="0" failures="0" skipped="0" time="0.598506">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/38266de6.php" line="20" assertions="2" time="0.132751"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/38266de6.php" line="20" assertions="2" time="0.147875"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/38266de6.php" line="20" assertions="2" time="0.123236"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/38266de6.php" line="20" assertions="1" time="0.194645"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" tests="24" assertions="103" errors="0" failures="0" skipped="0" time="9.481654">
+                <testsuite tests="3" assertions="42" errors="0" failures="0" skipped="0" time="0.602428">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="38" assertions="14" time="0.210081"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="38" assertions="14" time="0.177013"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="38" assertions="14" time="0.215334"/>
+                </testsuite>
+                <testsuite tests="3" assertions="5" errors="0" failures="0" skipped="0" time="0.717795">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="175" assertions="1" time="0.273808"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="175" assertions="2" time="0.204463"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="175" assertions="2" time="0.239524"/>
+                </testsuite>
+                <testsuite tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.267258">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="268" assertions="2" time="0.150271"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="268" assertions="2" time="0.116986"/>
+                </testsuite>
+                <testsuite tests="2" assertions="3" errors="0" failures="0" skipped="0" time="0.415477">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="348" assertions="1" time="0.215904"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="348" assertions="2" time="0.199573"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="439" assertions="11" time="3.834778"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="705" assertions="6" time="0.657032"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="840" assertions="6" time="0.197031"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="893" assertions="5" time="0.544743"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1028" assertions="1" time="0.144544"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1068" assertions="2" time="0.188508"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1127" assertions="3" time="0.292354"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1205" assertions="4" time="0.459088"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1301" assertions="4" time="0.257893"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1398" assertions="3" time="0.180895"/>
+                <testsuite tests="4" assertions="4" errors="0" failures="0" skipped="0" time="0.721829">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1451" assertions="1" time="0.144789"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1451" assertions="1" time="0.207113"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1451" assertions="1" time="0.171832"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/f23805b5.php" line="1451" assertions="1" time="0.198094"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c20be517.php" tests="2" assertions="8" errors="0" failures="0" skipped="0" time="0.612908">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c20be517.php" line="23" assertions="4" time="0.262111"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/c20be517.php" line="68" assertions="4" time="0.350796"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" tests="9" assertions="25" errors="0" failures="0" skipped="0" time="2.141741">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="21" assertions="2" time="0.157881"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="58" assertions="2" time="0.274135"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="101" assertions="4" time="0.235586"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="156" assertions="4" time="0.274109"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="215" assertions="7" time="0.248782"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="276" assertions="2" time="0.278753"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="318" assertions="0" time="0.204872"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="359" assertions="4" time="0.260205"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/4ef56da7.php" line="411" assertions="0" time="0.207418"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5cf04113.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.113975">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/5cf04113.php" line="14" assertions="2" time="0.113975"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/2af1249a.php" tests="4" assertions="0" errors="0" failures="0" skipped="1" time="0.580362">
+                <testsuite tests="2" assertions="0" errors="0" failures="0" skipped="0" time="0.418646">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/2af1249a.php" line="19" assertions="0" time="0.185348"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/2af1249a.php" line="19" assertions="0" time="0.233298"/>
+                </testsuite>
+                <testsuite tests="2" assertions="0" errors="0" failures="0" skipped="1" time="0.161716">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/2af1249a.php" line="96" assertions="0" time="0.005219">
+                        <skipped/>
+                    </testcase>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/2af1249a.php" line="96" assertions="0" time="0.156497"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" tests="25" assertions="54" errors="0" failures="0" skipped="2" time="0.473795">
+                <testsuite tests="19" assertions="52" errors="0" failures="0" skipped="0" time="0.408499">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.019870"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018853"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.020118"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.019021"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018850"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018744"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.018888"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.019945"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018829"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.018958"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.022913"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.053937"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018709"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.018740"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018640"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018545"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.026094"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="4" time="0.019876"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="22" assertions="2" time="0.018971"/>
+                </testsuite>
+                <testsuite tests="2" assertions="0" errors="0" failures="0" skipped="1" time="0.016054">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="300" assertions="0" time="0.000393">
+                        <skipped/>
+                    </testcase>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="300" assertions="0" time="0.015661"/>
+                </testsuite>
+                <testsuite tests="2" assertions="0" errors="0" failures="0" skipped="1" time="0.012196">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="394" assertions="0" time="0.000368">
+                        <skipped/>
+                    </testcase>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="394" assertions="0" time="0.011829"/>
+                </testsuite>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.037045">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="480" assertions="0" time="0.018530"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/6bc362db/86f6d716.php" line="480" assertions="2" time="0.018516"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/d3e73f70.php" tests="1" assertions="7" errors="0" failures="0" skipped="0" time="0.299695">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/d3e73f70.php" line="14" assertions="7" time="0.299695"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/557e91d4.php" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.594927">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/557e91d4.php" line="15" assertions="2" time="0.303452"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/557e91d4.php" line="87" assertions="2" time="0.291475"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b42734dd.php" tests="1" assertions="9" errors="0" failures="0" skipped="0" time="0.135362">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b42734dd.php" line="16" assertions="9" time="0.135362"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" tests="5" assertions="18" errors="0" failures="0" skipped="0" time="1.758936">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" line="21" assertions="5" time="0.355548"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" line="88" assertions="5" time="0.385453"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" line="165" assertions="1" time="0.308999"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" line="226" assertions="1" time="0.271293"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/adbe04d7.php" line="309" assertions="6" time="0.437642"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" tests="6" assertions="6" errors="0" failures="0" skipped="0" time="1.434418">
+                <testsuite tests="6" assertions="6" errors="0" failures="0" skipped="0" time="1.434418">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.232090"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.227428"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.238245"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.254185"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.234476"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/27fc1faf.php" line="16" assertions="1" time="0.247994"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" tests="8" assertions="19" errors="0" failures="0" skipped="0" time="2.115805">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="20" assertions="3" time="0.285300"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="118" assertions="1" time="0.177826"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="138" assertions="2" time="0.277525"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="182" assertions="3" time="0.224400"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="230" assertions="2" time="0.241330"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="266" assertions="3" time="0.335589"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="333" assertions="3" time="0.303572"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/b40a16a9.php" line="432" assertions="2" time="0.270263"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/2ef23e6c.php" tests="4" assertions="8" errors="0" failures="0" skipped="0" time="1.273105">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/2ef23e6c.php" line="15" assertions="2" time="0.338427"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/2ef23e6c.php" line="72" assertions="3" time="0.328954"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/2ef23e6c.php" line="159" assertions="1" time="0.302026"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/2ef23e6c.php" line="192" assertions="2" time="0.303699"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/c87ae19f.php" tests="4" assertions="8" errors="0" failures="0" skipped="0" time="1.515633">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/c87ae19f.php" line="14" assertions="2" time="0.389922"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/c87ae19f.php" line="48" assertions="1" time="0.414696"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/c87ae19f.php" line="81" assertions="3" time="0.368899"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/c87ae19f.php" line="184" assertions="2" time="0.342116"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" tests="14" assertions="39" errors="0" failures="0" skipped="0" time="3.847718">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="22" assertions="6" time="0.255959"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="79" assertions="1" time="0.228240"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="135" assertions="4" time="0.243252"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="220" assertions="5" time="0.266872"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="321" assertions="7" time="0.320401"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="464" assertions="3" time="0.360358"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="588" assertions="2" time="0.219156"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="673" assertions="2" time="0.295266"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="759" assertions="1" time="0.180047"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="782" assertions="1" time="0.305915"/>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.555555">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="833" assertions="1" time="0.293282"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="833" assertions="1" time="0.262273"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="922" assertions="2" time="0.374695"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/3c4f2454.php" line="985" assertions="3" time="0.242001"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/208b4e47.php" tests="1" assertions="0" errors="0" failures="0" skipped="0" time="0.000432">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/208b4e47.php" line="12" assertions="0" time="0.000432"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" tests="7" assertions="14" errors="0" failures="0" skipped="0" time="0.985108">
+                <testsuite tests="7" assertions="14" errors="0" failures="0" skipped="0" time="0.985108">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.142449"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.126345"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.104600"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.107491"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.129558"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.175245"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/5af56943.php" line="26" assertions="2" time="0.199421"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/512b2095.php" tests="1" assertions="5" errors="0" failures="0" skipped="0" time="0.017986">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/512b2095.php" line="14" assertions="5" time="0.017986"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" tests="9" assertions="29" errors="0" failures="0" skipped="0" time="2.551099">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="23" assertions="6" time="0.512829"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="87" assertions="1" time="0.140683"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="117" assertions="1" time="0.269860"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="160" assertions="1" time="0.205238"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="266" assertions="6" time="0.356758"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="362" assertions="2" time="0.151760"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="400" assertions="6" time="0.603020"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="473" assertions="3" time="0.130470"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/7cf5b9fb.php" line="520" assertions="3" time="0.180481"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/88a75e73.php" tests="2" assertions="3" errors="0" failures="0" skipped="0" time="0.127635">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/88a75e73.php" line="16" assertions="1" time="0.007956"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/88a75e73.php" line="29" assertions="2" time="0.119679"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/33723684.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.241329">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/33723684.php" line="17" assertions="2" time="0.241329"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" tests="6" assertions="12" errors="0" failures="0" skipped="0" time="1.153739">
+                <testsuite tests="6" assertions="12" errors="0" failures="0" skipped="0" time="1.153739">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="1" time="0.223085"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="3" time="0.213625"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="1" time="0.148718"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="3" time="0.173361"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="1" time="0.208833"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/27c0ad7a/317f7653.php" line="27" assertions="3" time="0.186116"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/68e5cc50/2097ed9f.php" tests="3" assertions="10" errors="0" failures="0" skipped="0" time="1.238712">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/68e5cc50/2097ed9f.php" line="34" assertions="3" time="0.376655"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/68e5cc50/2097ed9f.php" line="116" assertions="6" time="0.647618"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/68e5cc50/2097ed9f.php" line="283" assertions="1" time="0.214439"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8045a0a6/d9df130d.php" tests="4" assertions="12" errors="0" failures="0" skipped="0" time="0.492736">
+                <testsuite tests="4" assertions="12" errors="0" failures="0" skipped="0" time="0.492736">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8045a0a6/d9df130d.php" line="22" assertions="3" time="0.107771"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8045a0a6/d9df130d.php" line="22" assertions="3" time="0.142351"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8045a0a6/d9df130d.php" line="22" assertions="3" time="0.131054"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8045a0a6/d9df130d.php" line="22" assertions="3" time="0.111562"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8566658.php" tests="3" assertions="6" errors="0" failures="0" skipped="0" time="1.015231">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8566658.php" line="17" assertions="3" time="0.297690"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8566658.php" line="95" assertions="1" time="0.462055"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8566658.php" line="126" assertions="2" time="0.255486"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" tests="5" assertions="26" errors="0" failures="0" skipped="0" time="2.196711">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" line="26" assertions="2" time="0.200110"/>
+                <testsuite tests="2" assertions="12" errors="0" failures="0" skipped="0" time="0.986651">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" line="114" assertions="6" time="0.508698"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" line="114" assertions="6" time="0.477953"/>
+                </testsuite>
+                <testsuite tests="2" assertions="12" errors="0" failures="0" skipped="0" time="1.009951">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" line="235" assertions="6" time="0.509640"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/cdb854cd.php" line="235" assertions="6" time="0.500310"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8d41145.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.271876">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/b8d41145.php" line="11" assertions="1" time="0.271876"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/9ee7e8a0.php" tests="2" assertions="13" errors="0" failures="0" skipped="0" time="0.081724">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/9ee7e8a0.php" line="17" assertions="5" time="0.033952"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/9ee7e8a0.php" line="154" assertions="8" time="0.047771"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8f239eb3.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.000580">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8f239eb3.php" line="13" assertions="1" time="0.000245"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/8f239eb3.php" line="22" assertions="1" time="0.000334"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/6bab463b.php" tests="1" assertions="7" errors="0" failures="0" skipped="0" time="0.555110">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/6bab463b.php" line="30" assertions="7" time="0.555110"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/42429c09.php" tests="3" assertions="18" errors="0" failures="0" skipped="0" time="1.434241">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/42429c09.php" line="26" assertions="4" time="0.236783"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/42429c09.php" line="50" assertions="7" time="0.572294"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/00f4a3c0/42429c09.php" line="91" assertions="7" time="0.625163"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/58c3e42b.php" tests="3" assertions="6" errors="0" failures="0" skipped="0" time="0.056845">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/58c3e42b.php" line="16" assertions="2" time="0.019509"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/58c3e42b.php" line="51" assertions="1" time="0.018749"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/58c3e42b.php" line="80" assertions="3" time="0.018587"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/44122e13.php" tests="4" assertions="31" errors="0" failures="0" skipped="0" time="2.512542">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/44122e13.php" line="18" assertions="5" time="0.425082"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/44122e13.php" line="59" assertions="6" time="0.684993"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/44122e13.php" line="148" assertions="10" time="0.942572"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/44122e13.php" line="227" assertions="10" time="0.459894"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/35a27070.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.421493">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/35a27070.php" line="11" assertions="1" time="0.421493"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/976426bb.php" tests="1" assertions="5" errors="0" failures="0" skipped="0" time="0.433921">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/60de03cd/976426bb.php" line="23" assertions="5" time="0.433921"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/863f75d1.php" tests="2" assertions="11" errors="0" failures="0" skipped="0" time="1.548201">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/863f75d1.php" line="24" assertions="6" time="0.917235"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/863f75d1.php" line="133" assertions="5" time="0.630967"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/739f81dd.php" tests="1" assertions="10" errors="0" failures="0" skipped="0" time="0.410548">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/739f81dd.php" line="27" assertions="10" time="0.410548"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" tests="5" assertions="31" errors="0" failures="0" skipped="0" time="2.978311">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" line="30" assertions="4" time="0.379464"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" line="176" assertions="4" time="0.560270"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" line="309" assertions="5" time="0.565292"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" line="435" assertions="6" time="0.692354"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d7770258.php" line="592" assertions="12" time="0.780931"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/edab127d.php" tests="4" assertions="17" errors="0" failures="0" skipped="0" time="1.904810">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/edab127d.php" line="26" assertions="4" time="0.297092"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/edab127d.php" line="174" assertions="4" time="0.522286"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/edab127d.php" line="309" assertions="5" time="0.454087"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/edab127d.php" line="437" assertions="4" time="0.631344"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d80dd301.php" tests="1" assertions="6" errors="0" failures="0" skipped="0" time="0.321241">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4aad17fa/d80dd301.php" line="23" assertions="6" time="0.321241"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/4fd93de3.php" tests="3" assertions="4" errors="0" failures="0" skipped="0" time="0.703790">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/4fd93de3.php" line="18" assertions="2" time="0.437918"/>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.265872">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/4fd93de3.php" line="92" assertions="1" time="0.133198"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/4fd93de3.php" line="92" assertions="1" time="0.132674"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/ba283138.php" tests="4" assertions="6" errors="0" failures="0" skipped="0" time="0.733467">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/ba283138.php" line="22" assertions="3" time="0.251948"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/ba283138.php" line="57" assertions="1" time="0.124945"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/ba283138.php" line="88" assertions="1" time="0.185572"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/ba283138.php" line="111" assertions="1" time="0.171002"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/86e2ca10.php" tests="2" assertions="18" errors="0" failures="0" skipped="0" time="0.899530">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/86e2ca10.php" line="19" assertions="8" time="0.422644"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/7a65f0cf/86e2ca10.php" line="125" assertions="10" time="0.476886"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/5f264457.php" tests="1" assertions="5" errors="0" failures="0" skipped="0" time="0.391885">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/5f264457.php" line="19" assertions="5" time="0.391885"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" tests="5" assertions="6" errors="0" failures="0" skipped="0" time="1.971660">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" line="21" assertions="1" time="0.279199"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" line="133" assertions="1" time="0.253095"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" line="226" assertions="2" time="1.206151"/>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.233214">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" line="305" assertions="1" time="0.114844"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/c6914da5.php" line="305" assertions="1" time="0.118371"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/445ea8b3.php" tests="3" assertions="19" errors="0" failures="0" skipped="0" time="12.510709">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/445ea8b3.php" line="25" assertions="1" time="8.877060"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/445ea8b3.php" line="167" assertions="3" time="0.610299"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/810fa790/445ea8b3.php" line="308" assertions="15" time="3.023350"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" tests="7" assertions="23" errors="0" failures="0" skipped="0" time="2.022187">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="30" assertions="3" time="0.257793"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="63" assertions="1" time="0.125537"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="92" assertions="1" time="0.140812"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="114" assertions="1" time="0.172350"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="151" assertions="7" time="0.567253"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="202" assertions="5" time="0.435905"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/1b67a508.php" line="238" assertions="5" time="0.322537"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/23f09bb7.php" tests="2" assertions="7" errors="0" failures="0" skipped="0" time="0.561434">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/23f09bb7.php" line="18" assertions="4" time="0.334102"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/23f09bb7.php" line="135" assertions="3" time="0.227332"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" tests="5" assertions="16" errors="0" failures="0" skipped="0" time="1.323618">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" line="48" assertions="12" time="0.351281"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" line="126" assertions="1" time="0.213281"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" line="164" assertions="1" time="0.215855"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" line="205" assertions="1" time="0.309059"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/8d70f2dd.php" line="244" assertions="1" time="0.234142"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" tests="6" assertions="15" errors="0" failures="0" skipped="0" time="1.670623">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="21" assertions="5" time="0.588461"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="82" assertions="2" time="0.254742"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="158" assertions="2" time="0.208813"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="205" assertions="2" time="0.195118"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="254" assertions="2" time="0.212952"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/543d8900.php" line="302" assertions="2" time="0.210536"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/ad15fccb.php" tests="1" assertions="6" errors="0" failures="0" skipped="0" time="0.385033">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/ad15fccb.php" line="20" assertions="6" time="0.385033"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/a6935b1c.php" tests="3" assertions="123" errors="0" failures="0" skipped="0" time="9.771634">
+                <testsuite tests="2" assertions="122" errors="0" failures="0" skipped="0" time="9.519557">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/a6935b1c.php" line="25" assertions="61" time="4.652031"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/a6935b1c.php" line="25" assertions="61" time="4.867525"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/a6935b1c.php" line="116" assertions="1" time="0.252077"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" tests="5" assertions="17" errors="0" failures="0" skipped="0" time="4.853419">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" line="37" assertions="6" time="4.706764"/>
+                <testsuite tests="4" assertions="11" errors="0" failures="0" skipped="0" time="0.146656">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" line="167" assertions="2" time="0.036571"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" line="167" assertions="1" time="0.035568"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" line="167" assertions="4" time="0.038031"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/0eb6ce72/991ecb5c.php" line="167" assertions="4" time="0.036485"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" tests="12" assertions="72" errors="0" failures="0" skipped="0" time="6.361082">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="41" assertions="5" time="1.252922"/>
+                <testsuite tests="3" assertions="12" errors="0" failures="0" skipped="0" time="1.961266">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="200" assertions="4" time="0.581558"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="200" assertions="4" time="0.778452"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="200" assertions="4" time="0.601256"/>
+                </testsuite>
+                <testsuite tests="6" assertions="30" errors="0" failures="0" skipped="0" time="2.046080">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.354960"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.345501"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.348851"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.330397"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.335422"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="315" assertions="5" time="0.330949"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="472" assertions="11" time="0.454261"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/87296153.php" line="573" assertions="14" time="0.646554"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" tests="10" assertions="34" errors="0" failures="0" skipped="0" time="8.115093">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="27" assertions="2" time="0.060515"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="50" assertions="4" time="0.968448"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="139" assertions="4" time="1.074244"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="234" assertions="4" time="1.030403"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="337" assertions="4" time="1.312829"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="429" assertions="4" time="0.794907"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="557" assertions="3" time="0.837588"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="608" assertions="4" time="0.649904"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="718" assertions="1" time="0.621905"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/57247142.php" line="784" assertions="4" time="0.764349"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" tests="5" assertions="6" errors="0" failures="0" skipped="0" time="1.178130">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" line="17" assertions="1" time="0.013818"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" line="25" assertions="1" time="0.053425"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" line="45" assertions="2" time="0.453120"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" line="106" assertions="1" time="0.330476"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4546b585.php" line="155" assertions="1" time="0.327289"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/6919f876.php" tests="4" assertions="14" errors="0" failures="0" skipped="0" time="3.058482">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/6919f876.php" line="22" assertions="3" time="0.976259"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/6919f876.php" line="157" assertions="3" time="0.796691"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/6919f876.php" line="247" assertions="2" time="0.626639"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/6919f876.php" line="345" assertions="6" time="0.658892"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/55150de4.php" tests="2" assertions="31" errors="0" failures="0" skipped="0" time="2.671858">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/55150de4.php" line="20" assertions="27" time="2.040479"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/55150de4.php" line="174" assertions="4" time="0.631380"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e78e364d.php" tests="2" assertions="5" errors="0" failures="0" skipped="0" time="0.717067">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e78e364d.php" line="20" assertions="4" time="0.363755"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e78e364d.php" line="113" assertions="1" time="0.353312"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" tests="8" assertions="22" errors="0" failures="0" skipped="0" time="9.708547">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="16" assertions="2" time="0.453932"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="84" assertions="2" time="0.459574"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="169" assertions="2" time="0.308138"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="239" assertions="2" time="0.727687"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="343" assertions="2" time="1.110874"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="431" assertions="4" time="2.729781"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="533" assertions="4" time="1.245101"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/cb14532f.php" line="649" assertions="4" time="2.673461"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" tests="8" assertions="24" errors="0" failures="0" skipped="0" time="10.627846">
+                <testsuite tests="8" assertions="24" errors="0" failures="0" skipped="0" time="10.627846">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="0.477947"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.734143"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="0.879901"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.909843"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.527379"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.128132"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.827008"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/4bbb0fd9.php" line="28" assertions="3" time="1.143491"/>
+                </testsuite>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" tests="30" assertions="108" errors="0" failures="0" skipped="0" time="12.441651">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="50" assertions="1" time="0.039756"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="73" assertions="1" time="0.069783"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="103" assertions="1" time="0.071085"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="137" assertions="1" time="0.086834"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="173" assertions="1" time="0.148982"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="225" assertions="1" time="0.340871"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="268" assertions="1" time="0.333597"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="316" assertions="1" time="0.375455"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="365" assertions="0" time="0.493212"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="421" assertions="4" time="0.485388"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="487" assertions="4" time="0.577259"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="547" assertions="2" time="0.407014"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="601" assertions="1" time="0.382328"/>
+                <testsuite tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.774151">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="655" assertions="1" time="0.388061"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="655" assertions="1" time="0.386091"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="729" assertions="1" time="0.387387"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="783" assertions="1" time="0.408908"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="842" assertions="2" time="0.819314"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="923" assertions="1" time="0.192708"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="980" assertions="19" time="0.965247"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1121" assertions="6" time="0.615842"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1216" assertions="19" time="0.943828"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1359" assertions="29" time="0.661465"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1581" assertions="2" time="0.383334"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1680" assertions="4" time="0.495311"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1817" assertions="0" time="0.332056"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1854" assertions="1" time="0.388121"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="1966" assertions="0" time="0.566343"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="2110" assertions="1" time="0.299011"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/76d2cd8b/e917f018.php" line="2180" assertions="1" time="0.397061"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" tests="11" assertions="29" errors="0" failures="0" skipped="0" time="5.773525">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="24" assertions="8" time="0.999456"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="128" assertions="8" time="1.145395"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="200" assertions="3" time="0.597209"/>
+                <testsuite tests="3" assertions="3" errors="0" failures="0" skipped="0" time="1.276428">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="296" assertions="1" time="0.372614"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="296" assertions="1" time="0.415567"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="296" assertions="1" time="0.488247"/>
+                </testsuite>
+                <testsuite tests="4" assertions="6" errors="0" failures="0" skipped="0" time="1.536836">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="383" assertions="2" time="0.415608"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="383" assertions="2" time="0.408861"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="383" assertions="1" time="0.349410"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="383" assertions="1" time="0.362957"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c3d2f195.php" line="441" assertions="1" time="0.218200"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" tests="13" assertions="51" errors="0" failures="0" skipped="0" time="5.295708">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="28" assertions="1" time="0.089493"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="41" assertions="1" time="0.101022"/>
+                <testsuite tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.289602">
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="66" assertions="1" time="0.099395"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="66" assertions="1" time="0.096683"/>
+                    <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="66" assertions="1" time="0.093524"/>
+                </testsuite>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="119" assertions="1" time="0.163039"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="159" assertions="1" time="0.160221"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="199" assertions="2" time="0.822935"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="229" assertions="1" time="0.750437"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="262" assertions="1" time="1.258976"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="314" assertions="16" time="0.710025"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="521" assertions="11" time="0.480729"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/6aaaa642.php" line="645" assertions="13" time="0.469229"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" tests="5" assertions="41" errors="0" failures="0" skipped="0" time="9.988044">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" line="29" assertions="17" time="5.598494"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" line="101" assertions="16" time="1.410060"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" line="156" assertions="2" time="0.559615"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" line="243" assertions="5" time="1.831532"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/c01c5139.php" line="294" assertions="1" time="0.588343"/>
+            </testsuite>
+            <testsuite file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/0cfb4397.php" tests="2" assertions="1" errors="0" failures="0" skipped="0" time="0.234684">
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/0cfb4397.php" line="14" assertions="0" time="0.113340"/>
+                <testcase file="/builds/shipmonk-company/shipmonk-fulfillment/shipmonk/backend/tests/src/5680c87f/6416e8cb/af539ea8/0cfb4397.php" line="52" assertions="1" time="0.121344"/>
+            </testsuite>
+        </testsuite>
+    </testsuite>
+</testsuites>

@@ -61,7 +61,9 @@ parameters:
         # support even old sebastian/diff
         -
             message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
-            path: src/CoverageGuard.php
+            paths:
+                - src/CoverageGuard.php
+                - src/Command/AbstractCommand.php
 
         -
             identifiers:
@@ -75,3 +77,26 @@ parameters:
                 - missingType.checkedException
                 - shipmonk.checkedExceptionInCallable
             path: tests/
+
+        # DOMDocument::createElement can technically return false, but in practice it won't for simple element names
+        -
+            identifiers:
+                - method.nonObject
+                - argument.type
+                - missingType.checkedException
+            paths:
+                - src/Writer/CloverCoverageWriter.php
+                - src/Writer/CoberturaCoverageWriter.php
+
+        -
+            identifiers:
+                - return.type
+            path: src/Writer/CoberturaCoverageWriter.php
+
+        # Initializer is replaced by Command system but kept for potential future use
+        -
+            identifiers:
+                - shipmonk.deadMethod
+            paths:
+                - src/Initializer.php
+                - src/Command/AbstractCommand.php

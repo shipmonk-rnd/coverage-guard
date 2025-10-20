@@ -20,6 +20,7 @@ final class BinTest extends TestCase
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
@@ -49,6 +50,7 @@ final class BinTest extends TestCase
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--config',
             escapeshellarg($configFile),
@@ -79,7 +81,7 @@ final class BinTest extends TestCase
         self::assertSame(1, $exitCode, 'Expected exit code 1 on invalid arguments');
 
         $outputString = implode("\n", $output);
-        self::assertStringContainsString('Error', $outputString, 'Expected error message in output');
+        self::assertStringContainsString('Available commands:', $outputString, 'Expected help message in output');
     }
 
     public function testBinWithNoColorFlag(): void
@@ -92,6 +94,7 @@ final class BinTest extends TestCase
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
@@ -119,6 +122,7 @@ final class BinTest extends TestCase
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
@@ -147,6 +151,7 @@ final class BinTest extends TestCase
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),

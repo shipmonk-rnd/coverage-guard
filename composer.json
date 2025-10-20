@@ -13,6 +13,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "ext-dom": "*",
         "nikic/php-parser": "^4.19.1 || ^5.0"
     },
     "require-dev": {
@@ -70,7 +71,7 @@
         "check:ec": "ec src tests",
         "check:self": [
             "XDEBUG_MODE=coverage phpunit tests --coverage-clover cache/clover.xml",
-            "bin/coverage-guard cache/clover.xml"
+            "bin/coverage-guard check cache/clover.xml"
         ],
         "check:tests": "phpunit tests",
         "check:types": "phpstan analyse -vv --ansi",

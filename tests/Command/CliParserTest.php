@@ -1,0 +1,168 @@
+<?php declare(strict_types = 1);
+
+namespace ShipMonk\CoverageGuard\Command;
+
+use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
+
+final class CliParserTest extends TestCase
+{
+
+    public function testParseEmptyArgs(): void
+    {
+        $parser = new CliParser();
+
+        $result = $parser->parse([], [], []);
+
+        self::assertSame([], $result['arguments']);
+        self::assertSame([], $result['options']);
+    }
+
+    public function testParsePositionalArguments(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new Argument('file', 'Input file'),
+        ];
+
+        $result = $parser->parse(['file.txt'], $arguments, []);
+
+        self::assertSame(['file.txt'], $result['arguments']);
+        self::assertSame([], $result['options']);
+    }
+
+    public function testParseVariadicArguments(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new Argument('files', 'Input files', variadic: true),
+        ];
+
+        $result = $parser->parse(['file1.txt', 'file2.txt', 'file3.txt'], $arguments, []);
+
+        self::assertSame(['file1.txt', 'file2.txt', 'file3.txt'], $result['arguments']);
+    }
+
+    public function testParseBooleanOption(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new Option('verbose', 'Verbose output', requiresValue: false),
+        ];
+
+        $result = $parser->parse(['--verbose'], [], $options);
+
+        self::assertSame([], $result['arguments']);
+        self::assertArrayHasKey('verbose', $result['options']);
+        self::assertTrue($result['options']['verbose']);
+    }
+
+    public function testParseOptionWithValue(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new Option('config', 'Config file', requiresValue: true),
+        ];
+
+        $result = $parser->parse(['--config', 'config.php'], [], $options);
+
+        self::assertSame([], $result['arguments']);
+        self::assertArrayHasKey('config', $result['options']);
+        self::assertSame('config.php', $result['options']['config']);
+    }
+
+    public function testParseOptionWithEqualsSign(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new Option('config', 'Config file', requiresValue: true),
+        ];
+
+        $result = $parser->parse(['--config=config.php'], [], $options);
+
+        self::assertSame([], $result['arguments']);
+        self::assertArrayHasKey('config', $result['options']);
+        self::assertSame('config.php', $result['options']['config']);
+    }
+
+    public function testParseMixedPositionalAndOptions(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new Argument('file', 'Input file'),
+        ];
+
+        $options = [
+            new Option('verbose', 'Verbose output', requiresValue: false),
+            new Option('config', 'Config file', requiresValue: true),
+        ];
+
+        $result = $parser->parse(['input.txt', '--verbose', '--config', 'config.php'], $arguments, $options);
+
+        self::assertSame(['input.txt'], $result['arguments']);
+        self::assertArrayHasKey('verbose', $result['options']);
+        self::assertTrue($result['options']['verbose']);
+        self::assertArrayHasKey('config', $result['options']);
+        self::assertSame('config.php', $result['options']['config']);
+    }
+
+    public function testParseUnknownOptionThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --unknown');
+
+        $parser->parse(['--unknown'], [], []);
+    }
+
+    public function testParseOptionRequiringValueWithoutValueThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new Option('config', 'Config file', requiresValue: true),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Option --config requires a value');
+
+        $parser->parse(['--config'], [], $options);
+    }
+
+    public function testParseTooFewPositionalArgumentsThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new Argument('file1', 'First file'),
+            new Argument('file2', 'Second file'),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Missing required argument(s): <file2>');
+
+        $parser->parse(['only-one.txt'], $arguments, []);
+    }
+
+    public function testParseTooManyPositionalArgumentsThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new Argument('file', 'Input file'),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Too many arguments');
+
+        $parser->parse(['file1.txt', 'file2.txt'], $arguments, []);
+    }
+
+}
