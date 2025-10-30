@@ -78,7 +78,7 @@ final class CoverageGuardTest extends TestCase
         $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("Patch file '{$patchFile}' has added line #15 that does not match actual content of file '{$sampleFile}'.\nExpected '        return 'goodbye';'\nFound '        return 'hello';'\n\nIs the patch up-to-date?");
+        $this->expectExceptionMessage("Patch file '{$patchFile}' has added line #15 that does not match actual content of file '{$sampleFile}'.\nPatch data: '        return 'goodbye';'\nFilesystem: '        return 'hello';'\n\nIs the patch up-to-date?");
 
         $this->checkCoverageWithPatch($patchFile);
     }
