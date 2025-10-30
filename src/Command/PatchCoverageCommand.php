@@ -12,37 +12,24 @@ use function str_ends_with;
 final class PatchCoverageCommand extends AbstractCommand
 {
 
-    public function getName(): string
+    public function __construct(
+        protected readonly Printer $printer,
+    )
     {
-        return 'patch-coverage';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Calculate coverage percentage for lines changed in a patch';
-    }
-
-    public function getArguments(): array
-    {
-        return [
-            new Argument('coverage-file', 'Path to PHPUnit coverage file (.xml or .cov)'),
-        ];
-    }
-
-    public function getOptions(): array
-    {
-        return [
-            new Option('patch', 'Patch file to analyze (required)', requiresValue: true),
-        ];
     }
 
     /**
      * @throws ErrorException
      */
-    protected function run(Printer $printer): int
+    public function __invoke(
+        #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
+        string $coverageFile,
+
+        #[CliOption(description: 'Patch file to analyze (required)')]
+        string $patch,
+    ): int
     {
-        $coverageFile = $this->getArgument('coverage-file');
-        $patchFile = $this->getRequiredStringOption('patch');
+        $patchFile = $patch;
         $cwd = getcwd();
 
         if ($cwd === false) {
@@ -107,23 +94,33 @@ final class PatchCoverageCommand extends AbstractCommand
 
         // Output statistics
         if ($totalChangedLines === 0) {
-            $printer->printLine('No executable lines found in patch.');
-            $printer->printLine('');
+            $this->printer->printLine('No executable lines found in patch.');
+            $this->printer->printLine('');
             return 0;
         }
 
         $percentage = ($totalCoveredLines / $totalChangedLines) * 100;
         $percentageFormatted = number_format($percentage, 2);
 
-        $printer->printLine('Patch Coverage Statistics:');
-        $printer->printLine('');
-        $printer->printLine("  Changed executable lines: <white>{$totalChangedLines}</white>");
-        $printer->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
-        $printer->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
-        $printer->printLine("  Coverage:                 <white>{$percentageFormatted}%</white>");
-        $printer->printLine('');
+        $this->printer->printLine('Patch Coverage Statistics:');
+        $this->printer->printLine('');
+        $this->printer->printLine("  Changed executable lines: <white>{$totalChangedLines}</white>");
+        $this->printer->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
+        $this->printer->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
+        $this->printer->printLine("  Coverage:                 <white>{$percentageFormatted}%</white>");
+        $this->printer->printLine('');
 
         return 0;
+    }
+
+    public function getName(): string
+    {
+        return 'patch-coverage';
+    }
+
+    public function getDescription(): string
+    {
+        return 'Calculate coverage percentage for lines changed in a patch';
     }
 
 }

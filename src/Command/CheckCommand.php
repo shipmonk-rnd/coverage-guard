@@ -16,44 +16,33 @@ use function str_ends_with;
 final class CheckCommand extends AbstractCommand
 {
 
-    public function getName(): string
+    public function __construct(
+        protected readonly Printer $printer,
+    )
     {
-        return 'check';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Enforce code coverage rules on your codebase';
-    }
-
-    public function getArguments(): array
-    {
-        return [
-            new Argument('coverage-file', 'Path to PHPUnit coverage file (.xml or .cov)'),
-        ];
-    }
-
-    public function getOptions(): array
-    {
-        return [
-            new Option('patch', 'Path to git diff result to check only changed code', requiresValue: true),
-            new Option('config', 'Path to config file', requiresValue: true),
-        ];
     }
 
     /**
      * @throws ErrorException
      */
-    protected function run(Printer $printer): int
+    public function __invoke(
+        #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
+        string $coverageFile,
+
+        #[CliOption(description: 'Path to git diff result to check only changed code')]
+        ?string $patch = null,
+
+        #[CliOption(description: 'Path to config file')]
+        ?string $config = null,
+    ): int
     {
         $cwd = getcwd();
         if ($cwd === false) {
             throw new ErrorException('Cannot determine current working directory');
         }
 
-        $coverageFile = $this->getArgument('coverage-file');
-        $patchFile = $this->getRequiredStringOption('patch');
-        $configFilePath = $this->getRequiredStringOption('config');
+        $patchFile = $patch;
+        $configPath = $config;
 
         // Validate coverage file
         if (!is_file($coverageFile)) {
@@ -74,34 +63,34 @@ final class CheckCommand extends AbstractCommand
         }
 
         // Load config
-        if ($configFilePath !== null && $configFilePath !== '') {
-            if (!is_file($configFilePath)) {
-                throw new ErrorException("Provided config file not found: '{$configFilePath}'");
+        if ($configPath !== null && $configPath !== '') {
+            if (!is_file($configPath)) {
+                throw new ErrorException("Provided config file not found: '{$configPath}'");
             }
-            if (!str_ends_with($configFilePath, '.php')) {
-                throw new ErrorException("Provided config file must have php extension: '{$configFilePath}'");
+            if (!str_ends_with($configPath, '.php')) {
+                throw new ErrorException("Provided config file must have php extension: '{$configPath}'");
             }
         } else {
-            $configFilePath = $cwd . '/coverage-guard.php';
+            $configPath = $cwd . '/coverage-guard.php';
         }
 
-        $config = is_file($configFilePath)
-            ? $this->loadConfig($configFilePath)
+        $loadedConfig = is_file($configPath)
+            ? $this->loadConfig($configPath)
             : new Config();
 
         // Auto-detect git root if needed
-        if ($patchFile !== null && $config->getGitRoot() === null) {
+        if ($patchFile !== null && $loadedConfig->getGitRoot() === null) {
             $detectedGitRoot = $this->detectGitRoot($cwd);
 
             if ($detectedGitRoot !== null) {
-                $config->setGitRoot($detectedGitRoot);
+                $loadedConfig->setGitRoot($detectedGitRoot);
             }
         }
 
         // Run coverage check
         $pathHelper = new PathHelper($cwd);
-        $formatter = new ErrorFormatter($pathHelper, $printer, $config);
-        $guard = new CoverageGuard($config, $printer, $pathHelper);
+        $formatter = new ErrorFormatter($pathHelper, $this->printer, $loadedConfig);
+        $guard = new CoverageGuard($loadedConfig, $this->printer, $pathHelper);
 
         $coverageReport = $guard->checkCoverage(
             $coverageFile,
@@ -110,6 +99,16 @@ final class CheckCommand extends AbstractCommand
         );
 
         return $formatter->formatReport($coverageReport);
+    }
+
+    public function getName(): string
+    {
+        return 'check';
+    }
+
+    public function getDescription(): string
+    {
+        return 'Enforce code coverage rules on your codebase';
     }
 
     /**

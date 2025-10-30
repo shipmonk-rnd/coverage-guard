@@ -18,8 +18,8 @@ final class CliParser
      * Parse CLI arguments into arguments and options
      *
      * @param list<string> $args Raw CLI arguments (without script name and command name)
-     * @param list<Argument> $argumentDefinitions
-     * @param list<Option> $optionDefinitions
+     * @param list<ArgumentDefinition> $argumentDefinitions
+     * @param list<OptionDefinition> $optionDefinitions
      * @return array{arguments: list<string>, options: array<string, string|bool>}
      *
      * @throws ErrorException
@@ -31,21 +31,15 @@ final class CliParser
     ): array
     {
         $optionMap = $this->buildOptionMap($optionDefinitions);
+        $all = $this->parseOptionsAndArguments($args);
 
-        // Phase 1: Parse all options and arguments
-        $parsed = $this->parseAllArguments($args);
+        $this->validateOptions($all['options'], $optionMap);
+        $this->validateArguments($all['arguments'], $argumentDefinitions);
 
-        // Phase 2: Validate all options
-        $this->validateOptions($parsed['options'], $optionMap);
-
-        // Phase 3: Build final options array
-        $options = $this->buildOptionsArray($parsed['options'], $optionMap);
-
-        // Phase 4: Validate positional arguments
-        $this->validateArguments($parsed['arguments'], $argumentDefinitions);
+        $options = $this->buildOptionsArray($all['options'], $optionMap);
 
         return [
-            'arguments' => $parsed['arguments'],
+            'arguments' => $all['arguments'],
             'options' => $options,
         ];
     }
@@ -53,8 +47,8 @@ final class CliParser
     /**
      * Build option map for quick lookup
      *
-     * @param list<Option> $optionDefinitions
-     * @return array<string, Option>
+     * @param list<OptionDefinition> $optionDefinitions
+     * @return array<string, OptionDefinition>
      */
     private function buildOptionMap(array $optionDefinitions): array
     {
@@ -73,7 +67,7 @@ final class CliParser
      *
      * @throws ErrorException
      */
-    private function parseAllArguments(array $args): array
+    private function parseOptionsAndArguments(array $args): array
     {
         $arguments = [];
         $options = [];
@@ -145,7 +139,7 @@ final class CliParser
      * Build final options array from parsed values
      *
      * @param array<string, string|null> $parsedOptions
-     * @param array<string, Option> $optionMap
+     * @param array<string, OptionDefinition> $optionMap
      * @return array<string, string|bool>
      */
     private function buildOptionsArray(
@@ -173,10 +167,8 @@ final class CliParser
     }
 
     /**
-     * Validate all parsed options
-     *
      * @param array<string, string|null> $parsedOptions Map of option names to values (null if no value provided)
-     * @param array<string, Option> $optionMap Map of option names to definitions
+     * @param array<string, OptionDefinition> $optionMap Map of option names to definitions
      *
      * @throws ErrorException
      */
@@ -200,7 +192,7 @@ final class CliParser
 
     /**
      * @param list<string> $arguments
-     * @param list<Argument> $argumentDefinitions
+     * @param list<ArgumentDefinition> $argumentDefinitions
      *
      * @throws ErrorException
      */
@@ -230,7 +222,8 @@ final class CliParser
             }
 
             $missingList = implode(', ', $missingArgs);
-            throw new ErrorException("Missing required argument(s): {$missingList}");
+            $plural = count($missingArgs) > 1 ? 's' : '';
+            throw new ErrorException("Missing required argument$plural: {$missingList}");
         }
 
         if (!$hasVariadic && $providedCount > $requiredCount) {

@@ -2,6 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use LogicException;
+use ReflectionException;
+use ReflectionMethod;
 use ShipMonk\CoverageGuard\Printer;
 use function implode;
 use function str_pad;
@@ -13,23 +16,33 @@ final class HelpRenderer
     private const INDENT = '  ';
     private const OPTION_PADDING = 25;
 
+    public function __construct(
+        private readonly ParameterResolver $parameterResolver,
+    )
+    {
+    }
+
     public function renderCommandHelp(
         Command $command,
         Printer $printer,
     ): void
     {
+        $invokeMethod = $this->getInvokeMethod($command);
+        $arguments = $this->parameterResolver->getArgumentDefinitions($invokeMethod);
+        $options = $this->parameterResolver->getOptionDefinitions($invokeMethod);
+
         $printer->printLine("<white>{$command->getDescription()}</white>");
         $printer->printLine('');
         $printer->printLine('<white>Usage:</white>');
 
         $usageParts = ['coverage-guard', $command->getName()];
 
-        foreach ($command->getArguments() as $arg) {
+        foreach ($arguments as $arg) {
             $argStr = $arg->variadic ? "{$arg->name}..." : $arg->name;
             $usageParts[] = "<{$argStr}>";
         }
 
-        if ($command->getOptions() !== []) {
+        if ($options !== []) {
             $usageParts[] = '[options]';
         }
 
@@ -37,9 +50,9 @@ final class HelpRenderer
         $printer->printLine('');
 
         // Arguments
-        if ($command->getArguments() !== []) {
+        if ($arguments !== []) {
             $printer->printLine('<white>Arguments:</white>');
-            foreach ($command->getArguments() as $arg) {
+            foreach ($arguments as $arg) {
                 $argName = $arg->variadic ? "{$arg->name}..." : $arg->name;
                 $printer->printLine(self::INDENT . "<green>{$argName}</green>");
                 $printer->printLine(str_repeat(self::INDENT, 2) . $arg->description);
@@ -48,9 +61,9 @@ final class HelpRenderer
         }
 
         // Options
-        if ($command->getOptions() !== []) {
+        if ($options !== []) {
             $printer->printLine('<white>Options:</white>');
-            foreach ($command->getOptions() as $opt) {
+            foreach ($options as $opt) {
                 $optStr = $opt->requiresValue ? "--{$opt->name} <value>" : "--{$opt->name}";
                 $optStrPadded = str_pad($optStr, self::OPTION_PADDING);
                 $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$opt->description}");
@@ -83,6 +96,15 @@ final class HelpRenderer
         $printer->printLine(self::INDENT . '<green>--color            </green>Force colored output');
         $printer->printLine('');
         $printer->printLine('Run "coverage-guard <command> --help" for more information on a specific command.');
+    }
+
+    private function getInvokeMethod(Command $command): ReflectionMethod
+    {
+        try {
+            return new ReflectionMethod($command, '__invoke');
+        } catch (ReflectionException $e) {
+            throw new LogicException('Could not get reflection for __invoke() method', 0, $e);
+        }
     }
 
 }

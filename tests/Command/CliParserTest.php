@@ -23,7 +23,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $arguments = [
-            new Argument('file', 'Input file'),
+            new ArgumentDefinition('file', 'Input file', variadic: false),
         ];
 
         $result = $parser->parse(['file.txt'], $arguments, []);
@@ -37,7 +37,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $arguments = [
-            new Argument('files', 'Input files', variadic: true),
+            new ArgumentDefinition('files', 'Input files', variadic: true),
         ];
 
         $result = $parser->parse(['file1.txt', 'file2.txt', 'file3.txt'], $arguments, []);
@@ -50,7 +50,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new Option('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
         ];
 
         $result = $parser->parse(['--verbose'], [], $options);
@@ -65,7 +65,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new Option('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', requiresValue: true),
         ];
 
         $result = $parser->parse(['--config', 'config.php'], [], $options);
@@ -80,7 +80,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new Option('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', requiresValue: true),
         ];
 
         $result = $parser->parse(['--config=config.php'], [], $options);
@@ -95,12 +95,12 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $arguments = [
-            new Argument('file', 'Input file'),
+            new ArgumentDefinition('file', 'Input file', variadic: false),
         ];
 
         $options = [
-            new Option('verbose', 'Verbose output', requiresValue: false),
-            new Option('config', 'Config file', requiresValue: true),
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('config', 'Config file', requiresValue: true),
         ];
 
         $result = $parser->parse(['input.txt', '--verbose', '--config', 'config.php'], $arguments, $options);
@@ -127,7 +127,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new Option('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', requiresValue: true),
         ];
 
         $this->expectException(ErrorException::class);
@@ -141,12 +141,12 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $arguments = [
-            new Argument('file1', 'First file'),
-            new Argument('file2', 'Second file'),
+            new ArgumentDefinition('file1', 'First file', variadic: false),
+            new ArgumentDefinition('file2', 'Second file', variadic: false),
         ];
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Missing required argument(s): <file2>');
+        $this->expectExceptionMessage('Missing required argument: <file2>');
 
         $parser->parse(['only-one.txt'], $arguments, []);
     }
@@ -156,7 +156,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $arguments = [
-            new Argument('file', 'Input file'),
+            new ArgumentDefinition('file', 'Input file', variadic: false),
         ];
 
         $this->expectException(ErrorException::class);

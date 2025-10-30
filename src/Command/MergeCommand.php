@@ -4,7 +4,7 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Printer;
+use function array_values;
 use function count;
 use function file_get_contents;
 use function is_file;
@@ -15,36 +15,18 @@ use const STDOUT;
 final class MergeCommand extends AbstractCommand
 {
 
-    public function getName(): string
-    {
-        return 'merge';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Merge multiple coverage files into one';
-    }
-
-    public function getArguments(): array
-    {
-        return [
-            new Argument('files', 'Coverage files to merge (clover.xml, cobertura.xml, or .cov)', variadic: true),
-        ];
-    }
-
-    public function getOptions(): array
-    {
-        return [
-            new Option('format', 'Output format: clover or cobertura (default: auto-detect from first file)', requiresValue: true),
-        ];
-    }
-
     /**
      * @throws ErrorException
      */
-    protected function run(Printer $printer): int
+    public function __invoke(
+        #[CliOption(description: 'Output format: clover or cobertura (default: auto-detect from first file)')]
+        ?CoverageFormat $format = null,
+
+        #[CliArgument(description: 'Coverage files to merge (clover.xml, cobertura.xml, or .cov)')]
+        string ...$files,
+    ): int
     {
-        $inputFiles = $this->getVariadicArgument('files');
+        $inputFiles = array_values($files);
 
         if (count($inputFiles) < 2) {
             throw new ErrorException('At least 2 files are required to merge');
@@ -68,7 +50,6 @@ final class MergeCommand extends AbstractCommand
         $merged = CoverageMerger::merge($coverageSets);
 
         // Determine output format
-        $format = $this->getEnumOption('format', CoverageFormat::class);
         if ($format === null) {
             $format = $this->detectFormat($inputFiles[0]);
         }
@@ -78,6 +59,16 @@ final class MergeCommand extends AbstractCommand
         $writer->write($merged, STDOUT);
 
         return 0;
+    }
+
+    public function getName(): string
+    {
+        return 'merge';
+    }
+
+    public function getDescription(): string
+    {
+        return 'Merge multiple coverage files into one';
     }
 
     /**

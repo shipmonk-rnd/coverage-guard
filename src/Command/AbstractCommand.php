@@ -2,7 +2,6 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use BackedEnum;
 use Composer\InstalledVersions;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
@@ -11,19 +10,14 @@ use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
-use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Writer\CloverCoverageWriter;
 use ShipMonk\CoverageGuard\Writer\CoberturaCoverageWriter;
 use ShipMonk\CoverageGuard\Writer\CoverageWriter;
 use ShipMonk\CoverageGuard\XmlLoader;
-use function array_map;
-use function array_slice;
 use function exec;
 use function file_get_contents;
 use function function_exists;
-use function implode;
 use function is_dir;
-use function is_string;
 use function method_exists;
 use function realpath;
 use function str_contains;
@@ -35,183 +29,6 @@ use function trim;
 
 abstract class AbstractCommand implements Command
 {
-
-    /**
-     * @var list<string>
-     */
-    private array $arguments = [];
-
-    /**
-     * @var array<string, string|bool>
-     */
-    private array $options = [];
-
-    /**
-     * @param list<string> $arguments
-     * @param array<string, string|bool> $options
-     */
-    final public function execute(
-        array $arguments,
-        array $options,
-        Printer $printer,
-    ): int
-    {
-        $this->arguments = $arguments;
-        $this->options = $options;
-
-        return $this->run($printer);
-    }
-
-    /**
-     * Implement this method instead of execute()
-     */
-    abstract protected function run(Printer $printer): int;
-
-    /**
-     * Get a positional argument by name
-     *
-     * @throws ErrorException If argument is not defined or not provided
-     */
-    protected function getArgument(string $name): string
-    {
-        $arguments = $this->getArguments();
-
-        foreach ($arguments as $index => $argument) {
-            if ($argument->name === $name) {
-                if (!isset($this->arguments[$index])) {
-                    throw new ErrorException("Required argument '{$name}' not provided");
-                }
-
-                return $this->arguments[$index];
-            }
-        }
-
-        throw new ErrorException("Undefined argument: {$name}");
-    }
-
-    /**
-     * Get all positional arguments as an array
-     *
-     * Useful for variadic arguments
-     *
-     * @param string $name Argument name (must be variadic)
-     * @return list<string>
-     *
-     * @throws ErrorException If argument is not variadic
-     */
-    protected function getVariadicArgument(string $name): array
-    {
-        $arguments = $this->getArguments();
-
-        foreach ($arguments as $index => $argument) {
-            if ($argument->name === $name) {
-                if (!$argument->variadic) {
-                    throw new ErrorException("Argument '{$name}' is not variadic");
-                }
-
-                return array_slice($this->arguments, $index);
-            }
-        }
-
-        throw new ErrorException("Undefined argument: {$name}");
-    }
-
-    /**
-     * Get an option value
-     *
-     * @return string|bool|null String for options with values, bool for flags, null if not provided
-     *
-     * @throws ErrorException If option is not defined
-     */
-    protected function getOption(string $name): string|bool|null
-    {
-        $options = $this->getOptions();
-
-        foreach ($options as $option) {
-            if ($option->name === $name) {
-                return $this->options[$name] ?? null;
-            }
-        }
-
-        throw new ErrorException("Undefined option: --{$name}");
-    }
-
-    /**
-     * Get a required option value as a string
-     *
-     * @return string String value
-     *
-     * @throws ErrorException If option is not provided, not defined, or is a boolean flag
-     */
-    protected function getRequiredStringOption(string $name): string
-    {
-        $value = $this->getOption($name);
-
-        if ($value === null || $value === '') {
-            throw new ErrorException("Option --{$name} is required");
-        }
-
-        if ($value === true || $value === false) {
-            throw new ErrorException("Option --{$name} is a boolean flag, not a string option");
-        }
-
-        return $value;
-    }
-
-    /**
-     * Get an option value as a boolean
-     *
-     * @return bool True if flag was provided, false otherwise
-     *
-     * @throws ErrorException If option is not defined or requires a value
-     */
-    protected function getBoolOption(string $name): bool
-    {
-        $value = $this->getOption($name);
-
-        if (is_string($value)) {
-            throw new ErrorException("Option --{$name} requires a value, cannot be used as a boolean flag");
-        }
-
-        return $value === true;
-    }
-
-    /**
-     * Get an option value as an enum
-     *
-     * @param class-string<T> $enumClass
-     * @return T|null
-     *
-     * @template T of BackedEnum
-     *
-     * @throws ErrorException
-     */
-    protected function getEnumOption(
-        string $name,
-        string $enumClass,
-    ): ?BackedEnum
-    {
-        $value = $this->getOption($name);
-
-        if ($value === null || $value === '') {
-            return null;
-        }
-
-        if ($value === true || $value === false) {
-            throw new ErrorException("Option --{$name} requires a value");
-        }
-
-        foreach ($enumClass::cases() as $case) {
-            if ($case->value === $value) {
-                return $case;
-            }
-        }
-
-        $validValues = array_map(static fn (BackedEnum $case) => $case->value, $enumClass::cases());
-        $validValuesStr = implode(', ', $validValues);
-
-        throw new ErrorException("Invalid value '{$value}' for option --{$name}. Expected one of: {$validValuesStr}");
-    }
 
     /**
      * Create coverage extractor based on file extension and content

@@ -2,12 +2,13 @@
 <?php declare(strict_types=1);
 
 use ShipMonk\CoverageGuard\Command\CheckCommand;
+use ShipMonk\CoverageGuard\Command\CliParser;
 use ShipMonk\CoverageGuard\Command\CommandRegistry;
 use ShipMonk\CoverageGuard\Command\CommandRunner;
 use ShipMonk\CoverageGuard\Command\ConvertCommand;
 use ShipMonk\CoverageGuard\Command\HelpRenderer;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
-use ShipMonk\CoverageGuard\Command\CliParser;
+use ShipMonk\CoverageGuard\Command\ParameterResolver;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
@@ -33,12 +34,19 @@ $printer = new Printer(STDOUT, $noColor);
 
 try {
     $registry = new CommandRegistry();
-    $registry->register(new CheckCommand());
+    $registry->register(new CheckCommand($printer));
     $registry->register(new MergeCommand());
     $registry->register(new ConvertCommand());
-    $registry->register(new PatchCoverageCommand());
+    $registry->register(new PatchCoverageCommand($printer));
 
-    $runner = new CommandRunner($registry, new CliParser(), new HelpRenderer());
+    $parameterResolver = new ParameterResolver();
+
+    $runner = new CommandRunner(
+        $registry,
+        new CliParser(),
+        $parameterResolver,
+        new HelpRenderer($parameterResolver)
+    );
     $exitCode = $runner->run($argv, $printer);
     exit($exitCode);
 

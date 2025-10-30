@@ -99,4 +99,3 @@ parameters:
                 - shipmonk.deadMethod
             paths:
                 - src/Initializer.php
-                - src/Command/AbstractCommand.php

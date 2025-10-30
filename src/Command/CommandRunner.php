@@ -2,12 +2,16 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use LogicException;
+use ReflectionException;
+use ReflectionMethod;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
 use function array_filter;
 use function array_shift;
 use function array_values;
 use function in_array;
+use function is_int;
 use function str_starts_with;
 
 final class CommandRunner
@@ -16,6 +20,7 @@ final class CommandRunner
     public function __construct(
         private readonly CommandRegistry $registry,
         private readonly CliParser $cliParser,
+        private readonly ParameterResolver $parameterResolver,
         private readonly HelpRenderer $helpRenderer,
     )
     {
@@ -58,18 +63,43 @@ final class CommandRunner
             return 1;
         }
 
-        // Get the command
         $command = $this->registry->getCommand($commandName);
+        $invokeMethod = $this->getInvokeMethod($command);
 
-        // Parse command arguments and options
+        $argumentDefinitions = $this->parameterResolver->getArgumentDefinitions($invokeMethod);
+        $optionDefinitions = $this->parameterResolver->getOptionDefinitions($invokeMethod);
+
         $parsed = $this->cliParser->parse(
             $argv,
-            $command->getArguments(),
-            $command->getOptions(),
+            $argumentDefinitions,
+            $optionDefinitions,
         );
 
-        // Execute the command
-        return $command->execute($parsed['arguments'], $parsed['options'], $printer);
+        $parameters = $this->parameterResolver->resolveParameters(
+            $invokeMethod,
+            $parsed['arguments'],
+            $parsed['options'],
+        );
+
+        try {
+            $exitCode = $invokeMethod->invokeArgs($command, $parameters);
+        } catch (ReflectionException $e) {
+            throw new LogicException('Could not invoke command: ' . $e->getMessage(), 0, $e);
+        }
+
+        if (!is_int($exitCode)) {
+            throw new LogicException('Command must return an integer exit code');
+        }
+        return $exitCode;
+    }
+
+    private function getInvokeMethod(Command $command): ReflectionMethod
+    {
+        try {
+            return new ReflectionMethod($command, '__invoke');
+        } catch (ReflectionException $e) {
+            throw new LogicException('Could not get reflection for __invoke() method', 0, $e);
+        }
     }
 
 }

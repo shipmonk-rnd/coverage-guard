@@ -2,13 +2,13 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-final class Option
+final class ArgumentDefinition
 {
 
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        public readonly bool $requiresValue = false,
+        public readonly bool $variadic,
     )
     {
     }

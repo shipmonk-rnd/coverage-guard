@@ -16,109 +16,75 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testGetName(): void
     {
-        $command = new PatchCoverageCommand();
+        $stream = fopen('php://memory', 'w+');
+        self::assertIsResource($stream);
+        $printer = new Printer($stream, noColor: true);
+
+        $command = new PatchCoverageCommand($printer);
         self::assertSame('patch-coverage', $command->getName());
     }
 
     public function testGetDescription(): void
     {
-        $command = new PatchCoverageCommand();
+        $stream = fopen('php://memory', 'w+');
+        self::assertIsResource($stream);
+        $printer = new Printer($stream, noColor: true);
+
+        $command = new PatchCoverageCommand($printer);
         self::assertStringContainsString('coverage', $command->getDescription());
         self::assertStringContainsString('patch', $command->getDescription());
     }
 
-    public function testGetArguments(): void
+    public function testInvokeWithNonExistentCoverageFile(): void
     {
-        $command = new PatchCoverageCommand();
-        $arguments = $command->getArguments();
-
-        self::assertCount(1, $arguments);
-        self::assertSame('coverage-file', $arguments[0]->name);
-    }
-
-    public function testGetOptions(): void
-    {
-        $command = new PatchCoverageCommand();
-        $options = $command->getOptions();
-
-        self::assertCount(1, $options);
-        self::assertSame('patch', $options[0]->name);
-        self::assertTrue($options[0]->requiresValue);
-    }
-
-    public function testExecuteRequiresPatchOption(): void
-    {
-        $command = new PatchCoverageCommand();
-
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertIsResource($outputStream);
-
-        $printer = new Printer($outputStream, noColor: true);
-
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
-
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('--patch is required');
-
-        $command->execute(
-            [$coverageFile],
-            [],
-            $printer,
-        );
-    }
-
-    public function testExecuteWithNonExistentCoverageFile(): void
-    {
-        $command = new PatchCoverageCommand();
         $stream = fopen('php://memory', 'w+');
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
+
+        $command = new PatchCoverageCommand($printer);
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Coverage file not found');
 
-        $command->execute(
-            ['nonexistent.xml'],
-            ['patch' => 'some.patch'],
-            $printer,
+        ($command)(
+            'nonexistent.xml',
+            patch: 'some.patch',
         );
     }
 
-    public function testExecuteWithNonExistentPatchFile(): void
+    public function testInvokeWithNonExistentPatchFile(): void
     {
-        $command = new PatchCoverageCommand();
         $stream = fopen('php://memory', 'w+');
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
+
+        $command = new PatchCoverageCommand($printer);
 
         $coverageFile = __DIR__ . '/../fixtures/clover.xml';
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Patch file not found');
 
-        $command->execute(
-            [$coverageFile],
-            ['patch' => 'nonexistent.patch'],
-            $printer,
+        ($command)(
+            $coverageFile,
+            patch: 'nonexistent.patch',
         );
     }
 
-    public function testExecuteCalculatesPatchCoverage(): void
+    public function testInvokeCalculatesPatchCoverage(): void
     {
-        $command = new PatchCoverageCommand();
-
         $outputStream = fopen('php://memory', 'w+');
         self::assertIsResource($outputStream);
 
         $printer = new Printer($outputStream, noColor: true);
+        $command = new PatchCoverageCommand($printer);
 
         $coverageFile = __DIR__ . '/../fixtures/clover.xml';
         $patchFile = __DIR__ . '/../fixtures/sample.patch';
 
-        $exitCode = $command->execute(
-            [$coverageFile],
-            ['patch' => $patchFile],
-            $printer,
+        $exitCode = ($command)(
+            $coverageFile,
+            patch: $patchFile,
         );
 
         self::assertSame(0, $exitCode);
@@ -135,23 +101,21 @@ final class PatchCoverageCommandTest extends TestCase
         );
     }
 
-    public function testExecuteWithNoPatchChanges(): void
+    public function testInvokeWithNoPatchChanges(): void
     {
-        $command = new PatchCoverageCommand();
-
         $outputStream = fopen('php://memory', 'w+');
         self::assertIsResource($outputStream);
 
         $printer = new Printer($outputStream, noColor: true);
+        $command = new PatchCoverageCommand($printer);
 
         // Use a coverage file and patch that don't overlap
         $coverageFile = __DIR__ . '/../fixtures/clover_with_package.xml';
         $patchFile = __DIR__ . '/../fixtures/sample.patch'; // References different files
 
-        $exitCode = $command->execute(
-            [$coverageFile],
-            ['patch' => $patchFile],
-            $printer,
+        $exitCode = ($command)(
+            $coverageFile,
+            patch: $patchFile,
         );
 
         self::assertSame(0, $exitCode);
