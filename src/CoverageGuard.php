@@ -233,7 +233,7 @@ final class CoverageGuard
                         $actualLine = $actualFileLines[$lineNumber - 1];
 
                         if ($lineContent !== $actualLine) {
-                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nExpected '{$lineContent}'\nFound '{$actualLine}'\n\nIs the patch up-to-date?");
+                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nPatch data: '{$lineContent}'\nFilesystem: '{$actualLine}'\n\nIs the patch up-to-date?");
                         }
                     }
 
