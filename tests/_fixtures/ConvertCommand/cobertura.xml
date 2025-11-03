@@ -2,7 +2,7 @@
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 <coverage line-rate="0.5" branch-rate="0" lines-covered="2" lines-valid="4" branches-covered="0" branches-valid="0" complexity="2" version="0.4" timestamp="1234567890">
     <sources>
-        <source>tests/fixtures</source>
+        <source>tests/_fixtures</source>
     </sources>
     <packages>
         <package name="Sample.php" line-rate="0.5" branch-rate="0" complexity="2">

@@ -17,8 +17,8 @@ final class ConvertCommandTest extends TestCase
 
     public function testConvertCloverToCobertura(): void
     {
-        $inputFile = __DIR__ . '/../fixtures/clover.xml';
-        $expectedFile = __DIR__ . '/fixtures/clover-to-cobertura-expected.xml';
+        $inputFile = __DIR__ . '/../_fixtures/ConvertCommand/clover.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/ConvertCommand/clover-to-cobertura-expected.xml';
 
         $this->assertConvertProducesExpectedOutput(
             $inputFile,
@@ -30,8 +30,8 @@ final class ConvertCommandTest extends TestCase
 
     public function testConvertCoberturaToClover(): void
     {
-        $inputFile = __DIR__ . '/../fixtures/cobertura.xml';
-        $expectedFile = __DIR__ . '/fixtures/cobertura-to-clover-expected.xml';
+        $inputFile = __DIR__ . '/../_fixtures/ConvertCommand/cobertura.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/ConvertCommand/cobertura-to-clover-expected.xml';
 
         $this->assertConvertProducesExpectedOutput(
             $inputFile,
@@ -43,8 +43,8 @@ final class ConvertCommandTest extends TestCase
 
     public function testConvertWithCustomIndent(): void
     {
-        $inputFile = __DIR__ . '/../fixtures/clover.xml';
-        $expectedFile = __DIR__ . '/fixtures/clover-to-cobertura-tab-indent-expected.xml';
+        $inputFile = __DIR__ . '/../_fixtures/ConvertCommand/clover.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/ConvertCommand/clover-to-cobertura-tab-indent-expected.xml';
 
         $this->assertConvertProducesExpectedOutput(
             $inputFile,

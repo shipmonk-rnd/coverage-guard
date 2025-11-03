@@ -41,7 +41,7 @@
             "ShipMonk\\CoverageGuard\\": "tests/"
         },
         "classmap": [
-            "tests/Cli/fixtures"
+            "tests/_fixtures/ParameterResolver"
         ]
     },
     "bin": [

@@ -55,8 +55,8 @@ final class CheckCommandTest extends TestCase
         $printer = new Printer($outputStream, noColor: true);
         $command = new CheckCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover_with_package.xml';
-        $configFile = __DIR__ . '/../fixtures/config-for-bintest-no-rule.php';
+        $coverageFile = __DIR__ . '/../_fixtures/clover_with_package.xml';
+        $configFile = __DIR__ . '/../_fixtures/config-for-bintest-no-rule.php';
 
         $exitCode = ($command)(
             $coverageFile,
@@ -74,9 +74,9 @@ final class CheckCommandTest extends TestCase
         $printer = new Printer($outputStream, noColor: true);
         $command = new CheckCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
-        $patchFile = __DIR__ . '/../fixtures/sample.patch';
-        $configFile = __DIR__ . '/../fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/../_fixtures/sample.patch';
+        $configFile = __DIR__ . '/../_fixtures/config-for-bintest.php';
 
         $exitCode = ($command)(
             $coverageFile,
@@ -102,8 +102,8 @@ final class CheckCommandTest extends TestCase
 
         $command = new CheckCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
-        $patchFile = __DIR__ . '/../fixtures/config-for-bintest.php'; // Valid file but wrong extension
+        $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/../_fixtures/config-for-bintest.php'; // Valid file but wrong extension
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('expecting .patch or .diff extension');
@@ -122,8 +122,8 @@ final class CheckCommandTest extends TestCase
 
         $command = new CheckCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
-        $configFile = __DIR__ . '/../fixtures/sample.patch'; // Valid file but wrong extension
+        $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
+        $configFile = __DIR__ . '/../_fixtures/sample.patch'; // Valid file but wrong extension
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('must have php extension');

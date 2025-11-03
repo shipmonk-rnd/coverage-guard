@@ -50,11 +50,11 @@ final class CoverageGuardTest extends TestCase
      */
     public static function provideArgs(): iterable
     {
-        yield 'with patch' => [[__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', false]];
-        yield 'without patch' => [[__DIR__ . '/fixtures/clover.xml', null, false]];
+        yield 'with patch' => [[__DIR__ . '/_fixtures/clover.xml', __DIR__ . '/_fixtures/sample.patch', false]];
+        yield 'without patch' => [[__DIR__ . '/_fixtures/clover.xml', null, false]];
 
         yield 'with path mapping' => [
-            [__DIR__ . '/fixtures/clover_with_absolute_paths.xml', null, false],
+            [__DIR__ . '/_fixtures/CoverageGuardTest/clover_with_absolute_paths.xml', null, false],
             static function (Config $config): void {
                 $config->addCoveragePathMapping('/some/ci/path/root', __DIR__ . '/..');
             },
@@ -63,8 +63,8 @@ final class CoverageGuardTest extends TestCase
 
     public function testPatchIntegrityFailsWhenLineNumberExceedsFileLength(): void
     {
-        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/sample-line-out-of-bounds.patch');
-        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
+        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/CoverageGuardTest/sample-line-out-of-bounds.patch');
+        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Patch file '{$patchFile}' refers to added line #98 with '    public function untestedMethod(): string' contents in file '{$sampleFile}', but such line does not exist. Is the patch up-to-date?");
@@ -74,8 +74,8 @@ final class CoverageGuardTest extends TestCase
 
     public function testPatchIntegrityFailsWhenAddedLineContentMismatches(): void
     {
-        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/sample-added-mismatch.patch');
-        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/Sample.php');
+        $patchFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/CoverageGuardTest/sample-added-mismatch.patch');
+        $sampleFile = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/Sample.php');
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("Patch file '{$patchFile}' has added line #15 that does not match actual content of file '{$sampleFile}'.\nPatch data: '        return 'goodbye';'\nFilesystem: '        return 'hello';'\n\nIs the patch up-to-date?");
@@ -86,7 +86,7 @@ final class CoverageGuardTest extends TestCase
     public function testHandlesFileWithMissingNewlineAtEof(): void
     {
         $guard = $this->createCoverageGuard();
-        $report = $guard->checkCoverage(__DIR__ . '/fixtures/clover-no-newline.xml', patchFile: null, verbose: true);
+        $report = $guard->checkCoverage(__DIR__ . '/_fixtures/CoverageGuardTest/clover-no-newline.xml', patchFile: null, verbose: true);
 
         // The test passes if no exception is thrown about line count mismatch
         self::assertSame([], $report->reportedErrors);
@@ -102,8 +102,8 @@ final class CoverageGuardTest extends TestCase
         $guard = $this->createCoverageGuard($config);
 
         $report = $guard->checkCoverage(
-            __DIR__ . '/fixtures/clover-windows.xml',
-            __DIR__ . '/fixtures/sample-windows.patch',
+            __DIR__ . '/_fixtures/CoverageGuardTest/clover-windows.xml',
+            __DIR__ . '/_fixtures/CoverageGuardTest/sample-windows.patch',
             false,
         );
         $errors = $report->reportedErrors;
@@ -124,14 +124,14 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper(__DIR__ . '/../');
         $guard = new CoverageGuard($config, $printer, $pathHelper);
 
-        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', patchFile: null, verbose: true);
+        $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', patchFile: null, verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);
         self::assertNotFalse($output);
 
         self::assertStringContainsString('Info: Checking files listed in coverage report', $output);
-        self::assertStringContainsString('tests/fixtures/Sample.php', $output);
+        self::assertStringContainsString('tests/_fixtures/Sample.php', $output);
         self::assertStringContainsString('%', $output); // Coverage percentage
     }
 
@@ -145,14 +145,14 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper(__DIR__ . '/../');
         $guard = new CoverageGuard($config, $printer, $pathHelper);
 
-        $guard->checkCoverage(__DIR__ . '/fixtures/clover.xml', __DIR__ . '/fixtures/sample.patch', verbose: true);
+        $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', __DIR__ . '/_fixtures/sample.patch', verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);
         self::assertNotFalse($output);
 
         self::assertStringContainsString('Info: Checking files listed in patch file', $output);
-        self::assertStringContainsString('tests/fixtures/Sample.php', $output);
+        self::assertStringContainsString('tests/_fixtures/Sample.php', $output);
         self::assertStringContainsString('%', $output); // Coverage percentage
     }
 
@@ -161,7 +161,7 @@ final class CoverageGuardTest extends TestCase
         $guard = $this->createCoverageGuard();
 
         $guard->checkCoverage(
-            __DIR__ . '/fixtures/clover.xml',
+            __DIR__ . '/_fixtures/clover.xml',
             $patchFile,
             false,
         );

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <coverage generated="1234567890">
     <project timestamp="1234567890">
-        <file name="tests/fixtures/Sample.php">
+        <file name="tests/_fixtures/Sample.php">
             <line num="8" type="method" count="1"/>
             <line num="10" type="stmt" count="1"/>
             <line num="13" type="method" count="0"/>

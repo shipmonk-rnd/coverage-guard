@@ -24,7 +24,7 @@ final class PhpUnitCoverageExtractorTest extends TestCase
         $driver = $this->createMock(Driver::class);
         $filter = new Filter();
         $data = new ProcessedCodeCoverageData();
-        $data->setLineCoverage(['tests/fixtures/Sample.php' => [8 => []]]);
+        $data->setLineCoverage(['tests/_fixtures/Sample.php' => [8 => []]]);
 
         $coverage = new CodeCoverage($driver, $filter);
         $coverage->setData($data);

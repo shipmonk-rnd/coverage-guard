@@ -16,6 +16,7 @@ $config->addRule(new class implements CoverageRule {
         }
         return null;
     }
+
 });
 
 return $config;

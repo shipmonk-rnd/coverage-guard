@@ -13,9 +13,9 @@ final class BinTest extends TestCase
     public function testBinDetectsUntestedChangedMethod(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
@@ -44,8 +44,8 @@ final class BinTest extends TestCase
     public function testBinSucceedsWithNoCoverageIssues(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover_with_package.xml';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest-no-rule.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover_with_package.xml';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest-no-rule.php';
 
         $command = implode(' ', [
             'php',
@@ -87,9 +87,9 @@ final class BinTest extends TestCase
     public function testBinWithNoColorFlag(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
@@ -115,9 +115,9 @@ final class BinTest extends TestCase
     public function testBinWithColorFlag(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
@@ -144,9 +144,9 @@ final class BinTest extends TestCase
     public function testBinDefaultBehaviorWithoutTty(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',

@@ -30,7 +30,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeWithCoverageFileOnly(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
@@ -61,7 +61,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWhenCustomConfigFileDoesNotExist(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -72,7 +72,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWhenCustomConfigFileDoesNotExistWithEqualsSyntax(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -83,7 +83,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWhenPatchFileDoesNotExistWithEqualsSyntax(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -94,7 +94,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWithUnknownLongOption(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -105,7 +105,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWithUnknownLongOptionWithEquals(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -116,7 +116,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWithUnknownShortOption(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -127,7 +127,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWithUnknownArgument(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -138,7 +138,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWithMultipleUnknownArguments(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -149,7 +149,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWhenConfigOptionHasNoValue(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -160,7 +160,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeFailsWhenPatchOptionHasNoValue(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -171,19 +171,19 @@ final class InitializerTest extends TestCase
 
     public function testLoadConfigSucceedsWithValidConfig(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $configFile = __DIR__ . '/fixtures/valid-config.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $configFile = __DIR__ . '/_fixtures/InitializerTest/valid-config.php';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile]);
 
-        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
+        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/InitializerTest/'), $result->config->getGitRoot());
     }
 
     public function testLoadConfigFailsWhenConfigFileReturnsNonConfigInstance(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $configFile = __DIR__ . '/fixtures/invalid-config.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $configFile = __DIR__ . '/_fixtures/InitializerTest/invalid-config.php';
         $initializer = $this->createInitializer();
 
         $this->expectException(ErrorException::class);
@@ -194,7 +194,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeWithVerboseFlag(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--verbose']);
@@ -204,7 +204,7 @@ final class InitializerTest extends TestCase
 
     public function testInitializeWithoutVerboseFlag(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile]);
@@ -214,19 +214,19 @@ final class InitializerTest extends TestCase
 
     public function testInitializeWithVerboseFlagAndOtherOptions(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $configFile = __DIR__ . '/fixtures/valid-config.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $configFile = __DIR__ . '/_fixtures/InitializerTest/valid-config.php';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--config', $configFile, '--verbose']);
 
         self::assertTrue($result->cliOptions->verbose, 'Verbose flag should be true when --verbose is provided with other options');
-        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/fixtures/'), $result->config->getGitRoot());
+        self::assertSame(str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/_fixtures/InitializerTest/'), $result->config->getGitRoot());
     }
 
     public function testInitializeWithColorsFlag(): void
     {
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
         $initializer = $this->createInitializer();
 
         $result = $initializer->initialize(__DIR__, ['coverage-guard', $coverageFile, '--no-color', '--color']);

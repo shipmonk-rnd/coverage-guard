@@ -17,9 +17,9 @@ final class MergeCommandTest extends TestCase
 
     public function testMergeCoberturaCoverageFiles(): void
     {
-        $input1 = __DIR__ . '/fixtures/cobertura-1.xml';
-        $input2 = __DIR__ . '/fixtures/cobertura-2.xml';
-        $expectedFile = __DIR__ . '/fixtures/cobertura-merged-expected.xml';
+        $input1 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-1.xml';
+        $input2 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-2.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/MergeCommand/cobertura-merged-expected.xml';
 
         $this->assertMergeProducesExpectedOutput(
             [$input1, $input2],
@@ -30,9 +30,9 @@ final class MergeCommandTest extends TestCase
 
     public function testMergeMultipleSourcesIntoSingleCommonSource(): void
     {
-        $input1 = __DIR__ . '/fixtures/cobertura-multiple-sources-1.xml';
-        $input2 = __DIR__ . '/fixtures/cobertura-multiple-sources-2.xml';
-        $expectedFile = __DIR__ . '/fixtures/cobertura-multiple-sources-expected.xml';
+        $input1 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-multiple-sources-1.xml';
+        $input2 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-multiple-sources-2.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/MergeCommand/cobertura-multiple-sources-expected.xml';
 
         $this->assertMergeProducesExpectedOutput(
             [$input1, $input2],
@@ -43,9 +43,9 @@ final class MergeCommandTest extends TestCase
 
     public function testMergeSkipsFilesWithEmptyPackages(): void
     {
-        $emptyInput = __DIR__ . '/fixtures/cobertura-empty-packages.xml';
-        $validInput = __DIR__ . '/fixtures/cobertura-empty-packages-with-data.xml';
-        $expectedFile = __DIR__ . '/fixtures/cobertura-empty-packages-expected.xml';
+        $emptyInput = __DIR__ . '/../_fixtures/MergeCommand/cobertura-empty-packages.xml';
+        $validInput = __DIR__ . '/../_fixtures/MergeCommand/cobertura-empty-packages-with-data.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/MergeCommand/cobertura-empty-packages-expected.xml';
 
         $this->assertMergeProducesExpectedOutput(
             [$emptyInput, $validInput],

@@ -21,7 +21,7 @@ final class CloverCoverageExtractorTest extends TestCase
         $coverage = $extractor->getCoverage($filePath);
 
         self::assertNotEmpty($coverage);
-        self::assertSame('tests/fixtures/Sample.php', $coverage[0]->filePath);
+        self::assertSame('tests/_fixtures/Sample.php', $coverage[0]->filePath);
         $fileCoverage = $coverage[0];
 
         $lineNumberToHitCount = array_combine(
@@ -42,7 +42,7 @@ final class CloverCoverageExtractorTest extends TestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Failed to parse XML file');
 
-        $extractor->getCoverage(__DIR__ . '/../fixtures/Sample.php'); // not an XML file
+        $extractor->getCoverage(__DIR__ . '/../_fixtures/Sample.php'); // not an XML file
     }
 
     /**
@@ -50,8 +50,8 @@ final class CloverCoverageExtractorTest extends TestCase
      */
     public static function provideCoverageFiles(): iterable
     {
-        yield 'default' => [__DIR__ . '/../fixtures/clover.xml'];
-        yield 'with package' => [__DIR__ . '/../fixtures/clover_with_package.xml'];
+        yield 'default' => [__DIR__ . '/../_fixtures/clover.xml'];
+        yield 'with package' => [__DIR__ . '/../_fixtures/clover_with_package.xml'];
     }
 
 }

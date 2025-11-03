@@ -60,7 +60,7 @@ final class PatchCoverageCommandTest extends TestCase
 
         $command = new PatchCoverageCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
+        $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Patch file not found');
@@ -79,8 +79,8 @@ final class PatchCoverageCommandTest extends TestCase
         $printer = new Printer($outputStream, noColor: true);
         $command = new PatchCoverageCommand($printer);
 
-        $coverageFile = __DIR__ . '/../fixtures/clover.xml';
-        $patchFile = __DIR__ . '/../fixtures/sample.patch';
+        $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/../_fixtures/sample.patch';
 
         $exitCode = ($command)(
             $coverageFile,
@@ -110,8 +110,8 @@ final class PatchCoverageCommandTest extends TestCase
         $command = new PatchCoverageCommand($printer);
 
         // Use a coverage file and patch that don't overlap
-        $coverageFile = __DIR__ . '/../fixtures/clover_with_package.xml';
-        $patchFile = __DIR__ . '/../fixtures/sample.patch'; // References different files
+        $coverageFile = __DIR__ . '/../_fixtures/clover_with_package.xml';
+        $patchFile = __DIR__ . '/../_fixtures/sample.patch'; // References different files
 
         $exitCode = ($command)(
             $coverageFile,

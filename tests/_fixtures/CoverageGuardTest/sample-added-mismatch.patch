@@ -1,7 +1,7 @@
-diff --git a/tests/fixtures/Sample.php b/tests/fixtures/Sample.php
+diff --git a/tests/_fixtures/Sample.php b/tests/_fixtures/Sample.php
 index 1234567..abcdefg 100644
---- a/tests/fixtures/Sample.php
-+++ b/tests/fixtures/Sample.php
+--- a/tests/_fixtures/Sample.php
++++ b/tests/_fixtures/Sample.php
 @@ -10,4 +10,10 @@ class Sample
          return 42;
      }

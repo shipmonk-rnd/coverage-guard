@@ -16,7 +16,7 @@ parameters:
         - tests
     excludePaths:
         analyseAndScan:
-            - tests/fixtures/*
+            - tests/_fixtures/*
     tmpDir: cache/phpstan/
     internalErrorsCountLimit: 1
     checkMissingCallableSignature: true
