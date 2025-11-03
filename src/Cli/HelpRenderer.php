@@ -50,7 +50,6 @@ final class HelpRenderer
         $printer->printLine(self::INDENT . implode(' ', $usageParts));
         $printer->printLine('');
 
-        // Arguments
         if ($arguments !== []) {
             $printer->printLine('<white>Arguments:</white>');
             foreach ($arguments as $arg) {
@@ -61,7 +60,6 @@ final class HelpRenderer
             $printer->printLine('');
         }
 
-        // Options
         if ($options !== []) {
             $printer->printLine('<white>Options:</white>');
             foreach ($options as $opt) {

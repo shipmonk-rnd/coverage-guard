@@ -190,7 +190,6 @@ final class ParameterResolver
 
         $typeName = $type->getName();
 
-        // Handle enum types
         if (enum_exists($typeName) && is_a($typeName, BackedEnum::class, true)) {
             foreach ($typeName::cases() as $case) {
                 if ($case->value === $value) {
@@ -202,12 +201,10 @@ final class ParameterResolver
             throw new ErrorException("Invalid value '{$value}' for {$parameter->getName()}. Expected one of: " . implode(', ', $validValues));
         }
 
-        // Handle string type
         if ($typeName === 'string') {
             return $value;
         }
 
-        // Handle int type
         if ($typeName === 'int') {
             if (!is_numeric($value)) {
                 throw new ErrorException("Invalid value '{$value}' for {$parameter->getName()}. Expected an integer.");
@@ -230,7 +227,7 @@ final class ParameterResolver
     }
 
     /**
-     * Convert parameter name to CLI name (camelCase -> kebab-case)
+     * camelCase -> kebab-case
      */
     private function parameterNameToCliName(string $name): string
     {

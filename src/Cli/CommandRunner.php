@@ -13,7 +13,6 @@ use function array_shift;
 use function array_values;
 use function in_array;
 use function is_int;
-use function str_starts_with;
 
 final class CommandRunner
 {
@@ -38,40 +37,30 @@ final class CommandRunner
         Printer $printer,
     ): int
     {
-        // Remove script name
-        array_shift($argv);
+        array_shift($argv); // remove script name
+        $commandName = array_shift($argv);
 
-        // Show general help if: no arguments, or only --help without a command
-        if ($argv === [] || $argv === ['--help']) {
+        if ($commandName === null || $commandName === '--help') {
             $this->helpRenderer->renderGeneralHelp($this->registry, $printer);
             return 1;
         }
 
-        // Remove --no-color and --color from argv as they're already processed
-        $argv = array_values(array_filter($argv, static fn (string $arg) => $arg !== '--no-color' && $arg !== '--color'));
+        $command = $this->registry->getCommand($commandName);
 
-        // Extract command name
-        $commandName = array_shift($argv);
-
-        if ($commandName === null || str_starts_with($commandName, '--')) {
-            throw new ErrorException('No command specified. Use --help to see available commands.');
-        }
-
-        // Check for command-specific help
+        // command-specific help
         if (in_array('--help', $argv, true)) {
-            $command = $this->registry->getCommand($commandName);
             $this->helpRenderer->renderCommandHelp($command, $printer);
             return 1;
         }
 
-        $command = $this->registry->getCommand($commandName);
-        $invokeMethod = $this->getInvokeMethod($command);
+        $commandArgs = $this->removeGlobalCliOptions($argv);
 
+        $invokeMethod = $this->getInvokeMethod($command);
         $argumentDefinitions = $this->parameterResolver->getArgumentDefinitions($invokeMethod);
         $optionDefinitions = $this->parameterResolver->getOptionDefinitions($invokeMethod);
 
         $parsed = $this->cliParser->parse(
-            $argv,
+            $commandArgs,
             $argumentDefinitions,
             $optionDefinitions,
         );
@@ -101,6 +90,19 @@ final class CommandRunner
         } catch (ReflectionException $e) {
             throw new LogicException('Could not get reflection for __invoke() method', 0, $e);
         }
+    }
+
+    /**
+     * @param list<string> $argv
+     * @return list<string>
+     */
+    private function removeGlobalCliOptions(array $argv): array
+    {
+        return array_values(array_filter($argv, static function (string $arg): bool {
+            return $arg !== '--no-color'
+                && $arg !== '--color'
+                && $arg !== '--help';
+        }));
     }
 
 }

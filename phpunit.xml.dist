@@ -17,7 +17,6 @@
 
     <source>
         <include>
-            <directory>bin</directory>
             <directory>src</directory>
         </include>
     </source>

@@ -2,8 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
+use LogicException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use function array_key_exists;
 use function count;
 use function explode;
 use function implode;
@@ -75,11 +75,7 @@ final class CliParser
         $i = 0;
         $count = count($args);
         while ($i < $count) {
-            if (!array_key_exists($i, $args)) {
-                break; // Should not happen, but helps type analysis
-            }
-
-            $arg = $args[$i];
+            $arg = $args[$i]; // @phpstan-ignore offsetAccess.notFound
 
             if (str_starts_with($arg, '--')) {
                 [$optionName, $optionValue] = $this->extractOptionNameAndValue($arg, $args, $i);
@@ -123,6 +119,7 @@ final class CliParser
                 throw new ErrorException("Invalid option format: --{$optionName}");
             }
             [$optionName, $optionValue] = $parts;
+
         } elseif (isset($args[$i + 1])) {
             $nextArg = $args[$i + 1];
             if (!str_starts_with($nextArg, '--')) {
@@ -151,7 +148,7 @@ final class CliParser
 
         foreach ($parsedOptions as $optionName => $optionValue) {
             if (!isset($optionMap[$optionName])) {
-                continue; // Should not happen as we validate options first
+                throw new LogicException('Should not happen as we validate options first');
             }
 
             $optionDef = $optionMap[$optionName];

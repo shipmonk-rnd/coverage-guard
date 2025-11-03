@@ -34,10 +34,9 @@ $printer = new Printer(STDOUT, $noColor);
 
 
 try {
-    $merger = new CoverageMerger();
     $registry = new CommandRegistry();
     $registry->register(new CheckCommand($printer));
-    $registry->register(new MergeCommand($merger));
+    $registry->register(new MergeCommand(new CoverageMerger()));
     $registry->register(new ConvertCommand());
     $registry->register(new PatchCoverageCommand($printer));
 

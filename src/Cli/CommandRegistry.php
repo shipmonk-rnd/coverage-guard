@@ -4,7 +4,9 @@ namespace ShipMonk\CoverageGuard\Cli;
 
 use ShipMonk\CoverageGuard\Command\Command;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use function array_keys;
 use function array_values;
+use function implode;
 
 final class CommandRegistry
 {
@@ -25,7 +27,7 @@ final class CommandRegistry
     public function getCommand(string $name): Command
     {
         if (!isset($this->commands[$name])) {
-            throw new ErrorException("Unknown command: {$name}");
+            throw new ErrorException("Unknown command: {$name}. First argument need to be valid command name, expected one of: " . implode(', ', array_keys($this->commands)));
         }
 
         return $this->commands[$name];
