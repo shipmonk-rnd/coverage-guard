@@ -3,7 +3,6 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use Composer\InstalledVersions;
-use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
@@ -21,12 +20,9 @@ use function file_get_contents;
 use function function_exists;
 use function is_dir;
 use function method_exists;
-use function preg_replace_callback;
 use function realpath;
-use function round;
 use function str_contains;
 use function str_ends_with;
-use function str_repeat;
 use function str_starts_with;
 use function strlen;
 use function substr;
@@ -81,27 +77,6 @@ abstract class AbstractCommand implements Command
             CoverageFormat::Clover => new CloverCoverageWriter(),
             CoverageFormat::Cobertura => new CoberturaCoverageWriter(),
         };
-    }
-
-    protected function convertIndentation(
-        string $in,
-        string $from,
-        string $to,
-    ): string
-    {
-        $out = preg_replace_callback(
-            pattern: '/^( +)/m',
-            callback: static function (array $matches) use ($from, $to): string {
-                $currentIndentLength = strlen($matches[1]);
-                $level = (int) round($currentIndentLength / strlen($from));
-                return str_repeat($to, $level);
-            },
-            subject: $in,
-        );
-        if ($out === null) {
-            throw new LogicException('Failed to convert indentation');
-        }
-        return $out;
     }
 
     /**

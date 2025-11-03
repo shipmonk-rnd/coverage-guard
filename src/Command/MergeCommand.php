@@ -54,12 +54,9 @@ final class MergeCommand extends AbstractCommand
         }
 
         $merged = $this->coverageMerger->merge($coverageSets);
-        $xml = $this->createWriter($format)->write($merged);
+        $xml = $this->createWriter($format)->write($merged, $indent);
 
-        // TODO should be inside writers
-        $normalizedXml = $this->convertIndentation($xml, '  ', $indent);
-
-        fwrite($this->outputStream, $normalizedXml);
+        fwrite($this->outputStream, $xml);
 
         return 0;
     }

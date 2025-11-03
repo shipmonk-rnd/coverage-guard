@@ -5,12 +5,8 @@ namespace ShipMonk\CoverageGuard\Writer;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
-use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
-use ShipMonk\CoverageGuard\XmlLoader;
-use function file_put_contents;
-use function sys_get_temp_dir;
-use function tempnam;
-use function unlink;
+use function file_get_contents;
+use function preg_replace;
 
 final class CoberturaCoverageWriterTest extends TestCase
 {
@@ -28,28 +24,18 @@ final class CoberturaCoverageWriterTest extends TestCase
             ],
         );
 
-        $output = $writer->write([$fileCoverage]);
+        $output = $writer->write([$fileCoverage], '    ');
 
-        self::assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $output);
-        self::assertStringContainsString('<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">', $output);
-        self::assertStringContainsString('<coverage', $output);
-        self::assertStringContainsString('line-rate=', $output);
-        self::assertStringContainsString('lines-covered="2"', $output); // 2 out of 3 lines covered
-        self::assertStringContainsString('lines-valid="3"', $output);
-        self::assertStringContainsString('<sources>', $output);
-        self::assertStringContainsString('<source>/path/to</source>', $output);
-        self::assertStringContainsString('<packages>', $output);
-        self::assertStringContainsString('<line number="10" hits="5"/>', $output);
-        self::assertStringContainsString('<line number="20" hits="0"/>', $output);
-        self::assertStringContainsString('<line number="30" hits="3"/>', $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CoberturaCoverageWriter/valid-cobertura-expected.xml');
+
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
     }
 
-    public function testWriteCanBeReadBackByExtractor(): void
+    public function testWriteWithMultipleFiles(): void
     {
         $writer = new CoberturaCoverageWriter();
-        $extractor = new CoberturaCoverageExtractor(new XmlLoader());
 
-        $originalCoverage = [
+        $coverageData = [
             new FileCoverage(
                 '/path/to/File1.php',
                 [
@@ -65,47 +51,22 @@ final class CoberturaCoverageWriterTest extends TestCase
             ),
         ];
 
-        // Write to temp file
-        $tempFile = tempnam(sys_get_temp_dir(), 'cobertura-test-');
-        self::assertIsString($tempFile);
+        $output = $writer->write($coverageData, '    ');
 
-        try {
-            $output = $writer->write($originalCoverage);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CoberturaCoverageWriter/multiple-files-expected.xml');
 
-            file_put_contents($tempFile, $output);
-
-            // Read it back
-            $readCoverage = $extractor->getCoverage($tempFile);
-
-            self::assertCount(2, $readCoverage);
-
-            // Verify File1
-            self::assertSame('/path/to/File1.php', $readCoverage[0]->filePath);
-            self::assertCount(2, $readCoverage[0]->executableLines);
-            self::assertSame(10, $readCoverage[0]->executableLines[0]->lineNumber);
-            self::assertSame(5, $readCoverage[0]->executableLines[0]->hits);
-            self::assertSame(20, $readCoverage[0]->executableLines[1]->lineNumber);
-            self::assertSame(0, $readCoverage[0]->executableLines[1]->hits);
-
-            // Verify File2
-            self::assertSame('/path/to/File2.php', $readCoverage[1]->filePath);
-            self::assertCount(1, $readCoverage[1]->executableLines);
-            self::assertSame(15, $readCoverage[1]->executableLines[0]->lineNumber);
-            self::assertSame(3, $readCoverage[1]->executableLines[0]->hits);
-        } finally {
-            @unlink($tempFile);
-        }
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
     }
 
     public function testWriteWithNoFiles(): void
     {
         $writer = new CoberturaCoverageWriter();
 
-        $output = $writer->write([]);
+        $output = $writer->write([], '    ');
 
-        self::assertStringContainsString('<coverage', $output);
-        self::assertStringContainsString('lines-covered="0"', $output);
-        self::assertStringContainsString('lines-valid="0"', $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CoberturaCoverageWriter/no-files-expected.xml');
+
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
     }
 
     public function testWriteCalculatesCorrectLineRate(): void
@@ -124,11 +85,22 @@ final class CoberturaCoverageWriterTest extends TestCase
             ],
         );
 
-        $output = $writer->write([$fileCoverage]);
+        $output = $writer->write([$fileCoverage], '    ');
 
-        self::assertStringContainsString('line-rate="0.60000000000000"', $output);
-        self::assertStringContainsString('lines-covered="3"', $output);
-        self::assertStringContainsString('lines-valid="5"', $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CoberturaCoverageWriter/correct-line-rate-expected.xml');
+
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
+    }
+
+    private function normalizeOutput(string $output): string
+    {
+        $normalized = preg_replace(
+            ['/timestamp="[0-9]+"/', '/generated="[0-9]+"/'],
+            ['timestamp="1234567890"', 'generated="1234567890"'],
+            $output,
+        );
+        self::assertNotNull($normalized);
+        return $normalized;
     }
 
 }

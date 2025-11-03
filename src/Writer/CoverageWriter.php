@@ -12,6 +12,7 @@ interface CoverageWriter
      */
     public function write(
         array $fileCoverages,
+        string $indent,
     ): string;
 
 }

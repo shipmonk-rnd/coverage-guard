@@ -6,6 +6,7 @@ use DOMDocument;
 use DOMElement;
 use RuntimeException;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Utils\Indenter;
 use function time;
 
 final class CloverCoverageWriter implements CoverageWriter
@@ -18,6 +19,7 @@ final class CloverCoverageWriter implements CoverageWriter
      */
     public function write(
         array $fileCoverages,
+        string $indent,
     ): string
     {
         $dom = $this->generateXml($fileCoverages);
@@ -27,7 +29,7 @@ final class CloverCoverageWriter implements CoverageWriter
             throw new RuntimeException('Failed to generate clover XML');
         }
 
-        return $xml;
+        return Indenter::change($xml, '  ', $indent);
     }
 
     /**

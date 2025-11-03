@@ -7,6 +7,7 @@ use DOMElement;
 use LogicException;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Utils\Indenter;
 use function array_reduce;
 use function basename;
 use function count;
@@ -29,6 +30,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
      */
     public function write(
         array $fileCoverages,
+        string $indent,
     ): string
     {
         $dom = $this->generateXml($fileCoverages);
@@ -38,7 +40,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
             throw new LogicException('Failed to generate cobertura XML');
         }
 
-        return $xml;
+        return Indenter::change($xml, '  ', $indent);
     }
 
     /**

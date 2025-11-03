@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1234567890">
+    <project timestamp="1234567890">
+        <file name="/path/to/File1.php">
+            <line num="10" type="stmt" count="5"/>
+            <line num="20" type="stmt" count="0"/>
+        </file>
+        <file name="/path/to/File2.php">
+            <line num="15" type="stmt" count="3"/>
+        </file>
+    </project>
+</coverage>

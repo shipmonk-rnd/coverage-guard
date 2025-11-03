@@ -5,12 +5,8 @@ namespace ShipMonk\CoverageGuard\Writer;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
-use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
-use ShipMonk\CoverageGuard\XmlLoader;
-use function file_put_contents;
-use function sys_get_temp_dir;
-use function tempnam;
-use function unlink;
+use function file_get_contents;
+use function preg_replace;
 
 final class CloverCoverageWriterTest extends TestCase
 {
@@ -29,24 +25,18 @@ final class CloverCoverageWriterTest extends TestCase
             50,
         );
 
-        $output = $writer->write([$fileCoverage]);
+        $output = $writer->write([$fileCoverage], '    ');
 
-        self::assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $output);
-        self::assertStringContainsString('<coverage', $output);
-        self::assertStringContainsString('<project', $output);
-        self::assertStringContainsString('<file name="/path/to/Sample.php">', $output);
-        self::assertStringContainsString('<line num="10" type="stmt" count="5"/>', $output);
-        self::assertStringContainsString('<line num="20" type="stmt" count="0"/>', $output);
-        self::assertStringContainsString('<line num="30" type="stmt" count="3"/>', $output);
-        self::assertStringContainsString('<metrics loc="50"/>', $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CloverCoverageWriter/valid-clover-expected.xml');
+
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
     }
 
-    public function testWriteCanBeReadBackByExtractor(): void
+    public function testWriteWithMultipleFiles(): void
     {
         $writer = new CloverCoverageWriter();
-        $extractor = new CloverCoverageExtractor(new XmlLoader());
 
-        $originalCoverage = [
+        $coverageData = [
             new FileCoverage(
                 '/path/to/File1.php',
                 [
@@ -62,46 +52,33 @@ final class CloverCoverageWriterTest extends TestCase
             ),
         ];
 
-        // Write to temp file
-        $tempFile = tempnam(sys_get_temp_dir(), 'clover-test-');
-        self::assertIsString($tempFile);
+        $output = $writer->write($coverageData, '    ');
 
-        try {
-            $output = $writer->write($originalCoverage);
-            file_put_contents($tempFile, $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CloverCoverageWriter/multiple-files-expected.xml');
 
-            // Read it back
-            $readCoverage = $extractor->getCoverage($tempFile);
-
-            self::assertCount(2, $readCoverage);
-
-            // Verify File1
-            self::assertSame('/path/to/File1.php', $readCoverage[0]->filePath);
-            self::assertCount(2, $readCoverage[0]->executableLines);
-            self::assertSame(10, $readCoverage[0]->executableLines[0]->lineNumber);
-            self::assertSame(5, $readCoverage[0]->executableLines[0]->hits);
-            self::assertSame(20, $readCoverage[0]->executableLines[1]->lineNumber);
-            self::assertSame(0, $readCoverage[0]->executableLines[1]->hits);
-
-            // Verify File2
-            self::assertSame('/path/to/File2.php', $readCoverage[1]->filePath);
-            self::assertCount(1, $readCoverage[1]->executableLines);
-            self::assertSame(15, $readCoverage[1]->executableLines[0]->lineNumber);
-            self::assertSame(3, $readCoverage[1]->executableLines[0]->hits);
-        } finally {
-            @unlink($tempFile);
-        }
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
     }
 
     public function testWriteWithNoFiles(): void
     {
         $writer = new CloverCoverageWriter();
 
-        $output = $writer->write([]);
+        $output = $writer->write([], '    ');
 
-        self::assertStringContainsString('<coverage', $output);
-        self::assertStringContainsString('<project', $output);
-        self::assertStringContainsString('</coverage>', $output);
+        $expectedContent = file_get_contents(__DIR__ . '/../_fixtures/Writer/CloverCoverageWriter/no-files-expected.xml');
+
+        self::assertSame($expectedContent, $this->normalizeOutput($output));
+    }
+
+    private function normalizeOutput(string $output): string
+    {
+        $normalized = preg_replace(
+            ['/timestamp="[0-9]+"/', '/generated="[0-9]+"/'],
+            ['timestamp="1234567890"', 'generated="1234567890"'],
+            $output,
+        );
+        self::assertNotNull($normalized);
+        return $normalized;
     }
 
 }

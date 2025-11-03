@@ -44,12 +44,9 @@ final class ConvertCommand extends AbstractCommand
         $coverage = $extractor->getCoverage($inputFile);
 
         $writer = $this->createWriter($format);
-        $xml = $writer->write($coverage);
+        $xml = $writer->write($coverage, $indent);
 
-        // TODO should be inside writers
-        $normalizedXml = $this->convertIndentation($xml, '  ', $indent);
-
-        fwrite($this->outputStream, $normalizedXml);
+        fwrite($this->outputStream, $xml);
 
         return 0;
     }
