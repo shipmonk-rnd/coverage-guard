@@ -92,10 +92,3 @@ parameters:
             identifiers:
                 - return.type
             path: src/Writer/CoberturaCoverageWriter.php
-
-        # Initializer is replaced by Command system but kept for potential future use
-        -
-            identifiers:
-                - shipmonk.deadMethod
-            paths:
-                - src/Initializer.php
