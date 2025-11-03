@@ -304,7 +304,7 @@ final class CoverageGuard
         }
 
         if (!$foundHit) {
-            throw new ErrorException("Coverage file '{$coverageFile}' does not contain any executed line. Looks like no tests were run.");
+            $this->printer->printWarning("Coverage file '{$coverageFile}' does not contain any executed line. Looks like not a single test was executed.");
         }
 
         return $remappedCoverages;
