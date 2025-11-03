@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use ShipMonk\CoverageGuard\Cli\CliParser;
+use ShipMonk\CoverageGuard\Cli\CommandRegistry;
+use ShipMonk\CoverageGuard\Cli\CommandRunner;
+use ShipMonk\CoverageGuard\Cli\HelpRenderer;
+use ShipMonk\CoverageGuard\Cli\ParameterResolver;
 use ShipMonk\CoverageGuard\Command\CheckCommand;
-use ShipMonk\CoverageGuard\Command\CliParser;
-use ShipMonk\CoverageGuard\Command\CommandRegistry;
-use ShipMonk\CoverageGuard\Command\CommandRunner;
 use ShipMonk\CoverageGuard\Command\ConvertCommand;
-use ShipMonk\CoverageGuard\Command\HelpRenderer;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
-use ShipMonk\CoverageGuard\Command\ParameterResolver;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;

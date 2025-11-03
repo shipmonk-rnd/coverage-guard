@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use function fclose;
 use function file_get_contents;

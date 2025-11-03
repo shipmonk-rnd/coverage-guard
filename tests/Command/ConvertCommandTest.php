@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 
 final class ConvertCommandTest extends TestCase

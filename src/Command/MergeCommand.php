@@ -2,6 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use ShipMonk\CoverageGuard\Cli\CliArgument;
+use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function count;

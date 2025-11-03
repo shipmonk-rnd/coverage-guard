@@ -6,6 +6,7 @@ use Composer\InstalledVersions;
 use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
+use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;

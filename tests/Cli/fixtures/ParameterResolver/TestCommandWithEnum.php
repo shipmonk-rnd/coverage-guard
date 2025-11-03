@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard\Command;
+namespace ShipMonk\CoverageGuard\Cli;
 
-final class TestCommandWithCamelCase
+final class TestCommandWithEnum
 {
 
     public function __invoke(
         #[CliArgument]
-        string $inputFile,
+        CoverageFormat $format,
     ): void
     {
     }

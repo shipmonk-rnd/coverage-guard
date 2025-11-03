@@ -41,7 +41,7 @@
             "ShipMonk\\CoverageGuard\\": "tests/"
         },
         "classmap": [
-            "tests/Command/fixtures"
+            "tests/Cli/fixtures"
         ]
     },
     "bin": [
@@ -73,7 +73,7 @@
         "check:dependencies": "composer-dependency-analyser",
         "check:ec": "ec src tests",
         "check:self": [
-            "XDEBUG_MODE=coverage phpunit tests --coverage-clover cache/clover.xml --coverage-cobertura cache/cobertura.xml",
+            "XDEBUG_MODE=coverage phpunit tests --coverage-clover cache/clover.xml",
             "bin/coverage-guard check cache/clover.xml"
         ],
         "check:tests": "phpunit tests",

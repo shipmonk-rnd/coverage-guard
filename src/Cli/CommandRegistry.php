@@ -1,7 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard\Command;
+namespace ShipMonk\CoverageGuard\Cli;
 
+use ShipMonk\CoverageGuard\Command\Command;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function array_values;
 

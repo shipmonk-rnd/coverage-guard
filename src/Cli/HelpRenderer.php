@@ -1,10 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard\Command;
+namespace ShipMonk\CoverageGuard\Cli;
 
 use LogicException;
 use ReflectionException;
 use ReflectionMethod;
+use ShipMonk\CoverageGuard\Command\Command;
 use ShipMonk\CoverageGuard\Printer;
 use function implode;
 use function str_pad;

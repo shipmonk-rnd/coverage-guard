@@ -2,6 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use ShipMonk\CoverageGuard\Cli\CliArgument;
+use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
 use function getcwd;

@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard\Command;
+namespace ShipMonk\CoverageGuard\Cli;
 
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
-final class CliArgument
+final class CliOption
 {
 
     public function __construct(
