@@ -9,11 +9,9 @@ interface CoverageWriter
 
     /**
      * @param list<FileCoverage> $fileCoverages
-     * @param resource $output
      */
     public function write(
         array $fileCoverages,
-        $output,
-    ): void;
+    ): string;
 
 }

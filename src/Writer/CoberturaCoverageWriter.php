@@ -4,14 +4,21 @@ namespace ShipMonk\CoverageGuard\Writer;
 
 use DOMDocument;
 use DOMElement;
-use RuntimeException;
+use LogicException;
+use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use function array_reduce;
 use function basename;
 use function count;
 use function dirname;
-use function fwrite;
+use function explode;
+use function implode;
+use function min;
 use function number_format;
 use function str_replace;
+use function str_starts_with;
+use function strlen;
+use function substr;
 use function time;
 
 final class CoberturaCoverageWriter implements CoverageWriter
@@ -19,23 +26,19 @@ final class CoberturaCoverageWriter implements CoverageWriter
 
     /**
      * @param list<FileCoverage> $fileCoverages
-     * @param resource $output
-     *
-     * @throws RuntimeException
      */
     public function write(
         array $fileCoverages,
-        $output,
-    ): void
+    ): string
     {
         $dom = $this->generateXml($fileCoverages);
         $xml = $dom->saveXML();
 
         if ($xml === false) {
-            throw new RuntimeException('Failed to generate XML');
+            throw new LogicException('Failed to generate cobertura XML');
         }
 
-        fwrite($output, $xml);
+        return $xml;
     }
 
     /**
@@ -81,37 +84,76 @@ final class CoberturaCoverageWriter implements CoverageWriter
         $coverage->setAttribute('timestamp', (string) $timestamp);
         $dom->appendChild($coverage);
 
-        $this->addSources($dom, $coverage, $fileCoverages);
-        $this->addPackages($dom, $coverage, $fileCoverages);
+        $source = $this->findCommonParentDirectory($fileCoverages);
+
+        $this->addSource($dom, $coverage, $source);
+        $this->addPackages($dom, $coverage, $source, $fileCoverages);
 
         return $dom;
     }
 
-    /**
-     * @param list<FileCoverage> $fileCoverages
-     */
-    private function addSources(
+    private function addSource(
         DOMDocument $dom,
         DOMElement $coverage,
-        array $fileCoverages,
+        string $source,
     ): void
     {
         $sourcesElement = $dom->createElement('sources');
         $coverage->appendChild($sourcesElement);
 
-        // Extract unique source directories
-        $sources = [];
+        $sourceElement = $dom->createElement('source', $source);
+        $sourcesElement->appendChild($sourceElement);
+    }
+
+    /**
+     * Find the common parent directory for all file coverages
+     *
+     * @param list<FileCoverage> $fileCoverages
+     */
+    private function findCommonParentDirectory(array $fileCoverages): string
+    {
+        if (count($fileCoverages) === 0) {
+            return '.';
+        }
+
+        $dirs = [];
         foreach ($fileCoverages as $fileCoverage) {
-            $dir = dirname($fileCoverage->filePath);
-            if (!isset($sources[$dir])) {
-                $sources[$dir] = true;
+            $dirs[] = dirname($fileCoverage->filePath);
+        }
+
+        // If only one directory, return it
+        if (count($dirs) === 1) {
+            return $dirs[0];
+        }
+
+        $commonPath = $dirs[0];
+        foreach ($dirs as $dir) {
+            $commonPath = $this->findCommonPrefix($commonPath, $dir);
+        }
+
+        return $commonPath;
+    }
+
+    private function findCommonPrefix(
+        string $path1,
+        string $path2,
+    ): string
+    {
+        $parts1 = explode('/', $path1);
+        $parts2 = explode('/', $path2);
+
+        $common = [];
+        $minLength = min(count($parts1), count($parts2));
+
+        for ($i = 0; $i < $minLength; $i++) {
+            if (isset($parts1[$i], $parts2[$i]) && $parts1[$i] === $parts2[$i]) {
+                $common[] = $parts1[$i];
+            } else {
+                break;
             }
         }
 
-        foreach ($sources as $source => $unused) {
-            $sourceElement = $dom->createElement('source', $source);
-            $sourcesElement->appendChild($sourceElement);
-        }
+        return implode('/', $common);
     }
 
     /**
@@ -120,62 +162,40 @@ final class CoberturaCoverageWriter implements CoverageWriter
     private function addPackages(
         DOMDocument $dom,
         DOMElement $coverage,
+        string $source,
         array $fileCoverages,
     ): void
     {
         $packagesElement = $dom->createElement('packages');
         $coverage->appendChild($packagesElement);
 
-        // Group files by package (basename)
-        $packagedFiles = [];
         foreach ($fileCoverages as $fileCoverage) {
-            $packageName = basename($fileCoverage->filePath);
-            if (!isset($packagedFiles[$packageName])) {
-                $packagedFiles[$packageName] = [];
-            }
-            $packagedFiles[$packageName][] = $fileCoverage;
-        }
+            $relativeFilename = $this->getRelativePath($source, $fileCoverage->filePath);
 
-        foreach ($packagedFiles as $packageName => $files) {
-            $packageElement = $this->createPackageElement($dom, $packageName, $files);
+            $linesValid = count($fileCoverage->executableLines);
+            $linesCovered = array_reduce($fileCoverage->executableLines, static fn (int $carry, ExecutableLine $line): int => $line->hits > 0 ? $carry + 1 : $carry, 0);
+            $lineRate = $linesValid > 0 ? $linesCovered / $linesValid : 0.0;
+
+            $packageElement = $this->createPackageElement($dom, $lineRate, $relativeFilename);
             $packagesElement->appendChild($packageElement);
 
             $classesElement = $dom->createElement('classes');
             $packageElement->appendChild($classesElement);
 
-            foreach ($files as $fileCoverage) {
-                $classElement = $this->createClassElement($dom, $fileCoverage);
-                $classesElement->appendChild($classElement);
-            }
+            $classElement = $this->createClassElement($dom, $fileCoverage, $lineRate, $relativeFilename);
+            $classesElement->appendChild($classElement);
         }
     }
 
-    /**
-     * @param list<FileCoverage> $files
-     */
     private function createPackageElement(
         DOMDocument $dom,
+        float $lineRate,
         string $packageName,
-        array $files,
     ): DOMElement
     {
-        $packageLinesValid = 0;
-        $packageLinesCovered = 0;
-
-        foreach ($files as $fileCoverage) {
-            $packageLinesValid += count($fileCoverage->executableLines);
-            foreach ($fileCoverage->executableLines as $line) {
-                if ($line->hits > 0) {
-                    $packageLinesCovered++;
-                }
-            }
-        }
-
-        $packageLineRate = $packageLinesValid > 0 ? $packageLinesCovered / $packageLinesValid : 0.0;
-
         $packageElement = $dom->createElement('package');
         $packageElement->setAttribute('name', $packageName);
-        $packageElement->setAttribute('line-rate', number_format($packageLineRate, decimals: 14));
+        $packageElement->setAttribute('line-rate', number_format($lineRate, decimals: 14));
         $packageElement->setAttribute('branch-rate', '0');
         $packageElement->setAttribute('complexity', '0');
 
@@ -185,26 +205,18 @@ final class CoberturaCoverageWriter implements CoverageWriter
     private function createClassElement(
         DOMDocument $dom,
         FileCoverage $fileCoverage,
+        float $lineRate,
+        string $relativeFilename,
     ): DOMElement
     {
-        $classLinesValid = count($fileCoverage->executableLines);
-        $classLinesCovered = 0;
-        foreach ($fileCoverage->executableLines as $line) {
-            if ($line->hits > 0) {
-                $classLinesCovered++;
-            }
-        }
-
-        $classLineRate = $classLinesValid > 0 ? $classLinesCovered / $classLinesValid : 0.0;
-
         // Derive a class name from the file path
         $className = basename($fileCoverage->filePath, '.php');
         $className = str_replace('/', '\\', $className);
 
         $classElement = $dom->createElement('class');
         $classElement->setAttribute('name', $className);
-        $classElement->setAttribute('filename', basename($fileCoverage->filePath));
-        $classElement->setAttribute('line-rate', number_format($classLineRate, decimals: 14));
+        $classElement->setAttribute('filename', $relativeFilename);
+        $classElement->setAttribute('line-rate', number_format($lineRate, decimals: 14));
         $classElement->setAttribute('branch-rate', '0');
         $classElement->setAttribute('complexity', '0');
 
@@ -216,6 +228,32 @@ final class CoberturaCoverageWriter implements CoverageWriter
         $this->addLines($dom, $classElement, $fileCoverage);
 
         return $classElement;
+    }
+
+    /**
+     * Get relative path from source directory to file path
+     */
+    private function getRelativePath(
+        string $sourceDir,
+        string $filePath,
+    ): string
+    {
+        $fileDir = dirname($filePath);
+        $fileName = basename($filePath);
+
+        // If file is directly in source dir
+        if ($fileDir === $sourceDir) {
+            return $fileName;
+        }
+
+        // Calculate relative path from source to file directory
+        if (str_starts_with($fileDir, $sourceDir . '/')) {
+            $relativePath = substr($fileDir, strlen($sourceDir) + 1);
+            return $relativePath . '/' . $fileName;
+        }
+
+        // Fallback to just filename if paths don't match expected pattern
+        return $fileName;
     }
 
     private function addLines(

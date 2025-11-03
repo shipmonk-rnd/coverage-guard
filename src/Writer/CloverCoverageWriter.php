@@ -6,7 +6,6 @@ use DOMDocument;
 use DOMElement;
 use RuntimeException;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
-use function fwrite;
 use function time;
 
 final class CloverCoverageWriter implements CoverageWriter
@@ -14,23 +13,21 @@ final class CloverCoverageWriter implements CoverageWriter
 
     /**
      * @param list<FileCoverage> $fileCoverages
-     * @param resource $output
      *
      * @throws RuntimeException
      */
     public function write(
         array $fileCoverages,
-        $output,
-    ): void
+    ): string
     {
         $dom = $this->generateXml($fileCoverages);
         $xml = $dom->saveXML();
 
         if ($xml === false) {
-            throw new RuntimeException('Failed to generate XML');
+            throw new RuntimeException('Failed to generate clover XML');
         }
 
-        fwrite($output, $xml);
+        return $xml;
     }
 
     /**

@@ -3,11 +3,21 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use function fwrite;
 use function is_file;
 use const STDOUT;
 
 final class ConvertCommand extends AbstractCommand
 {
+
+    /**
+     * @param resource $outputStream
+     */
+    public function __construct(
+        private readonly mixed $outputStream = STDOUT,
+    )
+    {
+    }
 
     /**
      * @throws ErrorException
@@ -16,7 +26,7 @@ final class ConvertCommand extends AbstractCommand
         #[CliArgument('input-file', description: 'Input coverage file (clover.xml, cobertura.xml, or .cov)')]
         string $inputFile,
 
-        #[CliOption(description: 'Output format: clover or cobertura (required)')]
+        #[CliOption(description: 'Output format: clover or cobertura')]
         CoverageFormat $format,
     ): int
     {
@@ -24,13 +34,14 @@ final class ConvertCommand extends AbstractCommand
             throw new ErrorException("File not found: {$inputFile}");
         }
 
-        // Extract coverage from input file
         $extractor = $this->createExtractor($inputFile);
         $coverage = $extractor->getCoverage($inputFile);
 
         // Write to stdout in the desired format
         $writer = $this->createWriter($format);
-        $writer->write($coverage, STDOUT);
+        $xml = $writer->write($coverage);
+
+        fwrite($this->outputStream, $xml);
 
         return 0;
     }

@@ -33,9 +33,4 @@ final class ConvertCommandTest extends TestCase
         );
     }
 
-    /**
-     * Note: Actual conversion execution is tested in BinTest to avoid stdout pollution
-     * We only test validation and error cases here
-     */
-
 }

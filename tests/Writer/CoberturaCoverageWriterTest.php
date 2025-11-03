@@ -7,10 +7,7 @@ use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
-use function fclose;
-use function fopen;
-use function rewind;
-use function stream_get_contents;
+use function file_put_contents;
 use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
@@ -31,16 +28,8 @@ final class CoberturaCoverageWriterTest extends TestCase
             ],
         );
 
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $output = $writer->write([$fileCoverage]);
 
-        $writer->write([$fileCoverage], $stream);
-
-        rewind($stream);
-        $output = stream_get_contents($stream);
-        fclose($stream);
-
-        self::assertIsString($output);
         self::assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $output);
         self::assertStringContainsString('<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">', $output);
         self::assertStringContainsString('<coverage', $output);
@@ -81,11 +70,9 @@ final class CoberturaCoverageWriterTest extends TestCase
         self::assertIsString($tempFile);
 
         try {
-            $stream = fopen($tempFile, 'w');
-            self::assertIsResource($stream);
+            $output = $writer->write($originalCoverage);
 
-            $writer->write($originalCoverage, $stream);
-            fclose($stream);
+            file_put_contents($tempFile, $output);
 
             // Read it back
             $readCoverage = $extractor->getCoverage($tempFile);
@@ -114,16 +101,8 @@ final class CoberturaCoverageWriterTest extends TestCase
     {
         $writer = new CoberturaCoverageWriter();
 
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $output = $writer->write([]);
 
-        $writer->write([], $stream);
-
-        rewind($stream);
-        $output = stream_get_contents($stream);
-        fclose($stream);
-
-        self::assertIsString($output);
         self::assertStringContainsString('<coverage', $output);
         self::assertStringContainsString('lines-covered="0"', $output);
         self::assertStringContainsString('lines-valid="0"', $output);
@@ -145,16 +124,8 @@ final class CoberturaCoverageWriterTest extends TestCase
             ],
         );
 
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $output = $writer->write([$fileCoverage]);
 
-        $writer->write([$fileCoverage], $stream);
-
-        rewind($stream);
-        $output = stream_get_contents($stream);
-        fclose($stream);
-
-        self::assertIsString($output);
         self::assertStringContainsString('line-rate="0.60000000000000"', $output);
         self::assertStringContainsString('lines-covered="3"', $output);
         self::assertStringContainsString('lines-valid="5"', $output);

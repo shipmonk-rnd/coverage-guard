@@ -3,45 +3,95 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
-use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
+use function fclose;
+use function file_get_contents;
+use function fopen;
+use function preg_replace;
+use function rewind;
+use function stream_get_contents;
 
 final class MergeCommandTest extends TestCase
 {
 
-    public function testGetName(): void
+    public function testMergeCoberturaCoverageFiles(): void
     {
-        $command = new MergeCommand();
-        self::assertSame('merge', $command->getName());
+        $input1 = __DIR__ . '/fixtures/cobertura-1.xml';
+        $input2 = __DIR__ . '/fixtures/cobertura-2.xml';
+        $expectedFile = __DIR__ . '/fixtures/cobertura-merged-expected.xml';
+
+        $this->assertMergeProducesExpectedOutput(
+            [$input1, $input2],
+            $expectedFile,
+            CoverageFormat::Cobertura,
+        );
     }
 
-    public function testGetDescription(): void
+    public function testMergeMultipleSourcesIntoSingleCommonSource(): void
     {
-        $command = new MergeCommand();
-        self::assertStringContainsString('Merge', $command->getDescription());
+        $input1 = __DIR__ . '/fixtures/cobertura-multiple-sources-1.xml';
+        $input2 = __DIR__ . '/fixtures/cobertura-multiple-sources-2.xml';
+        $expectedFile = __DIR__ . '/fixtures/cobertura-multiple-sources-expected.xml';
+
+        $this->assertMergeProducesExpectedOutput(
+            [$input1, $input2],
+            $expectedFile,
+            CoverageFormat::Cobertura,
+        );
     }
 
-    public function testInvokeRequiresAtLeastTwoFiles(): void
+    public function testMergeSkipsFilesWithEmptyPackages(): void
     {
-        $command = new MergeCommand();
+        $emptyInput = __DIR__ . '/fixtures/cobertura-empty-packages.xml';
+        $validInput = __DIR__ . '/fixtures/cobertura-empty-packages-with-data.xml';
+        $expectedFile = __DIR__ . '/fixtures/cobertura-empty-packages-expected.xml';
 
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('At least 2 files are required to merge');
-
-        ($command)(null, 'single-file.xml');
+        $this->assertMergeProducesExpectedOutput(
+            [$emptyInput, $validInput],
+            $expectedFile,
+            CoverageFormat::Cobertura,
+        );
     }
 
     /**
-     * Note: Actual merge execution is tested in BinTest to avoid stdout pollution
-     * We only test validation and error cases here
+     * @param list<string> $inputFiles
      */
-    public function testInvokeWithInvalidFile(): void
+    private function assertMergeProducesExpectedOutput(
+        array $inputFiles,
+        string $expectedFile,
+        CoverageFormat $format,
+    ): void
     {
-        $command = new MergeCommand();
+        // Create a memory stream to capture output
+        $outputStream = fopen('php://memory', 'w+');
+        if ($outputStream === false) {
+            self::fail('Failed to create memory stream');
+        }
 
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('File not found');
+        try {
+            $indent = '    ';
 
-        ($command)(null, 'nonexistent1.xml', 'nonexistent2.xml');
+            $command = new MergeCommand(new CoverageMerger(), $outputStream);
+            $command($format, $indent, ...$inputFiles);
+
+            // Read the output from the stream
+            rewind($outputStream);
+            $actualContent = stream_get_contents($outputStream);
+            if ($actualContent === false) {
+                self::fail('Failed to read from memory stream');
+            }
+
+            $expectedContent = file_get_contents($expectedFile);
+            if ($expectedContent === false) {
+                self::fail("Failed to read expected file: {$expectedFile}");
+            }
+
+            $actualContentWithDummyTimestamp = preg_replace('/timestamp=".*?"/', 'timestamp="dummy"', $actualContent);
+
+            self::assertSame($expectedContent, $actualContentWithDummyTimestamp);
+        } finally {
+            fclose($outputStream);
+        }
     }
 
 }

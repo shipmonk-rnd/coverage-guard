@@ -10,6 +10,7 @@ use ShipMonk\CoverageGuard\Command\HelpRenderer;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
 use ShipMonk\CoverageGuard\Command\ParameterResolver;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
+use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
 
@@ -33,9 +34,10 @@ $printer = new Printer(STDOUT, $noColor);
 
 
 try {
+    $merger = new CoverageMerger();
     $registry = new CommandRegistry();
     $registry->register(new CheckCommand($printer));
-    $registry->register(new MergeCommand());
+    $registry->register(new MergeCommand($merger));
     $registry->register(new ConvertCommand());
     $registry->register(new PatchCoverageCommand($printer));
 

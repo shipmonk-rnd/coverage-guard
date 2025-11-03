@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Coverage;
 
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function array_map;
 
 final class CoverageMergerTest extends TestCase
@@ -10,7 +11,7 @@ final class CoverageMergerTest extends TestCase
 
     public function testMergeEmptyArray(): void
     {
-        $result = CoverageMerger::merge([]);
+        $result = (new CoverageMerger())->merge([]);
 
         self::assertSame([], $result);
     }
@@ -26,7 +27,7 @@ final class CoverageMergerTest extends TestCase
             100,
         );
 
-        $result = CoverageMerger::merge([[$fileCoverage]]);
+        $result = (new CoverageMerger())->merge([[$fileCoverage]]);
 
         self::assertCount(1, $result);
         self::assertSame('/path/to/file.php', $result[0]->filePath);
@@ -56,7 +57,7 @@ final class CoverageMergerTest extends TestCase
             ],
         );
 
-        $result = CoverageMerger::merge([[$coverage1], [$coverage2]]);
+        $result = (new CoverageMerger())->merge([[$coverage1], [$coverage2]]);
 
         self::assertCount(1, $result);
         self::assertSame('/path/to/file.php', $result[0]->filePath);
@@ -83,7 +84,7 @@ final class CoverageMergerTest extends TestCase
         $coverage2a = new FileCoverage('/path/to/file1.php', [new ExecutableLine(10, 2)]);
         $coverage2b = new FileCoverage('/path/to/file3.php', [new ExecutableLine(30, 1)]);
 
-        $result = CoverageMerger::merge([
+        $result = (new CoverageMerger())->merge([
             [$coverage1a, $coverage1b],
             [$coverage2a, $coverage2b],
         ]);
@@ -97,16 +98,15 @@ final class CoverageMergerTest extends TestCase
         self::assertContains('/path/to/file3.php', $filePaths);
     }
 
-    public function testMergePreservesExpectedLinesCount(): void
+    public function testMergeChecksExpectedLinesCount(): void
     {
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Inconsistent expected lines count');
+
         $coverage1 = new FileCoverage('/path/to/file.php', [new ExecutableLine(10, 5)], 100);
         $coverage2 = new FileCoverage('/path/to/file.php', [new ExecutableLine(20, 3)], 120);
 
-        $result = CoverageMerger::merge([[$coverage1], [$coverage2]]);
-
-        self::assertCount(1, $result);
-        // Should use the maximum expected lines count
-        self::assertSame(120, $result[0]->expectedLinesCount);
+        (new CoverageMerger())->merge([[$coverage1], [$coverage2]]);
     }
 
     public function testMergeWithNullExpectedLinesCount(): void
@@ -114,38 +114,10 @@ final class CoverageMergerTest extends TestCase
         $coverage1 = new FileCoverage('/path/to/file.php', [new ExecutableLine(10, 5)], null);
         $coverage2 = new FileCoverage('/path/to/file.php', [new ExecutableLine(20, 3)], null);
 
-        $result = CoverageMerger::merge([[$coverage1], [$coverage2]]);
+        $result = (new CoverageMerger())->merge([[$coverage1], [$coverage2]]);
 
         self::assertCount(1, $result);
         self::assertNull($result[0]->expectedLinesCount);
-    }
-
-    public function testMergeSortsLinesByLineNumber(): void
-    {
-        $coverage1 = new FileCoverage(
-            '/path/to/file.php',
-            [
-                new ExecutableLine(30, 1),
-                new ExecutableLine(10, 2),
-            ],
-        );
-
-        $coverage2 = new FileCoverage(
-            '/path/to/file.php',
-            [
-                new ExecutableLine(20, 3),
-            ],
-        );
-
-        $result = CoverageMerger::merge([[$coverage1], [$coverage2]]);
-
-        self::assertCount(1, $result);
-        self::assertCount(3, $result[0]->executableLines);
-
-        // Should be sorted by line number
-        self::assertSame(10, $result[0]->executableLines[0]->lineNumber);
-        self::assertSame(20, $result[0]->executableLines[1]->lineNumber);
-        self::assertSame(30, $result[0]->executableLines[2]->lineNumber);
     }
 
 }
