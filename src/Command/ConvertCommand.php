@@ -31,6 +31,9 @@ final class ConvertCommand extends AbstractCommand
 
         #[CliOption(description: 'Output format: clover or cobertura')]
         CoverageFormat $format,
+
+        #[CliOption(description: 'XML indent to use')]
+        string $indent = '    ',
     ): int
     {
         if (!is_file($inputFile)) {
@@ -40,11 +43,13 @@ final class ConvertCommand extends AbstractCommand
         $extractor = $this->createExtractor($inputFile);
         $coverage = $extractor->getCoverage($inputFile);
 
-        // Write to stdout in the desired format
         $writer = $this->createWriter($format);
         $xml = $writer->write($coverage);
 
-        fwrite($this->outputStream, $xml);
+        // TODO should be inside writers
+        $normalizedXml = $this->convertIndentation($xml, '  ', $indent);
+
+        fwrite($this->outputStream, $normalizedXml);
 
         return 0;
     }

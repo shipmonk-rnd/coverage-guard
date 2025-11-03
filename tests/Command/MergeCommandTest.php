@@ -65,9 +65,7 @@ final class MergeCommandTest extends TestCase
     {
         // Create a memory stream to capture output
         $outputStream = fopen('php://memory', 'w+');
-        if ($outputStream === false) {
-            self::fail('Failed to create memory stream');
-        }
+        self::assertNotFalse($outputStream);
 
         try {
             $indent = '    ';
@@ -75,17 +73,12 @@ final class MergeCommandTest extends TestCase
             $command = new MergeCommand(new CoverageMerger(), $outputStream);
             $command($format, $indent, ...$inputFiles);
 
-            // Read the output from the stream
             rewind($outputStream);
             $actualContent = stream_get_contents($outputStream);
-            if ($actualContent === false) {
-                self::fail('Failed to read from memory stream');
-            }
-
             $expectedContent = file_get_contents($expectedFile);
-            if ($expectedContent === false) {
-                self::fail("Failed to read expected file: {$expectedFile}");
-            }
+
+            self::assertNotFalse($actualContent);
+            self::assertNotFalse($expectedContent);
 
             $actualContentWithDummyTimestamp = preg_replace('/timestamp=".*?"/', 'timestamp="dummy"', $actualContent);
 

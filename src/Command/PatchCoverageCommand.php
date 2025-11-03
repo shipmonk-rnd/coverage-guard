@@ -27,7 +27,7 @@ final class PatchCoverageCommand extends AbstractCommand
         #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
         string $coverageFile,
 
-        #[CliOption(description: 'Patch file to analyze (required)')]
+        #[CliOption(description: 'Patch file to analyze')]
         string $patch,
     ): int
     {

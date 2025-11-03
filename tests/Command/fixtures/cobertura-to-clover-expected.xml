@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="dummy">
+    <project timestamp="dummy">
+        <file name="tests/fixtures/Sample.php">
+            <line num="10" type="stmt" count="1"/>
+            <line num="15" type="stmt" count="0"/>
+        </file>
+    </project>
+</coverage>
