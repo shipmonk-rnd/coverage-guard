@@ -26,16 +26,20 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
+$cwd = getcwd();
+if ($cwd === false) {
+    throw new LogicException('Cannot determine current working directory');
+}
+
 $noColor = in_array('--no-color', $argv, true)
     || getenv('NO_COLOR') !== false
     || (!stream_isatty(STDOUT) && !in_array('--color', $argv, true));
 
 $printer = new Printer(STDOUT, $noColor);
 
-
 try {
     $registry = new CommandRegistry();
-    $registry->register(new CheckCommand($printer));
+    $registry->register(new CheckCommand($cwd, $printer));
     $registry->register(new MergeCommand(new CoverageMerger()));
     $registry->register(new ConvertCommand());
     $registry->register(new PatchCoverageCommand($printer));

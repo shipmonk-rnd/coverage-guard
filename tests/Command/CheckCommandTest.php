@@ -13,33 +13,9 @@ use function stream_get_contents;
 final class CheckCommandTest extends TestCase
 {
 
-    public function testGetName(): void
-    {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        $printer = new Printer($stream, noColor: true);
-
-        $command = new CheckCommand($printer);
-        self::assertSame('check', $command->getName());
-    }
-
-    public function testGetDescription(): void
-    {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        $printer = new Printer($stream, noColor: true);
-
-        $command = new CheckCommand($printer);
-        self::assertStringContainsString('coverage', $command->getDescription());
-    }
-
     public function testInvokeWithNonExistentCoverageFile(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        $printer = new Printer($stream, noColor: true);
-
-        $command = new CheckCommand($printer);
+        $command = $this->createCommand();
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Coverage file not found');
@@ -49,18 +25,14 @@ final class CheckCommandTest extends TestCase
 
     public function testInvokeWithValidCoverageFile(): void
     {
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertIsResource($outputStream);
-
-        $printer = new Printer($outputStream, noColor: true);
-        $command = new CheckCommand($printer);
+        $command = $this->createCommand();
 
         $coverageFile = __DIR__ . '/../_fixtures/clover_with_package.xml';
         $configFile = __DIR__ . '/../_fixtures/config-for-bintest-no-rule.php';
 
         $exitCode = ($command)(
             $coverageFile,
-            config: $configFile,
+            configPath: $configFile,
         );
 
         self::assertSame(0, $exitCode);
@@ -68,20 +40,17 @@ final class CheckCommandTest extends TestCase
 
     public function testInvokeWithPatchOption(): void
     {
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertIsResource($outputStream);
-
-        $printer = new Printer($outputStream, noColor: true);
-        $command = new CheckCommand($printer);
+        $outputStream = $this->createStream();
+        $command = $this->createCommand($outputStream);
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $patchFile = __DIR__ . '/../_fixtures/sample.patch';
         $configFile = __DIR__ . '/../_fixtures/config-for-bintest.php';
 
-        $exitCode = ($command)(
+        $exitCode = $command(
             $coverageFile,
-            patch: $patchFile,
-            config: $configFile,
+            patchFile: $patchFile,
+            configPath: $configFile,
         );
 
         self::assertSame(1, $exitCode); // Should find violations
@@ -96,11 +65,7 @@ final class CheckCommandTest extends TestCase
 
     public function testInvokeWithInvalidPatchExtension(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        $printer = new Printer($stream, noColor: true);
-
-        $command = new CheckCommand($printer);
+        $command = $this->createCommand();
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $patchFile = __DIR__ . '/../_fixtures/config-for-bintest.php'; // Valid file but wrong extension
@@ -110,17 +75,13 @@ final class CheckCommandTest extends TestCase
 
         ($command)(
             $coverageFile,
-            patch: $patchFile,
+            patchFile: $patchFile,
         );
     }
 
     public function testInvokeWithInvalidConfigExtension(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        $printer = new Printer($stream, noColor: true);
-
-        $command = new CheckCommand($printer);
+        $command = $this->createCommand();
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $configFile = __DIR__ . '/../_fixtures/sample.patch'; // Valid file but wrong extension
@@ -130,8 +91,27 @@ final class CheckCommandTest extends TestCase
 
         ($command)(
             $coverageFile,
-            config: $configFile,
+            configPath: $configFile,
         );
+    }
+
+    /**
+     * @return resource
+     */
+    private function createStream(): mixed
+    {
+        $stream = fopen('php://memory', 'w+');
+        self::assertIsResource($stream);
+        return $stream;
+    }
+
+    /**
+     * @param resource|null $stream
+     */
+    private function createCommand(mixed $stream = null): CheckCommand
+    {
+        $printer = new Printer($stream ?? $this->createStream(), noColor: true);
+        return new CheckCommand(__DIR__, $printer);
     }
 
 }

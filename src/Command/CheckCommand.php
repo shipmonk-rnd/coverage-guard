@@ -11,7 +11,6 @@ use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 use Throwable;
-use function getcwd;
 use function is_file;
 use function str_ends_with;
 
@@ -19,7 +18,8 @@ final class CheckCommand extends AbstractCommand
 {
 
     public function __construct(
-        protected readonly Printer $printer,
+        private readonly string $cwd,
+        private readonly Printer $printer,
     )
     {
     }
@@ -28,77 +28,32 @@ final class CheckCommand extends AbstractCommand
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
+        #[CliArgument(description: 'Path to PHPUnit coverage file (.xml or .cov)')]
         string $coverageFile,
 
-        #[CliOption(description: 'Path to git diff result to check only changed code')]
-        ?string $patch = null,
+        #[CliOption(name: 'patch', description: 'Path to git diff result to check only changed code')]
+        ?string $patchFile = null,
 
-        #[CliOption(description: 'Path to config file')]
-        ?string $config = null,
+        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        ?string $configPath = null,
+
+        #[CliOption(description: 'Print all processed files')]
+        bool $verbose = false,
     ): int
     {
-        $cwd = getcwd();
-        if ($cwd === false) {
-            throw new ErrorException('Cannot determine current working directory');
-        }
+        $this->validateCoverageFile($coverageFile);
+        $this->validatePatchFile($patchFile);
 
-        $patchFile = $patch;
-        $configPath = $config;
+        $resolvedConfigPath = $this->resolveConfigPath($configPath);
+        $config = $this->resolveConfig($resolvedConfigPath);
 
-        // Validate coverage file
-        if (!is_file($coverageFile)) {
-            throw new ErrorException("Coverage file not found: {$coverageFile}");
-        }
+        $this->autoDetectGitRoot($config, $patchFile);
 
-        // Validate patch file
-        if ($patchFile !== null && $patchFile !== '') {
-            if (!is_file($patchFile)) {
-                throw new ErrorException("Patch file not found: {$patchFile}");
-            }
+        $pathHelper = new PathHelper($this->cwd);
+        $formatter = new ErrorFormatter($pathHelper, $this->printer, $config);
+        $guard = new CoverageGuard($config, $this->printer, $pathHelper);
 
-            if (!str_ends_with($patchFile, '.patch') && !str_ends_with($patchFile, '.diff')) {
-                throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch or .diff extension");
-            }
-        } else {
-            $patchFile = null;
-        }
-
-        // Load config
-        if ($configPath !== null && $configPath !== '') {
-            if (!is_file($configPath)) {
-                throw new ErrorException("Provided config file not found: '{$configPath}'");
-            }
-            if (!str_ends_with($configPath, '.php')) {
-                throw new ErrorException("Provided config file must have php extension: '{$configPath}'");
-            }
-        } else {
-            $configPath = $cwd . '/coverage-guard.php';
-        }
-
-        $loadedConfig = is_file($configPath)
-            ? $this->loadConfig($configPath)
-            : new Config();
-
-        // Auto-detect git root if needed
-        if ($patchFile !== null && $loadedConfig->getGitRoot() === null) {
-            $detectedGitRoot = $this->detectGitRoot($cwd);
-
-            if ($detectedGitRoot !== null) {
-                $loadedConfig->setGitRoot($detectedGitRoot);
-            }
-        }
-
-        // Run coverage check
-        $pathHelper = new PathHelper($cwd);
-        $formatter = new ErrorFormatter($pathHelper, $this->printer, $loadedConfig);
-        $guard = new CoverageGuard($loadedConfig, $this->printer, $pathHelper);
-
-        $coverageReport = $guard->checkCoverage(
-            $coverageFile,
-            $patchFile,
-            false,
-        );
+        $coverageReport = $guard->checkCoverage($coverageFile, $patchFile, $verbose);
 
         return $formatter->formatReport($coverageReport);
     }
@@ -111,6 +66,83 @@ final class CheckCommand extends AbstractCommand
     public function getDescription(): string
     {
         return 'Enforce code coverage rules on your codebase';
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    private function validateCoverageFile(string $coverageFile): void
+    {
+        if (!is_file($coverageFile)) {
+            throw new ErrorException("Coverage file not found: {$coverageFile}");
+        }
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    private function validatePatchFile(?string $patchFile): void
+    {
+        if ($patchFile === null) {
+            return;
+        }
+
+        if (!is_file($patchFile)) {
+            throw new ErrorException("Patch file not found: {$patchFile}");
+        }
+
+        if (!str_ends_with($patchFile, '.patch') && !str_ends_with($patchFile, '.diff')) {
+            throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch or .diff extension");
+        }
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    private function resolveConfigPath(?string $configPath): string
+    {
+        if ($configPath !== null) {
+            if (!is_file($configPath)) {
+                throw new ErrorException("Provided config file not found: '{$configPath}'");
+            }
+
+            if (!str_ends_with($configPath, '.php')) {
+                throw new ErrorException("Provided config file must have php extension: '{$configPath}'");
+            }
+
+            return $configPath;
+        }
+
+        return $this->cwd . '/coverage-guard.php';
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    private function resolveConfig(string $configPath): Config
+    {
+        return is_file($configPath)
+            ? $this->loadConfig($configPath)
+            : new Config();
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    private function autoDetectGitRoot(
+        Config $config,
+        ?string $patchFile,
+    ): void
+    {
+        if ($patchFile === null || $config->getGitRoot() !== null) {
+            return;
+        }
+
+        $detectedGitRoot = $this->detectGitRoot($this->cwd);
+
+        if ($detectedGitRoot !== null) {
+            $config->setGitRoot($detectedGitRoot);
+        }
     }
 
     /**
