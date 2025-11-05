@@ -34,7 +34,7 @@ jobs:
                 if: github.event_name == 'pull_request'
                 run: |
                     git diff origin/${{ github.base_ref }}...HEAD > changes.patch
-                    bin/coverage-guard cache/clover.xml --patch changes.patch
+                    bin/coverage-guard check cache/clover.xml --patch changes.patch
 
     tests:
         runs-on: ${{ matrix.operating-system }}
