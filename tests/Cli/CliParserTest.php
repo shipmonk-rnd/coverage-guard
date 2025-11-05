@@ -165,4 +165,67 @@ final class CliParserTest extends TestCase
         $parser->parse(['file1.txt', 'file2.txt'], $arguments, []);
     }
 
+    public function testParseBooleanOptionBeforePositionalArgument(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new ArgumentDefinition('file', 'Input file', variadic: false),
+        ];
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+        ];
+
+        // Test with option before argument: --verbose file.xml
+        $result = $parser->parse(['--verbose', 'file.xml'], $arguments, $options);
+
+        self::assertSame(['file.xml'], $result['arguments']);
+        self::assertArrayHasKey('verbose', $result['options']);
+        self::assertTrue($result['options']['verbose']);
+    }
+
+    public function testParseBooleanOptionAfterPositionalArgument(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new ArgumentDefinition('file', 'Input file', variadic: false),
+        ];
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+        ];
+
+        // Test with option after argument: file.xml --verbose
+        $result = $parser->parse(['file.xml', '--verbose'], $arguments, $options);
+
+        self::assertSame(['file.xml'], $result['arguments']);
+        self::assertArrayHasKey('verbose', $result['options']);
+        self::assertTrue($result['options']['verbose']);
+    }
+
+    public function testParseMultipleBooleanOptionsAndPositionalArgument(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new ArgumentDefinition('file', 'Input file', variadic: false),
+        ];
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('debug', 'Debug mode', requiresValue: false),
+        ];
+
+        // Test with options in various positions
+        $result = $parser->parse(['--verbose', 'file.xml', '--debug'], $arguments, $options);
+
+        self::assertSame(['file.xml'], $result['arguments']);
+        self::assertArrayHasKey('verbose', $result['options']);
+        self::assertTrue($result['options']['verbose']);
+        self::assertArrayHasKey('debug', $result['options']);
+        self::assertTrue($result['options']['debug']);
+    }
+
 }

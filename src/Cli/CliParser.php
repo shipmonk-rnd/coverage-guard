@@ -31,7 +31,7 @@ final class CliParser
     ): array
     {
         $optionMap = $this->buildOptionMap($optionDefinitions);
-        $all = $this->parseOptionsAndArguments($args);
+        $all = $this->parseOptionsAndArguments($args, $optionMap);
 
         $this->validateOptions($all['options'], $optionMap);
         $this->validateArguments($all['arguments'], $argumentDefinitions);
@@ -63,11 +63,15 @@ final class CliParser
      * Parse all arguments into positional arguments and options
      *
      * @param list<string> $args
+     * @param array<string, OptionDefinition> $optionMap
      * @return array{arguments: list<string>, options: array<string, string|null>}
      *
      * @throws ErrorException
      */
-    private function parseOptionsAndArguments(array $args): array
+    private function parseOptionsAndArguments(
+        array $args,
+        array $optionMap,
+    ): array
     {
         $arguments = [];
         $options = [];
@@ -78,7 +82,7 @@ final class CliParser
             $arg = $args[$i]; // @phpstan-ignore offsetAccess.notFound
 
             if (str_starts_with($arg, '--')) {
-                [$optionName, $optionValue] = $this->extractOptionNameAndValue($arg, $args, $i);
+                [$optionName, $optionValue] = $this->extractOptionNameAndValue($arg, $args, $i, $optionMap);
                 $options[$optionName] = $optionValue;
             } else {
                 $arguments[] = $arg;
@@ -99,6 +103,7 @@ final class CliParser
      * @param string $arg Current argument
      * @param list<string> $args All arguments
      * @param int $i Current index (will be modified if value is in next argument)
+     * @param array<string, OptionDefinition> $optionMap
      * @return array{string, string|null}
      *
      * @throws ErrorException
@@ -107,6 +112,7 @@ final class CliParser
         string $arg,
         array $args,
         int &$i,
+        array $optionMap,
     ): array
     {
         $optionName = substr($arg, 2);
@@ -122,7 +128,10 @@ final class CliParser
 
         } elseif (isset($args[$i + 1])) {
             $nextArg = $args[$i + 1];
-            if (!str_starts_with($nextArg, '--')) {
+            // Only consume the next argument if:
+            // 1. It doesn't start with '--' (not another option)
+            // 2. The current option requires a value
+            if (!str_starts_with($nextArg, '--') && isset($optionMap[$optionName]) && $optionMap[$optionName]->requiresValue) {
                 // Value is in next argument
                 $i++;
                 $optionValue = $nextArg;
