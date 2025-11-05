@@ -24,12 +24,14 @@ parameters:
     checkBenevolentUnionTypes: true
     checkImplicitMixed: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkTooWideThrowTypesInProtectedAndPublicMethods: true
     reportAnyTypeWideningInVarTag: true
     reportPossiblyNonexistentConstantArrayOffset: true
     reportPossiblyNonexistentGeneralArrayOffset: true
     exceptions:
         check:
             missingCheckedExceptionInThrows: true
+            throwTypeCovariance: true
             tooWideThrowType: true
         implicitThrows: false
         uncheckedExceptionClasses:

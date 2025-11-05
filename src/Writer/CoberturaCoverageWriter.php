@@ -7,12 +7,14 @@ use DOMElement;
 use LogicException;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Utils\Indenter;
 use function array_reduce;
 use function basename;
 use function count;
 use function dirname;
 use function explode;
+use function extension_loaded;
 use function implode;
 use function min;
 use function number_format;
@@ -27,6 +29,8 @@ final class CoberturaCoverageWriter implements CoverageWriter
 
     /**
      * @param list<FileCoverage> $fileCoverages
+     *
+     * @throws ErrorException
      */
     public function write(
         array $fileCoverages,
@@ -45,9 +49,15 @@ final class CoberturaCoverageWriter implements CoverageWriter
 
     /**
      * @param list<FileCoverage> $fileCoverages
+     *
+     * @throws ErrorException
      */
     private function generateXml(array $fileCoverages): DOMDocument
     {
+        if (!extension_loaded('dom')) {
+            throw new ErrorException('In order to output cobertura files, you need to enable the dom extension');
+        }
+
         $dom = new DOMDocument('1.0', 'UTF-8');
         $dom->formatOutput = true;
 

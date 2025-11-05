@@ -3,12 +3,15 @@
 namespace ShipMonk\CoverageGuard\Writer;
 
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
+use ShipMonk\CoverageGuard\Exception\ErrorException;
 
 interface CoverageWriter
 {
 
     /**
      * @param list<FileCoverage> $fileCoverages
+     *
+     * @throws ErrorException
      */
     public function write(
         array $fileCoverages,
