@@ -228,4 +228,18 @@ final class CliParserTest extends TestCase
         self::assertTrue($result['options']['debug']);
     }
 
+    public function testParseBooleanOptionWithValueThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Option --verbose does not accept a value');
+
+        $parser->parse(['--verbose=something'], [], $options);
+    }
+
 }

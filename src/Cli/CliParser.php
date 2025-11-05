@@ -193,6 +193,10 @@ final class CliParser
             if ($optionDef->requiresValue && $optionValue === null) {
                 throw new ErrorException("Option --{$optionName} requires a value");
             }
+
+            if (!$optionDef->requiresValue && $optionValue !== null) {
+                throw new ErrorException("Option --{$optionName} does not accept a value");
+            }
         }
     }
 
