@@ -8,6 +8,7 @@ use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function count;
 use function fwrite;
 use function is_file;
@@ -56,7 +57,7 @@ final class MergeCommand extends AbstractCommand
         }
 
         $merged = $this->coverageMerger->merge($coverageSets);
-        $xml = $this->createWriter($format)->write($merged, $indent);
+        $xml = CoverageWriterFactory::create($format)->write($merged, $indent);
 
         fwrite($this->outputStream, $xml);
 

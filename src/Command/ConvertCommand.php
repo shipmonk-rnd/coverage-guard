@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function fwrite;
 use function is_file;
 use const STDOUT;
@@ -45,7 +46,7 @@ final class ConvertCommand extends AbstractCommand
         $extractor = $this->extractorFactory->createExtractor($inputFile);
         $coverage = $extractor->getCoverage($inputFile);
 
-        $writer = $this->createWriter($format);
+        $writer = CoverageWriterFactory::create($format);
         $xml = $writer->write($coverage, $indent);
 
         fwrite($this->outputStream, $xml);
