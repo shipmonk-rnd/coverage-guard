@@ -5,6 +5,8 @@ namespace ShipMonk\CoverageGuard\Command;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;
 use function fopen;
 use function rewind;
@@ -69,6 +71,7 @@ final class CheckCommandTest extends TestCase
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $patchFile = __DIR__ . '/../_fixtures/config-for-bintest.php'; // Valid file but wrong extension
+        $configFile = __DIR__ . '/../_fixtures/config-for-bintest.php'; // Has git root set
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('expecting .patch or .diff extension');
@@ -76,6 +79,7 @@ final class CheckCommandTest extends TestCase
         ($command)(
             $coverageFile,
             patchFile: $patchFile,
+            configPath: $configFile,
         );
     }
 
@@ -110,8 +114,10 @@ final class CheckCommandTest extends TestCase
      */
     private function createCommand(mixed $stream = null): CheckCommand
     {
+        $cwd = __DIR__;
         $printer = new Printer($stream ?? $this->createStream(), noColor: true);
-        return new CheckCommand(__DIR__, $printer);
+        $configResolver = new ConfigResolver($cwd);
+        return new CheckCommand($cwd, $printer, $configResolver, new PatchParser($cwd, $printer));
     }
 
 }

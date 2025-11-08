@@ -6,16 +6,17 @@ use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
-use function getcwd;
-use function is_file;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function number_format;
-use function str_ends_with;
 
 final class PatchCoverageCommand extends AbstractCommand
 {
 
     public function __construct(
-        protected readonly Printer $printer,
+        private readonly Printer $printer,
+        private readonly PatchParser $patchParser,
+        private readonly ConfigResolver $configResolver,
     )
     {
     }
@@ -27,28 +28,14 @@ final class PatchCoverageCommand extends AbstractCommand
         #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
         string $coverageFile,
 
-        #[CliOption(description: 'Patch file to analyze')]
-        string $patch,
+        #[CliOption(name: 'patch', description: 'Patch file to analyze')]
+        string $patchPath,
+
+        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        ?string $configPath = null,
     ): int
     {
-        $patchFile = $patch;
-        $cwd = getcwd();
-
-        if ($cwd === false) {
-            throw new ErrorException('Cannot determine current working directory');
-        }
-
-        if (!is_file($coverageFile)) {
-            throw new ErrorException("Coverage file not found: {$coverageFile}");
-        }
-
-        if (!is_file($patchFile)) {
-            throw new ErrorException("Patch file not found: {$patchFile}");
-        }
-
-        if (!str_ends_with($patchFile, '.patch') && !str_ends_with($patchFile, '.diff')) {
-            throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch or .diff extension");
-        }
+        $config = $this->configResolver->resolveConfig($configPath);
 
         // Extract coverage
         $extractor = $this->createExtractor($coverageFile);
@@ -61,12 +48,7 @@ final class PatchCoverageCommand extends AbstractCommand
         }
 
         // Parse patch
-        $gitRoot = $this->detectGitRoot($cwd);
-        if ($gitRoot === null) {
-            throw new ErrorException('In order to process patch files, you need to be inside git repository folder, install git or specify git root via config');
-        }
-
-        $changesPerFile = $this->getPatchChangedLines($patchFile, $gitRoot);
+        $changesPerFile = $this->patchParser->getPatchChangedLines($patchPath, $config);
 
         // Calculate coverage for changed lines
         $totalChangedLines = 0;
@@ -94,14 +76,12 @@ final class PatchCoverageCommand extends AbstractCommand
             }
         }
 
-        // Output statistics
         if ($totalChangedLines === 0) {
-            $this->printer->printLine('No executable lines found in patch.');
-            $this->printer->printLine('');
-            return 0;
+            $percentage = 0;
+        } else {
+            $percentage = ($totalCoveredLines / $totalChangedLines) * 100;
         }
 
-        $percentage = ($totalCoveredLines / $totalChangedLines) * 100;
         $percentageFormatted = number_format($percentage, 2);
 
         $this->printer->printLine('Patch Coverage Statistics:');

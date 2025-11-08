@@ -3,10 +3,14 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;
 use function fopen;
+use function realpath;
 use function rewind;
 use function str_contains;
 use function stream_get_contents;
@@ -20,7 +24,7 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
 
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
         self::assertSame('patch-coverage', $command->getName());
     }
 
@@ -30,7 +34,7 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
 
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
         self::assertStringContainsString('coverage', $command->getDescription());
         self::assertStringContainsString('patch', $command->getDescription());
     }
@@ -41,14 +45,14 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
 
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Coverage file not found');
 
         ($command)(
             'nonexistent.xml',
-            patch: 'some.patch',
+            patchPath: 'some.patch',
         );
     }
 
@@ -58,7 +62,7 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($stream);
         $printer = new Printer($stream, noColor: true);
 
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
 
@@ -67,7 +71,7 @@ final class PatchCoverageCommandTest extends TestCase
 
         ($command)(
             $coverageFile,
-            patch: 'nonexistent.patch',
+            patchPath: 'nonexistent.patch',
         );
     }
 
@@ -77,14 +81,14 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($outputStream);
 
         $printer = new Printer($outputStream, noColor: true);
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $patchFile = __DIR__ . '/../_fixtures/sample.patch';
 
         $exitCode = ($command)(
             $coverageFile,
-            patch: $patchFile,
+            patchPath: $patchFile,
         );
 
         self::assertSame(0, $exitCode);
@@ -107,15 +111,15 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertIsResource($outputStream);
 
         $printer = new Printer($outputStream, noColor: true);
-        $command = new PatchCoverageCommand($printer);
+        $command = $this->createCommand($printer);
 
-        // Use a coverage file and patch that don't overlap
+        // Use a coverage file and patch that overlap (sample.patch adds untestedMethod to Sample.php)
         $coverageFile = __DIR__ . '/../_fixtures/clover_with_package.xml';
-        $patchFile = __DIR__ . '/../_fixtures/sample.patch'; // References different files
+        $patchFile = __DIR__ . '/../_fixtures/sample.patch';
 
         $exitCode = ($command)(
             $coverageFile,
-            patch: $patchFile,
+            patchPath: $patchFile,
         );
 
         self::assertSame(0, $exitCode);
@@ -125,8 +129,20 @@ final class PatchCoverageCommandTest extends TestCase
         fclose($outputStream);
 
         self::assertIsString($output);
-        // Should show message about no executable lines
-        self::assertStringContainsString('No executable lines found in patch', $output);
+        // The patch adds an untested method, so coverage should be reported
+        self::assertStringContainsString('Patch Coverage Statistics:', $output);
+        self::assertStringContainsString('Coverage:', $output);
+    }
+
+    private function createCommand(Printer $printer): PatchCoverageCommand
+    {
+        $gitRoot = realpath(__DIR__ . '/../..'); // Project root
+        if ($gitRoot === false) {
+            throw new RuntimeException('Failed to resolve git root');
+        }
+        $patchParser = new PatchParser($gitRoot, $printer);
+        $configResolver = new ConfigResolver($gitRoot);
+        return new PatchCoverageCommand($printer, $patchParser, $configResolver);
     }
 
 }

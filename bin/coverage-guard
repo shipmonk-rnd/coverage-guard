@@ -13,6 +13,8 @@ use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 
 $autoloadPaths = [
     __DIR__ . '/../vendor/autoload.php',
@@ -38,11 +40,14 @@ $noColor = in_array('--no-color', $argv, true)
 $printer = new Printer(STDOUT, $noColor);
 
 try {
+    $patchParser = new PatchParser($cwd, $printer);
+    $configResolver = new ConfigResolver($cwd);
+
     $registry = new CommandRegistry();
-    $registry->register(new CheckCommand($cwd, $printer));
+    $registry->register(new CheckCommand($cwd, $printer, $configResolver, $patchParser));
     $registry->register(new MergeCommand(new CoverageMerger()));
     $registry->register(new ConvertCommand());
-    $registry->register(new PatchCoverageCommand($printer));
+    $registry->register(new PatchCoverageCommand($printer, $patchParser, $configResolver));
 
     $parameterResolver = new ParameterResolver();
 

@@ -64,8 +64,7 @@ parameters:
         -
             message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
             paths:
-                - src/CoverageGuard.php
-                - src/Command/AbstractCommand.php
+                - src/Utils/PatchParser.php
 
         -
             identifiers:

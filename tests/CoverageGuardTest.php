@@ -2,12 +2,14 @@
 
 namespace ShipMonk\CoverageGuard;
 
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fopen;
 use function rewind;
 use function str_replace;
@@ -120,9 +122,7 @@ final class CoverageGuardTest extends TestCase
         self::assertNotFalse($stream);
 
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
-        $config = $this->createConfig();
-        $pathHelper = new PathHelper(__DIR__ . '/../');
-        $guard = new CoverageGuard($config, $printer, $pathHelper);
+        $guard = $this->createCoverageGuard(printer: $printer);
 
         $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', patchFile: null, verbose: true);
 
@@ -141,9 +141,7 @@ final class CoverageGuardTest extends TestCase
         self::assertNotFalse($stream);
 
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
-        $config = $this->createConfig();
-        $pathHelper = new PathHelper(__DIR__ . '/../');
-        $guard = new CoverageGuard($config, $printer, $pathHelper);
+        $guard = $this->createCoverageGuard(printer: $printer);
 
         $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', __DIR__ . '/_fixtures/sample.patch', verbose: true);
 
@@ -174,16 +172,26 @@ final class CoverageGuardTest extends TestCase
         return $config;
     }
 
-    private function createCoverageGuard(?Config $config = null): CoverageGuard
+    private function createCoverageGuard(
+        ?Config $config = null,
+        ?Printer $printer = null,
+    ): CoverageGuard
+    {
+        $cwd = __DIR__ . '/../';
+        $printer ??= $this->createPrinter();
+        $config ??= $this->createConfig();
+        $pathHelper = new PathHelper($cwd);
+        $phpParser = (new ParserFactory())->createForHostVersion();
+        $patchParser = new PatchParser($cwd, $printer);
+
+        return new CoverageGuard($printer, $phpParser, $config, $pathHelper, $patchParser);
+    }
+
+    private function createPrinter(bool $noColor = false): Printer
     {
         $stream = fopen('php://memory', 'rw');
         self::assertNotFalse($stream);
-
-        $printer = new Printer($stream, noColor: false);
-        $config ??= $this->createConfig();
-        $pathHelper = new PathHelper(__DIR__ . '/../');
-
-        return new CoverageGuard($config, $printer, $pathHelper);
+        return new Printer($stream, noColor: $noColor);
     }
 
     private function createFullyUncoveredAndFullyChangedRule(): CoverageRule
