@@ -172,6 +172,15 @@ Patch Coverage Statistics:
   Coverage:                 84.44%
 ```
 
+## Optional dependencies
+- Libraries:
+  - `phpunit/php-code-coverage` for loading coverage cov files
+  - `sebastian/diff` for processing diff/patch files
+- PHP extensions:
+  - `ext-libxml` and `ext-simplexml` for loading coverage XML files
+  - `ext-dom` for `check` and `merge` commands
+  - `ext-tokenizer` to see syntax highlighted code blocks
+
 ## Contributing
 - Check your code by `composer check`
 - Autofix coding-style by `composer fix:cs`
