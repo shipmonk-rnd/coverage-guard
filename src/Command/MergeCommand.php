@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use function count;
 use function fwrite;
 use function is_file;
@@ -19,6 +20,7 @@ final class MergeCommand extends AbstractCommand
      * @param resource $outputStream
      */
     public function __construct(
+        private readonly ExtractorFactory $extractorFactory,
         private readonly CoverageMerger $coverageMerger,
         private readonly mixed $outputStream = STDOUT,
     )
@@ -49,7 +51,7 @@ final class MergeCommand extends AbstractCommand
                 throw new ErrorException("Given file not found: {$file}");
             }
 
-            $extractor = $this->createExtractor($file);
+            $extractor = $this->extractorFactory->createExtractor($file);
             $coverageSets[] = $extractor->getCoverage($file);
         }
 

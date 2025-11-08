@@ -10,10 +10,7 @@ use PhpParser\Parser as PhpParser;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
-use ShipMonk\CoverageGuard\Extractor\CoberturaCoverageExtractor;
-use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
-use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
@@ -25,14 +22,11 @@ use function array_keys;
 use function array_map;
 use function count;
 use function file;
-use function file_get_contents;
 use function implode;
 use function is_file;
 use function range;
 use function realpath;
 use function rtrim;
-use function str_contains;
-use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function substr;
@@ -47,6 +41,7 @@ final class CoverageGuard
         private readonly Config $config,
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
+        private readonly ExtractorFactory $extractorFactory,
     )
     {
     }
@@ -165,7 +160,7 @@ final class CoverageGuard
      */
     private function getCoverage(string $coverageFile): array
     {
-        $coverages = $this->createExtractor($coverageFile)->getCoverage($coverageFile);
+        $coverages = $this->extractorFactory->createExtractor($coverageFile)->getCoverage($coverageFile);
         $foundHit = false;
         $remappedCoverages = [];
 
@@ -211,47 +206,6 @@ final class CoverageGuard
         }
 
         return $remappedCoverages;
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    private function createExtractor(string $coverageFile): CoverageExtractor
-    {
-        if (!is_file($coverageFile)) {
-            throw new ErrorException("Coverage file not found: {$coverageFile}");
-        }
-
-        if (str_ends_with($coverageFile, '.cov')) {
-            return new PhpUnitCoverageExtractor();
-        }
-
-        if (str_ends_with($coverageFile, '.xml')) {
-            return $this->detectExtractorForXml($coverageFile);
-        }
-
-        throw new ErrorException("Unknown coverage file format: '{$coverageFile}'. Expecting .cov or .xml");
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    private function detectExtractorForXml(
-        string $xmlFile,
-    ): CoverageExtractor
-    {
-        $xmlLoader = new XmlLoader();
-        $content = file_get_contents($xmlFile);
-
-        if ($content === false) {
-            throw new ErrorException("Failed to read file: {$xmlFile}");
-        }
-
-        if (str_contains($content, 'cobertura')) {
-            return new CoberturaCoverageExtractor($xmlLoader);
-        }
-
-        return new CloverCoverageExtractor($xmlLoader);
     }
 
     private function mapCoverageFilePath(string $filePath): string

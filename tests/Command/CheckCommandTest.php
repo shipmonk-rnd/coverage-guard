@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
@@ -117,7 +118,7 @@ final class CheckCommandTest extends TestCase
         $cwd = __DIR__;
         $printer = new Printer($stream ?? $this->createStream(), noColor: true);
         $configResolver = new ConfigResolver($cwd);
-        return new CheckCommand($cwd, $printer, $configResolver, new PatchParser($cwd, $printer));
+        return new CheckCommand($cwd, $printer, $configResolver, new PatchParser($cwd, $printer), new ExtractorFactory());
     }
 
 }

@@ -67,11 +67,13 @@ parameters:
                 - src/Utils/PatchParser.php
 
         -
+            message: "#SebastianBergmann\\\\CodeCoverage#"
             identifiers:
                 - classConstant.internalClass
                 - new.internalClass
                 - method.internalClass
-            path: tests/Extractor/PhpUnitCoverageExtractorTest.php
+            paths:
+                - tests/Extractor/PhpUnitCoverageExtractorTest.php
 
         -
             identifiers:

@@ -6,6 +6,7 @@ use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use function fwrite;
 use function is_file;
 use const STDOUT;
@@ -17,6 +18,7 @@ final class ConvertCommand extends AbstractCommand
      * @param resource $outputStream
      */
     public function __construct(
+        private readonly ExtractorFactory $extractorFactory,
         private readonly mixed $outputStream = STDOUT,
     )
     {
@@ -40,7 +42,7 @@ final class ConvertCommand extends AbstractCommand
             throw new ErrorException("File not found: {$inputFile}");
         }
 
-        $extractor = $this->createExtractor($inputFile);
+        $extractor = $this->extractorFactory->createExtractor($inputFile);
         $coverage = $extractor->getCoverage($inputFile);
 
         $writer = $this->createWriter($format);

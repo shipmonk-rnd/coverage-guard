@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard\Cli;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Command\ConvertCommand;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Printer;
 use function fopen;
 use function rewind;
@@ -18,7 +19,7 @@ final class CommandRunnerTest extends TestCase
         $registry = new CommandRegistry();
         $outputStream = $this->createMemoryStream();
 
-        $registry->register(new ConvertCommand($outputStream));
+        $registry->register(new ConvertCommand(new ExtractorFactory(), $outputStream));
         $runner = $this->createRunner($registry);
 
         $printerStream = $this->createMemoryStream();
@@ -41,7 +42,7 @@ final class CommandRunnerTest extends TestCase
         $registry = new CommandRegistry();
         $outputStream = $this->createMemoryStream();
 
-        $registry->register(new ConvertCommand($outputStream));
+        $registry->register(new ConvertCommand(new ExtractorFactory(), $outputStream));
         $runner = $this->createRunner($registry);
 
         $printerStream = $this->createMemoryStream();
@@ -61,7 +62,7 @@ final class CommandRunnerTest extends TestCase
     public function testRunWithNoArguments(): void
     {
         $registry = new CommandRegistry();
-        $registry->register(new ConvertCommand());
+        $registry->register(new ConvertCommand(new ExtractorFactory()));
         $runner = $this->createRunner($registry);
 
         $printerStream = $this->createMemoryStream();
@@ -80,7 +81,7 @@ final class CommandRunnerTest extends TestCase
     public function testRunWithUnknownCommand(): void
     {
         $registry = new CommandRegistry();
-        $registry->register(new ConvertCommand());
+        $registry->register(new ConvertCommand(new ExtractorFactory()));
         $runner = $this->createRunner($registry);
 
         $printerStream = $this->createMemoryStream();

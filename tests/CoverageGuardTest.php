@@ -6,6 +6,7 @@ use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
@@ -183,8 +184,9 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
+        $extractorFactory = new ExtractorFactory();
 
-        return new CoverageGuard($printer, $phpParser, $config, $pathHelper, $patchParser);
+        return new CoverageGuard($printer, $phpParser, $config, $pathHelper, $patchParser, $extractorFactory);
     }
 
     private function createPrinter(bool $noColor = false): Printer

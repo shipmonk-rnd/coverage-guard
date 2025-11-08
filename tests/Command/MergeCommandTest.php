@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard\Command;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use function fclose;
 use function file_get_contents;
 use function fopen;
@@ -70,7 +71,7 @@ final class MergeCommandTest extends TestCase
         try {
             $indent = '    ';
 
-            $command = new MergeCommand(new CoverageMerger(), $outputStream);
+            $command = new MergeCommand(new ExtractorFactory(), new CoverageMerger(), $outputStream);
             $command($format, $indent, ...$inputFiles);
 
             rewind($outputStream);

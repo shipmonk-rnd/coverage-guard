@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
@@ -21,6 +22,7 @@ final class CheckCommand extends AbstractCommand
         private readonly Printer $printer,
         private readonly ConfigResolver $configResolver,
         private readonly PatchParser $patchParser,
+        private readonly ExtractorFactory $extractorFactory,
     )
     {
     }
@@ -47,7 +49,8 @@ final class CheckCommand extends AbstractCommand
         $pathHelper = new PathHelper($this->cwd);
         $formatter = new ErrorFormatter($pathHelper, $this->printer, $config);
         $phpParser = (new ParserFactory())->createForHostVersion();
-        $guard = new CoverageGuard($this->printer, $phpParser, $config, $pathHelper, $this->patchParser);
+
+        $guard = new CoverageGuard($this->printer, $phpParser, $config, $pathHelper, $this->patchParser, $this->extractorFactory);
 
         $coverageReport = $guard->checkCoverage($coverageFile, $patchFile, $verbose);
 
