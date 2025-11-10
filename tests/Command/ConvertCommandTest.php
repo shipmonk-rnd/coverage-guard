@@ -7,19 +7,12 @@ use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
-use function array_keys;
-use function array_values;
 use function dirname;
-use function fclose;
-use function fopen;
-use function preg_quote;
-use function preg_replace;
-use function realpath;
-use function rewind;
-use function stream_get_contents;
 
 final class ConvertCommandTest extends TestCase
 {
+
+    use CommandTestTrait;
 
     public function testConvertCloverToCobertura(): void
     {
@@ -84,44 +77,6 @@ final class ConvertCommandTest extends TestCase
             '/generated=".*?"/' => 'generated="dummy"',
             $this->buildRegexForPath(dirname($fixturesDir)) => 'tests/_fixtures',
         ]);
-    }
-
-    /**
-     * @param resource $stream
-     * @param array<string, string> $replacements
-     */
-    private function assertStreamMatchesFile(
-        mixed $stream,
-        string $expectedFile,
-        array $replacements = [],
-    ): void
-    {
-        rewind($stream);
-        $actual = stream_get_contents($stream);
-        fclose($stream);
-        self::assertIsString($actual);
-
-        $actualReplaced = preg_replace(array_keys($replacements), array_values($replacements), $actual);
-
-        self::assertNotNull($actualReplaced);
-        self::assertStringEqualsFile($expectedFile, $actualReplaced, "File $expectedFile does not match");
-    }
-
-    /**
-     * @return resource
-     */
-    private function createStream(): mixed
-    {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        return $stream;
-    }
-
-    private function buildRegexForPath(string $path): string
-    {
-        $realPath = realpath($path);
-        self::assertIsString($realPath);
-        return '#' . preg_quote($realPath, '#') . '#';
     }
 
 }

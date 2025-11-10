@@ -9,12 +9,13 @@ use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;
-use function fopen;
 use function rewind;
 use function stream_get_contents;
 
 final class CheckCommandTest extends TestCase
 {
+
+    use CommandTestTrait;
 
     public function testInvokeWithNonExistentCoverageFile(): void
     {
@@ -98,16 +99,6 @@ final class CheckCommandTest extends TestCase
             $coverageFile,
             configPath: $configFile,
         );
-    }
-
-    /**
-     * @return resource
-     */
-    private function createStream(): mixed
-    {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
-        return $stream;
     }
 
     /**

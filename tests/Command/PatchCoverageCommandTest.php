@@ -10,7 +10,6 @@ use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;
-use function fopen;
 use function realpath;
 use function rewind;
 use function str_contains;
@@ -19,10 +18,11 @@ use function stream_get_contents;
 final class PatchCoverageCommandTest extends TestCase
 {
 
+    use CommandTestTrait;
+
     public function testGetName(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
 
         $command = $this->createCommand($printer);
@@ -31,8 +31,7 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testGetDescription(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
 
         $command = $this->createCommand($printer);
@@ -42,8 +41,7 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeWithNonExistentCoverageFile(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
 
         $command = $this->createCommand($printer);
@@ -59,8 +57,7 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeWithNonExistentPatchFile(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertIsResource($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
 
         $command = $this->createCommand($printer);
@@ -78,8 +75,7 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeCalculatesPatchCoverage(): void
     {
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertIsResource($outputStream);
+        $outputStream = $this->createStream();
 
         $printer = new Printer($outputStream, noColor: true);
         $command = $this->createCommand($printer);
@@ -108,8 +104,7 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeWithNoPatchChanges(): void
     {
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertIsResource($outputStream);
+        $outputStream = $this->createStream();
 
         $printer = new Printer($outputStream, noColor: true);
         $command = $this->createCommand($printer);
