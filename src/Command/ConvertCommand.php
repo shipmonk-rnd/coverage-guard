@@ -5,11 +5,11 @@ namespace ShipMonk\CoverageGuard\Command;
 use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function fwrite;
-use function is_file;
 use const STDOUT;
 
 final class ConvertCommand extends AbstractCommand
@@ -19,7 +19,8 @@ final class ConvertCommand extends AbstractCommand
      * @param resource $outputStream
      */
     public function __construct(
-        private readonly ExtractorFactory $extractorFactory,
+        private readonly CoverageProvider $extractorFactory,
+        private readonly ConfigResolver $configResolver,
         private readonly mixed $outputStream = STDOUT,
     )
     {
@@ -35,16 +36,15 @@ final class ConvertCommand extends AbstractCommand
         #[CliOption(description: 'Output format: clover or cobertura')]
         CoverageFormat $format,
 
+        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        ?string $configPath = null,
+
         #[CliOption(description: 'XML indent to use')]
         string $indent = '    ',
     ): int
     {
-        if (!is_file($inputFile)) {
-            throw new ErrorException("File not found: {$inputFile}");
-        }
-
-        $extractor = $this->extractorFactory->createExtractor($inputFile);
-        $coverage = $extractor->getCoverage($inputFile);
+        $config = $this->configResolver->resolveConfig($configPath);
+        $coverage = $this->extractorFactory->getCoverage($config, $inputFile);
 
         $writer = CoverageWriterFactory::create($format);
         $xml = $writer->write($coverage, $indent);

@@ -4,12 +4,17 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
-use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\CoverageProvider;
+use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use function array_keys;
+use function array_values;
+use function dirname;
 use function fclose;
-use function file_get_contents;
 use function fopen;
+use function preg_quote;
 use function preg_replace;
+use function realpath;
 use function rewind;
 use function stream_get_contents;
 
@@ -55,19 +60,6 @@ final class ConvertCommandTest extends TestCase
         );
     }
 
-    public function testInvokeWithNonExistentFile(): void
-    {
-        $command = new ConvertCommand(new ExtractorFactory());
-
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('File not found');
-
-        ($command)(
-            'nonexistent.xml',
-            CoverageFormat::Clover,
-        );
-    }
-
     private function assertConvertProducesExpectedOutput(
         string $inputFile,
         string $expectedFile,
@@ -75,31 +67,61 @@ final class ConvertCommandTest extends TestCase
         string $indent,
     ): void
     {
-        // Create a memory stream to capture output
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertNotFalse($outputStream);
+        $commandStream = $this->createStream();
+        $printerStream = $this->createStream();
 
-        try {
-            $command = new ConvertCommand(new ExtractorFactory(), $outputStream);
-            $command($inputFile, $format, $indent);
+        $fixturesDir = __DIR__ . '/../_fixtures/ConvertCommand';
 
-            rewind($outputStream);
-            $actualContent = stream_get_contents($outputStream);
-            $expectedContent = file_get_contents($expectedFile);
+        $printer = new Printer($printerStream, noColor: true);
+        $configResolver = new ConfigResolver(__DIR__);
+        $configPath = $fixturesDir . '/config.php';
 
-            self::assertNotFalse($actualContent);
-            self::assertNotFalse($expectedContent);
+        $command = new ConvertCommand(new CoverageProvider($printer), $configResolver, $commandStream);
+        $command($inputFile, $format, $configPath, $indent);
 
-            $actualContentNormalized = preg_replace(
-                ['/timestamp="[0-9]+"/', '/generated="[0-9]+"/'],
-                ['timestamp="dummy"', 'generated="dummy"'],
-                $actualContent,
-            );
+        $this->assertStreamMatchesFile($commandStream, $expectedFile, [
+            '/timestamp=".*?"/' => 'timestamp="dummy"',
+            '/generated=".*?"/' => 'generated="dummy"',
+            $this->buildRegexForPath(dirname($fixturesDir)) => 'tests/_fixtures',
+        ]);
+    }
 
-            self::assertSame($expectedContent, $actualContentNormalized);
-        } finally {
-            fclose($outputStream);
-        }
+    /**
+     * @param resource $stream
+     * @param array<string, string> $replacements
+     */
+    private function assertStreamMatchesFile(
+        mixed $stream,
+        string $expectedFile,
+        array $replacements = [],
+    ): void
+    {
+        rewind($stream);
+        $actual = stream_get_contents($stream);
+        fclose($stream);
+        self::assertIsString($actual);
+
+        $actualReplaced = preg_replace(array_keys($replacements), array_values($replacements), $actual);
+
+        self::assertNotNull($actualReplaced);
+        self::assertStringEqualsFile($expectedFile, $actualReplaced, "File $expectedFile does not match");
+    }
+
+    /**
+     * @return resource
+     */
+    private function createStream(): mixed
+    {
+        $stream = fopen('php://memory', 'w+');
+        self::assertIsResource($stream);
+        return $stream;
+    }
+
+    private function buildRegexForPath(string $path): string
+    {
+        $realPath = realpath($path);
+        self::assertIsString($realPath);
+        return '#' . preg_quote($realPath, '#') . '#';
     }
 
 }

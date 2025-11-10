@@ -11,8 +11,8 @@ use ShipMonk\CoverageGuard\Command\ConvertCommand;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
@@ -43,12 +43,12 @@ $printer = new Printer(STDOUT, $noColor);
 try {
     $patchParser = new PatchParser($cwd, $printer);
     $configResolver = new ConfigResolver($cwd);
-    $extractorFactory = new ExtractorFactory();
+    $extractorFactory = new CoverageProvider($printer);
 
     $registry = new CommandRegistry();
     $registry->register(new CheckCommand($cwd, $printer, $configResolver, $patchParser, $extractorFactory));
-    $registry->register(new MergeCommand($extractorFactory, new CoverageMerger()));
-    $registry->register(new ConvertCommand($extractorFactory));
+    $registry->register(new MergeCommand($extractorFactory, new CoverageMerger(), $configResolver));
+    $registry->register(new ConvertCommand($extractorFactory, $configResolver));
     $registry->register(new PatchCoverageCommand($printer, $patchParser, $configResolver, $extractorFactory));
 
     $parameterResolver = new ParameterResolver();

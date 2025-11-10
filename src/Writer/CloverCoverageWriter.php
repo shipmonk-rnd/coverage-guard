@@ -14,7 +14,7 @@ final class CloverCoverageWriter implements CoverageWriter
 {
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      *
      * @throws ErrorException
      */
@@ -34,7 +34,7 @@ final class CloverCoverageWriter implements CoverageWriter
     }
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      */
     private function generateXml(array $fileCoverages): DOMDocument
     {

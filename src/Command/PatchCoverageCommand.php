@@ -4,8 +4,8 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
@@ -18,7 +18,7 @@ final class PatchCoverageCommand extends AbstractCommand
         private readonly Printer $printer,
         private readonly PatchParser $patchParser,
         private readonly ConfigResolver $configResolver,
-        private readonly ExtractorFactory $extractorFactory,
+        private readonly CoverageProvider $extractorFactory,
     )
     {
     }
@@ -39,17 +39,7 @@ final class PatchCoverageCommand extends AbstractCommand
     {
         $config = $this->configResolver->resolveConfig($configPath);
 
-        // Extract coverage
-        $extractor = $this->extractorFactory->createExtractor($coverageFile);
-        $coveragePerFile = [];
-        foreach ($extractor->getCoverage($coverageFile) as $fileCoverage) {
-            $realPath = $this->tryRealpath($fileCoverage->filePath);
-            if ($realPath !== null) {
-                $coveragePerFile[$realPath] = $fileCoverage;
-            }
-        }
-
-        // Parse patch
+        $coveragePerFile = $this->extractorFactory->getCoverage($config, $coverageFile);
         $changesPerFile = $this->patchParser->getPatchChangedLines($patchPath, $config);
 
         // Calculate coverage for changed lines

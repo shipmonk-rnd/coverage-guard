@@ -10,26 +10,19 @@ use PhpParser\Parser as PhpParser;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
+use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;
 use function array_map;
 use function count;
-use function file;
 use function implode;
-use function is_file;
 use function range;
-use function realpath;
-use function rtrim;
-use function str_starts_with;
-use function strlen;
-use function substr;
 use const PHP_EOL;
 
 final class CoverageGuard
@@ -41,7 +34,7 @@ final class CoverageGuard
         private readonly Config $config,
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
-        private readonly ExtractorFactory $extractorFactory,
+        private readonly CoverageProvider $extractorFactory,
     )
     {
     }
@@ -56,7 +49,7 @@ final class CoverageGuard
     ): CoverageReport
     {
         $patchMode = $patchFile !== null;
-        $coveragePerFile = $this->getCoverage($coverageFile);
+        $coveragePerFile = $this->extractorFactory->getCoverage($this->config, $coverageFile);
         $changesPerFile = $patchFile === null
             ? array_fill_keys(array_keys($coveragePerFile), null)
             : $this->patchParser->getPatchChangedLines($patchFile, $this->config);
@@ -117,7 +110,7 @@ final class CoverageGuard
         FileCoverage $fileCoverage,
     ): array
     {
-        $codeLines = $this->readFileLines($file);
+        $codeLines = FileUtils::readFileLines($file);
         $lineNumbers = range(1, count($codeLines));
 
         $nameResolver = new NameResolver();
@@ -151,108 +144,6 @@ final class CoverageGuard
         $traverser->traverse($ast);
 
         return $extractor->getReportedErrors();
-    }
-
-    /**
-     * @return array<string, FileCoverage>
-     *
-     * @throws ErrorException
-     */
-    private function getCoverage(string $coverageFile): array
-    {
-        $coverages = $this->extractorFactory->createExtractor($coverageFile)->getCoverage($coverageFile);
-        $foundHit = false;
-        $remappedCoverages = [];
-
-        if ($coverages === []) {
-            throw new ErrorException("Coverage file '{$coverageFile}' does not contain any coverage data. Is it valid PHPUnit coverage file?");
-        }
-
-        foreach ($coverages as $fileCoverage) {
-            $filePath = $fileCoverage->filePath;
-            $newFilePath = $this->mapCoverageFilePath($filePath);
-            $pathMappingInfo = $newFilePath === $filePath ? '' : " (mapped from '{$filePath}')";
-
-            if (!is_file($newFilePath)) {
-                throw new ErrorException("File '$newFilePath'$pathMappingInfo referenced in coverage file '$coverageFile' was not found. Is the report up-to-date?");
-            }
-
-            $realPath = $this->realpath($newFilePath);
-            $codeLines = $this->readFileLines($realPath);
-            $codeLinesCount = count($codeLines);
-
-            // integrity checks follow
-            if ($fileCoverage->expectedLinesCount !== null && $fileCoverage->expectedLinesCount !== $codeLinesCount) {
-                throw new ErrorException("Coverage file '{$coverageFile}' refers to file '{$realPath}'{$pathMappingInfo} with {$fileCoverage->expectedLinesCount} lines of code, but the actual file has {$codeLinesCount} lines of code. Is the report up-to-date?");
-            }
-
-            foreach ($fileCoverage->executableLines as $executableLine) {
-                $lineNumber = $executableLine->lineNumber;
-
-                if ($lineNumber > $codeLinesCount) {
-                    throw new ErrorException("Coverage file '{$coverageFile}' refers to line #{$lineNumber} of file '{$realPath}'{$pathMappingInfo}, but such line does not exist. Is the report up-to-date?");
-                }
-
-                if (!$foundHit && $executableLine->hits > 0) {
-                    $foundHit = true;
-                }
-            }
-
-            $remappedCoverages[$realPath] = new FileCoverage($realPath, $fileCoverage->executableLines, $fileCoverage->expectedLinesCount);
-        }
-
-        if (!$foundHit) {
-            $this->printer->printWarning("Coverage file '{$coverageFile}' does not contain any executed line. Looks like not a single test was executed.");
-        }
-
-        return $remappedCoverages;
-    }
-
-    private function mapCoverageFilePath(string $filePath): string
-    {
-        foreach ($this->config->getCoveragePathMapping() as $oldPath => $newPath) {
-            if (str_starts_with($filePath, $oldPath)) {
-                return $newPath . substr($filePath, strlen($oldPath));
-            }
-        }
-
-        return $filePath;
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    private function realpath(string $path): string
-    {
-        $realpath = realpath($path);
-        if ($realpath === false) {
-            throw new ErrorException("Could not realpath '$path'");
-        }
-        return $realpath;
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function readFileLines(string $file): array
-    {
-        $lines = file($file);
-        if ($lines === false) {
-            throw new LogicException("Failed to read file: {$file}");
-        }
-
-        if ($lines === []) {
-            return [];
-        }
-
-        $lastLineIndex = count($lines) - 1;
-        $lastLine = $lines[$lastLineIndex];
-
-        if (rtrim($lastLine, "\n\r") !== $lastLine) {
-            $lines[] = ''; // if last line ends with newline, add empty line to ensure expected number of lines is reached
-        }
-
-        return array_map(static fn (string $line): string => rtrim($line, "\n\r"), $lines);
     }
 
 }

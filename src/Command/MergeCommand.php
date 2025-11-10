@@ -6,12 +6,12 @@ use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function count;
 use function fwrite;
-use function is_file;
 use const STDOUT;
 
 final class MergeCommand extends AbstractCommand
@@ -21,8 +21,9 @@ final class MergeCommand extends AbstractCommand
      * @param resource $outputStream
      */
     public function __construct(
-        private readonly ExtractorFactory $extractorFactory,
+        private readonly CoverageProvider $extractorFactory,
         private readonly CoverageMerger $coverageMerger,
+        private readonly ConfigResolver $configResolver,
         private readonly mixed $outputStream = STDOUT,
     )
     {
@@ -38,6 +39,9 @@ final class MergeCommand extends AbstractCommand
         #[CliOption(description: 'XML indent to use')]
         string $indent = '    ',
 
+        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        ?string $configPath = null,
+
         #[CliArgument(description: 'Coverage files to merge (clover.xml, cobertura.xml, or .cov)')]
         string ...$files,
     ): int
@@ -46,14 +50,11 @@ final class MergeCommand extends AbstractCommand
             throw new ErrorException('At least 2 files are required to merge');
         }
 
+        $config = $this->configResolver->resolveConfig($configPath);
+
         $coverageSets = [];
         foreach ($files as $file) {
-            if (!is_file($file)) {
-                throw new ErrorException("Given file not found: {$file}");
-            }
-
-            $extractor = $this->extractorFactory->createExtractor($file);
-            $coverageSets[] = $extractor->getCoverage($file);
+            $coverageSets[] = $this->extractorFactory->getCoverage($config, $file);
         }
 
         $merged = $this->coverageMerger->merge($coverageSets);

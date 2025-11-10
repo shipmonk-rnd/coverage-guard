@@ -9,7 +9,7 @@ interface CoverageWriter
 {
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      *
      * @throws ErrorException
      */

@@ -3,23 +3,17 @@
 namespace ShipMonk\CoverageGuard\Utils;
 
 use Composer\InstalledVersions;
-use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
-use function array_map;
-use function count;
 use function exec;
-use function file;
 use function file_get_contents;
 use function function_exists;
 use function is_dir;
 use function is_file;
 use function method_exists;
-use function realpath;
-use function rtrim;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
@@ -82,8 +76,8 @@ final class PatchParser
                 throw new ErrorException("File '{$absolutePath}' present in patch file '{$patchFile}' was not found. Is the patch up-to-date?");
             }
 
-            $realPath = $this->realpath($absolutePath);
-            $actualFileLines = $this->readFileLines($realPath);
+            $realPath = FileUtils::realpath($absolutePath);
+            $actualFileLines = FileUtils::readFileLines($realPath);
 
             $changes[$realPath] = [];
 
@@ -104,7 +98,7 @@ final class PatchParser
                         $actualLine = $actualFileLines[$lineNumber - 1];
 
                         if ($lineContent !== $actualLine) {
-                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nExpected '{$lineContent}'\nFound '{$actualLine}'\n\nIs the patch up-to-date?");
+                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nPatch data: '{$lineContent}'\nFilesystem: '{$actualLine}'\n\nIs the patch up-to-date?");
                         }
                     }
 
@@ -124,42 +118,6 @@ final class PatchParser
         }
 
         return $changes;
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    private function realpath(string $path): string
-    {
-        $realpath = realpath($path);
-        if ($realpath === false) {
-            throw new ErrorException("Could not realpath '$path'");
-        }
-        return $realpath;
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function readFileLines(string $file): array
-    {
-        $lines = file($file);
-        if ($lines === false) {
-            throw new LogicException("Failed to read file: {$file}");
-        }
-
-        if ($lines === []) {
-            return [];
-        }
-
-        $lastLineIndex = count($lines) - 1;
-        $lastLine = $lines[$lastLineIndex];
-
-        if (rtrim($lastLine, "\n\r") !== $lastLine) {
-            $lines[] = ''; // if last line ends with newline, add empty line to ensure expected number of lines is reached
-        }
-
-        return array_map(static fn (string $line): string => rtrim($line, "\n\r"), $lines);
     }
 
     /**

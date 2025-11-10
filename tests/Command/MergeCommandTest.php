@@ -5,11 +5,16 @@ namespace ShipMonk\CoverageGuard\Command;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
+use ShipMonk\CoverageGuard\CoverageProvider;
+use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use function array_keys;
+use function array_values;
 use function fclose;
-use function file_get_contents;
 use function fopen;
+use function preg_quote;
 use function preg_replace;
+use function realpath;
 use function rewind;
 use function stream_get_contents;
 
@@ -64,29 +69,61 @@ final class MergeCommandTest extends TestCase
         CoverageFormat $format,
     ): void
     {
-        // Create a memory stream to capture output
-        $outputStream = fopen('php://memory', 'w+');
-        self::assertNotFalse($outputStream);
+        $commandStream = $this->createStream();
+        $printerStream = $this->createStream();
 
-        try {
-            $indent = '    ';
+        $fixturesDir = __DIR__ . '/../_fixtures/MergeCommand';
 
-            $command = new MergeCommand(new ExtractorFactory(), new CoverageMerger(), $outputStream);
-            $command($format, $indent, ...$inputFiles);
+        $indent = '    ';
+        $printer = new Printer($printerStream, noColor: true);
+        $configResolver = new ConfigResolver(__DIR__);
+        $configPath = $fixturesDir . '/config.php';
 
-            rewind($outputStream);
-            $actualContent = stream_get_contents($outputStream);
-            $expectedContent = file_get_contents($expectedFile);
+        $command = new MergeCommand(new CoverageProvider($printer), new CoverageMerger(), $configResolver, $commandStream);
+        $command($format, $indent, $configPath, ...$inputFiles);
 
-            self::assertNotFalse($actualContent);
-            self::assertNotFalse($expectedContent);
+        $this->assertStreamMatchesFile($commandStream, $expectedFile, [
+            '/timestamp=".*?"/' => 'timestamp="dummy"',
+            $this->buildRegexForPath($fixturesDir) => '/new/absolute',
+        ]);
+    }
 
-            $actualContentWithDummyTimestamp = preg_replace('/timestamp=".*?"/', 'timestamp="dummy"', $actualContent);
+    /**
+     * @param resource $stream
+     * @param array<string, string> $replacements
+     */
+    private function assertStreamMatchesFile(
+        mixed $stream,
+        string $expectedFile,
+        array $replacements = [],
+    ): void
+    {
+        rewind($stream);
+        $actual = stream_get_contents($stream);
+        fclose($stream);
+        self::assertIsString($actual);
 
-            self::assertSame($expectedContent, $actualContentWithDummyTimestamp);
-        } finally {
-            fclose($outputStream);
-        }
+        $actualReplaced = preg_replace(array_keys($replacements), array_values($replacements), $actual);
+
+        self::assertNotNull($actualReplaced);
+        self::assertStringEqualsFile($expectedFile, $actualReplaced, "File $expectedFile does not match");
+    }
+
+    /**
+     * @return resource
+     */
+    private function createStream(): mixed
+    {
+        $stream = fopen('php://memory', 'w+');
+        self::assertIsResource($stream);
+        return $stream;
+    }
+
+    private function buildRegexForPath(string $path): string
+    {
+        $realPath = realpath($path);
+        self::assertIsString($realPath);
+        return '#' . preg_quote($realPath, '#') . '#';
     }
 
 }

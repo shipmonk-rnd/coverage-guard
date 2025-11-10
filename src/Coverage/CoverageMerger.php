@@ -9,7 +9,7 @@ final class CoverageMerger
 {
 
     /**
-     * @param list<list<FileCoverage>> $coverageSets
+     * @param list<array<FileCoverage>> $coverageSets
      * @return list<FileCoverage>
      *
      * @throws ErrorException

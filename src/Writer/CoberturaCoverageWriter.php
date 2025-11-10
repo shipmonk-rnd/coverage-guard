@@ -28,7 +28,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
 {
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      *
      * @throws ErrorException
      */
@@ -48,7 +48,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
     }
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      *
      * @throws ErrorException
      */
@@ -120,7 +120,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
     /**
      * Find the common parent directory for all file coverages
      *
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      */
     private function findCommonParentDirectory(array $fileCoverages): string
     {
@@ -169,7 +169,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
     }
 
     /**
-     * @param list<FileCoverage> $fileCoverages
+     * @param array<FileCoverage> $fileCoverages
      */
     private function addPackages(
         DOMDocument $dom,

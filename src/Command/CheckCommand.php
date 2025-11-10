@@ -6,8 +6,8 @@ use PhpParser\ParserFactory;
 use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\CoverageGuard;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\ExtractorFactory;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
@@ -22,7 +22,7 @@ final class CheckCommand extends AbstractCommand
         private readonly Printer $printer,
         private readonly ConfigResolver $configResolver,
         private readonly PatchParser $patchParser,
-        private readonly ExtractorFactory $extractorFactory,
+        private readonly CoverageProvider $extractorFactory,
     )
     {
     }
