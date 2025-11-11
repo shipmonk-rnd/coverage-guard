@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Report;
+namespace ShipMonk\CoverageGuard\Report;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Config;
@@ -8,9 +8,6 @@ use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
-use ShipMonk\CoverageGuard\Report\CoverageReport;
-use ShipMonk\CoverageGuard\Report\ErrorFormatter;
-use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use function fopen;
 use function rewind;

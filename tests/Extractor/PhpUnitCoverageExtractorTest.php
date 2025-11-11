@@ -1,13 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace Extractor;
+namespace ShipMonk\CoverageGuard\Extractor;
 
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Data\ProcessedCodeCoverageData;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use SebastianBergmann\CodeCoverage\Filter;
-use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
 use function file_put_contents;
 use function serialize;
 use function sys_get_temp_dir;

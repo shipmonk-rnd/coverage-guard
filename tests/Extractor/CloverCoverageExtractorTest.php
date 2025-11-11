@@ -1,12 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace Extractor;
+namespace ShipMonk\CoverageGuard\Extractor;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
 use ShipMonk\CoverageGuard\XmlLoader;
 use function array_combine;
 use function array_map;

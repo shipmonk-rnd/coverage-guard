@@ -40,7 +40,7 @@
             "ShipMonk\\CoverageGuard\\": "tests/"
         },
         "classmap": [
-            "tests/_fixtures/ParameterResolver"
+            "tests/_fixtures/"
         ]
     },
     "bin": [
@@ -66,7 +66,8 @@
         "check:collisions": "detect-collisions src tests",
         "check:composer": [
             "composer normalize --dry-run --no-update-lock",
-            "composer validate --strict"
+            "composer validate --strict",
+            "composer dump -o --strict-psr"
         ],
         "check:cs": "phpcs",
         "check:dependencies": "composer-dependency-analyser",
