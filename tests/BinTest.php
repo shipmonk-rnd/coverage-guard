@@ -101,6 +101,7 @@ final class BinTest extends TestCase
             '--config',
             escapeshellarg($configFile),
             '--no-color',
+            '2>&1',
         ]);
 
         $output = [];

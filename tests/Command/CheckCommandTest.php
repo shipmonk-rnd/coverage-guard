@@ -107,9 +107,12 @@ final class CheckCommandTest extends TestCase
     private function createCommand(mixed $stream = null): CheckCommand
     {
         $cwd = __DIR__;
-        $printer = new Printer($stream ?? $this->createStream(), noColor: true);
+        $stderrStream = $this->createStream();
+        $stdoutStream = $stream ?? $this->createStream();
+        $stderrPrinter = new Printer($stderrStream, noColor: true);
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
         $configResolver = new ConfigResolver($cwd);
-        return new CheckCommand($cwd, $printer, $configResolver, new PatchParser($cwd, $printer), new CoverageProvider($printer));
+        return new CheckCommand($cwd, $stderrPrinter, $stdoutPrinter, $configResolver, new PatchParser($cwd, $stderrPrinter), new CoverageProvider($stderrPrinter));
     }
 
 }

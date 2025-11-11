@@ -22,29 +22,29 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testGetName(): void
     {
-        $stream = $this->createStream();
-        $printer = new Printer($stream, noColor: true);
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
         self::assertSame('patch-coverage', $command->getName());
     }
 
     public function testGetDescription(): void
     {
-        $stream = $this->createStream();
-        $printer = new Printer($stream, noColor: true);
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
         self::assertStringContainsString('coverage', $command->getDescription());
         self::assertStringContainsString('patch', $command->getDescription());
     }
 
     public function testInvokeWithNonExistentCoverageFile(): void
     {
-        $stream = $this->createStream();
-        $printer = new Printer($stream, noColor: true);
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Coverage file not found');
@@ -57,10 +57,10 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeWithNonExistentPatchFile(): void
     {
-        $stream = $this->createStream();
-        $printer = new Printer($stream, noColor: true);
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
 
@@ -75,10 +75,10 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeCalculatesPatchCoverage(): void
     {
-        $outputStream = $this->createStream();
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $printer = new Printer($outputStream, noColor: true);
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
 
         $coverageFile = __DIR__ . '/../_fixtures/clover.xml';
         $patchFile = __DIR__ . '/../_fixtures/sample.patch';
@@ -90,9 +90,9 @@ final class PatchCoverageCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
 
-        rewind($outputStream);
-        $output = stream_get_contents($outputStream);
-        fclose($outputStream);
+        rewind($stdoutStream);
+        $output = stream_get_contents($stdoutStream);
+        fclose($stdoutStream);
 
         self::assertIsString($output);
         // The output should contain either coverage statistics or "No executable lines"
@@ -104,10 +104,10 @@ final class PatchCoverageCommandTest extends TestCase
 
     public function testInvokeWithNoPatchChanges(): void
     {
-        $outputStream = $this->createStream();
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
 
-        $printer = new Printer($outputStream, noColor: true);
-        $command = $this->createCommand($printer);
+        $command = $this->createCommand($stdoutPrinter);
 
         // Use a coverage file and patch that overlap (sample.patch adds untestedMethod to Sample.php)
         $coverageFile = __DIR__ . '/../_fixtures/clover_with_package.xml';
@@ -120,9 +120,9 @@ final class PatchCoverageCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
 
-        rewind($outputStream);
-        $output = stream_get_contents($outputStream);
-        fclose($outputStream);
+        rewind($stdoutStream);
+        $output = stream_get_contents($stdoutStream);
+        fclose($stdoutStream);
 
         self::assertIsString($output);
         // The patch adds an untested method, so coverage should be reported
@@ -130,15 +130,19 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertStringContainsString('Coverage:', $output);
     }
 
-    private function createCommand(Printer $printer): PatchCoverageCommand
+    private function createCommand(
+        Printer $stdoutPrinter,
+    ): PatchCoverageCommand
     {
         $gitRoot = realpath(__DIR__ . '/../..'); // Project root
         if ($gitRoot === false) {
             throw new RuntimeException('Failed to resolve git root');
         }
-        $patchParser = new PatchParser($gitRoot, $printer);
+        $stderrStream = $this->createStream();
+        $stderrPrinter = new Printer($stderrStream, noColor: true);
+        $patchParser = new PatchParser($gitRoot, $stderrPrinter);
         $configResolver = new ConfigResolver($gitRoot);
-        return new PatchCoverageCommand($printer, $patchParser, $configResolver, new CoverageProvider($printer));
+        return new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, new CoverageProvider($stderrPrinter));
     }
 
 }

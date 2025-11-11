@@ -19,7 +19,8 @@ final class CheckCommand extends AbstractCommand
 
     public function __construct(
         private readonly string $cwd,
-        private readonly Printer $printer,
+        private readonly Printer $stderrPrinter,
+        private readonly Printer $stdoutPrinter,
         private readonly ConfigResolver $configResolver,
         private readonly PatchParser $patchParser,
         private readonly CoverageProvider $extractorFactory,
@@ -47,10 +48,10 @@ final class CheckCommand extends AbstractCommand
         $config = $this->configResolver->resolveConfig($configPath);
 
         $pathHelper = new PathHelper($this->cwd);
-        $formatter = new ErrorFormatter($pathHelper, $this->printer, $config);
+        $formatter = new ErrorFormatter($pathHelper, $this->stdoutPrinter, $config);
         $phpParser = (new ParserFactory())->createForHostVersion();
 
-        $guard = new CoverageGuard($this->printer, $phpParser, $config, $pathHelper, $this->patchParser, $this->extractorFactory);
+        $guard = new CoverageGuard($this->stderrPrinter, $phpParser, $config, $pathHelper, $this->patchParser, $this->extractorFactory);
 
         $coverageReport = $guard->checkCoverage($coverageFile, $patchFile, $verbose);
 

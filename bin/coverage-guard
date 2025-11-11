@@ -34,22 +34,19 @@ if ($cwd === false) {
     throw new LogicException('Cannot determine current working directory');
 }
 
-$noColor = in_array('--no-color', $argv, true)
-    || getenv('NO_COLOR') !== false
-    || (!stream_isatty(STDOUT) && !in_array('--color', $argv, true));
-
-$printer = new Printer(STDOUT, $noColor);
+$stderrPrinter = Printer::create(STDERR, $argv);
+$stdoutPrinter = Printer::create(STDOUT, $argv);
 
 try {
-    $patchParser = new PatchParser($cwd, $printer);
+    $patchParser = new PatchParser($cwd, $stderrPrinter);
     $configResolver = new ConfigResolver($cwd);
-    $extractorFactory = new CoverageProvider($printer);
+    $extractorFactory = new CoverageProvider($stderrPrinter);
 
     $registry = new CommandRegistry();
-    $registry->register(new CheckCommand($cwd, $printer, $configResolver, $patchParser, $extractorFactory));
+    $registry->register(new CheckCommand($cwd, $stderrPrinter, $stdoutPrinter, $configResolver, $patchParser, $extractorFactory));
     $registry->register(new MergeCommand($extractorFactory, new CoverageMerger(), $configResolver));
     $registry->register(new ConvertCommand($extractorFactory, $configResolver));
-    $registry->register(new PatchCoverageCommand($printer, $patchParser, $configResolver, $extractorFactory));
+    $registry->register(new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, $extractorFactory));
 
     $parameterResolver = new ParameterResolver();
 
@@ -59,18 +56,18 @@ try {
         $parameterResolver,
         new HelpRenderer($parameterResolver)
     );
-    $exitCode = $runner->run($argv, $printer);
+    $exitCode = $runner->run($argv, $stderrPrinter);
     exit($exitCode);
 
 } catch (ErrorException $e) {
-    $printer->printLine('');
-    $printer->printLine('⚠️  <orange>Error:</orange> ' . $e->getMessage());
-    $printer->printLine('');
+    $stderrPrinter->printLine('');
+    $stderrPrinter->printLine('⚠️  <orange>Error:</orange> ' . $e->getMessage());
+    $stderrPrinter->printLine('');
     exit(1);
 
 } catch (Throwable $e) {
-    $printer->printLine('');
-    $printer->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
-    $printer->printLine($e->getTraceAsString());
+    $stderrPrinter->printLine('');
+    $stderrPrinter->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
+    $stderrPrinter->printLine($e->getTraceAsString());
     exit(1);
 }

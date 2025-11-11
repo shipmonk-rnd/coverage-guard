@@ -15,7 +15,7 @@ final class PatchCoverageCommand extends AbstractCommand
 {
 
     public function __construct(
-        private readonly Printer $printer,
+        private readonly Printer $stdoutPrinter,
         private readonly PatchParser $patchParser,
         private readonly ConfigResolver $configResolver,
         private readonly CoverageProvider $extractorFactory,
@@ -76,13 +76,13 @@ final class PatchCoverageCommand extends AbstractCommand
 
         $percentageFormatted = number_format($percentage, 2);
 
-        $this->printer->printLine('Patch Coverage Statistics:');
-        $this->printer->printLine('');
-        $this->printer->printLine("  Changed executable lines: <white>{$totalChangedLines}</white>");
-        $this->printer->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
-        $this->printer->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
-        $this->printer->printLine("  Coverage:                 <white>{$percentageFormatted}%</white>");
-        $this->printer->printLine('');
+        $this->stdoutPrinter->printLine('Patch Coverage Statistics:');
+        $this->stdoutPrinter->printLine('');
+        $this->stdoutPrinter->printLine("  Changed executable lines: <white>{$totalChangedLines}</white>");
+        $this->stdoutPrinter->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
+        $this->stdoutPrinter->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
+        $this->stdoutPrinter->printLine("  Coverage:                 <white>{$percentageFormatted}%</white>");
+        $this->stdoutPrinter->printLine('');
 
         return 0;
     }

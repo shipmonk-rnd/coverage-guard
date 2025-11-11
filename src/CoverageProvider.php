@@ -42,7 +42,7 @@ final class CoverageProvider
         $remappedCoverages = [];
 
         if ($coverages === []) {
-            $this->printer->printWarning("Coverage file '{$coverageFile}' does not contain any coverage data. Is it valid PHPUnit coverage file?");
+            $this->printer->printWarning("Coverage file '{$coverageFile}' does not contain any coverage data.");
             return [];
         }
 
