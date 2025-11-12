@@ -42,6 +42,18 @@ In real application, you will probably use `phpunit.xml` to [configure PHPUnit c
 
 To collect coverage, you can pick traditional [XDebug](https://xdebug.org/docs/install) or performant [PCOV](https://github.com/krakjoe/pcov/blob/develop/INSTALL.md) extension.
 
+
+## Enforce coverage for new code only
+
+```sh
+git diff master...HEAD > changes.patch
+vendor/bin/coverage-guard check clover.xml --patch changes.patch
+```
+
+- When patch is provided, this tool will only analyse changed files and methods and won't report violations from elsewhere.
+- This allows you to gradually enforce code coverage for new code only.
+
+
 ## Configuration
 
 Create a `coverage-guard.php` file in your project root to customize behavior and set up your `CoverageRules`.
@@ -51,15 +63,11 @@ The config file must return an instance of `ShipMonk\CoverageGuard\Config`:
 <?php
 
 use ShipMonk\CoverageGuard\Config;
-use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
-use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
-use ShipMonk\CoverageGuard\Rule\CoverageRule;
-use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 
 $config = new Config();
 
-// Your main specification of what must be covered
+// Your rules what must be covered
 $config->addRule(new EnforceCoverageForMethodsRule(
     requiredCoveragePercentage: 50,
     minMethodChangePercentage: 50, // when --patch is provided, check only methods changed by more than 50%
@@ -81,12 +89,14 @@ $config->setEditorUrl('phpstorm://open?file={file}&line={line}');
 return $config;
 ```
 
-- For more advanced usage, implement `CoverageRule` and pass it to `Config::addRule()` method.
+### Advanced usage:
+
+- For custom enforcement logic, implement `CoverageRule` and pass it to `Config::addRule()` method:
   - Inspire by prepared [`EnforceCoverageForMethodsRule`](src/Rule/EnforceCoverageForMethodsRule.php) or our own [coverage config](./coverage-guard.php).
 
 
-## What can you enforce?
-The `CodeBlock` class is aware **which line is executable, changed and covered**.
+### What can you enforce:
+The `CodeBlock` class passed to `CoverageRule` is aware **which line is executable, changed and covered**.
 Also, you can use **reflection** to pinpoint your rules.
 This allows you to setup huge variety of rules, examples:
 
@@ -97,10 +107,10 @@ This allows you to setup huge variety of rules, examples:
 - Every method must be tested unless custom **`#[NoCoverageAllowed]` attribute** is used
 - ...
 
-## Global options
+## Global CLI options
 
 - `--verbose` show detailed processing information
-- `--help` show generic help or command help (when combined with command name)
+- `--help` show generic help (or command help when combined with command name)
 - `--no-color` to disable colors (`NO_COLOR` env is also supported)
 - `--color` to force colors even when output is not a TTY
 
@@ -128,9 +138,9 @@ vendor/bin/coverage-guard check clover.xml
 ```
 
 Options:
-- `--verbose` - Show detailed processing information
-- `--patch` - Path to git diff. To check coverage for only changed files & methods
-- `--config` - Path to custom PHP config file (defaults to: `coverage-guard.php`)
+- `--verbose` – show detailed processing information
+- `--patch` – path to git diff, to check coverage only for changed files & methods
+- `--config` – path to custom PHP config file (defaults to: `coverage-guard.php`)
 
 ### `merge` & `convert`
 
@@ -146,7 +156,7 @@ vendor/bin/coverage-guard convert cobertura.xml --format clover > clover.xml
 ```
 
 Options:
-- `--format` - Output format (`clover` or `cobertura`)
+- `--format` – output format (`clover` or `cobertura`)
 
 ### `patch-coverage`
 
@@ -160,7 +170,7 @@ vendor/bin/coverage-guard patch-coverage clover.xml --patch changes.patch
 ```
 
 Options:
-- `--patch` - path to patch file (required)
+- `--patch` – path to diff file (required)
 
 Output example:
 ```
