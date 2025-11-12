@@ -24,6 +24,7 @@ use function str_starts_with;
 use function strlen;
 use function substr;
 use function time;
+use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 
 final class CoberturaCoverageWriter implements CoverageWriter
@@ -162,8 +163,8 @@ final class CoberturaCoverageWriter implements CoverageWriter
         string $path2,
     ): string
     {
-        $parts1 = explode('/', $path1);
-        $parts2 = explode('/', $path2);
+        $parts1 = explode(DIRECTORY_SEPARATOR, $path1);
+        $parts2 = explode(DIRECTORY_SEPARATOR, $path2);
 
         $common = [];
         $minLength = min(count($parts1), count($parts2));
@@ -176,7 +177,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
             }
         }
 
-        return implode('/', $common);
+        return implode(DIRECTORY_SEPARATOR, $common);
     }
 
     /**
@@ -242,7 +243,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
     {
         // Derive a class name from the file path
         $className = basename($fileCoverage->filePath, '.php');
-        $className = str_replace('/', '\\', $className);
+        $className = str_replace(DIRECTORY_SEPARATOR, '\\', $className);
 
         $classElement = $dom->createElement('class');
         $classElement->setAttribute('name', $className);
@@ -278,9 +279,9 @@ final class CoberturaCoverageWriter implements CoverageWriter
         }
 
         // Calculate relative path from source to file directory
-        if (str_starts_with($fileDir, $sourceDir . '/')) {
+        if (str_starts_with($fileDir, $sourceDir . DIRECTORY_SEPARATOR)) {
             $relativePath = substr($fileDir, strlen($sourceDir) + 1);
-            return $relativePath . '/' . $fileName;
+            return $relativePath . DIRECTORY_SEPARATOR . $fileName;
         }
 
         // Fallback to just filename if paths don't match expected pattern
