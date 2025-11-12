@@ -24,8 +24,8 @@ final class PatchParser
 {
 
     public function __construct(
-        private string $cwd,
-        private Printer $printer,
+        private readonly string $cwd,
+        private readonly Printer $printer,
     )
     {
     }

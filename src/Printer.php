@@ -29,22 +29,13 @@ final class Printer
     ];
 
     /**
-     * @var resource
-     */
-    private $resource;
-
-    private bool $noColor;
-
-    /**
      * @param resource $resource
      */
     public function __construct(
-        $resource,
-        bool $noColor,
+        private readonly mixed $resource,
+        private readonly bool $noColor,
     )
     {
-        $this->resource = $resource;
-        $this->noColor = $noColor;
     }
 
     /**

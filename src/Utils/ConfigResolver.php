@@ -12,7 +12,7 @@ final class ConfigResolver
 {
 
     public function __construct(
-        private string $cwd,
+        private readonly string $cwd,
     )
     {
     }
