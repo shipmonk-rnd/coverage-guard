@@ -4,15 +4,15 @@ namespace ShipMonk\CoverageGuard;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use function fopen;
 
 final class CoverageProviderTest extends TestCase
 {
 
+    use StreamTestTrait;
+
     public function testThrowsExceptionForNonExistentFile(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertNotFalse($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
         $factory = new CoverageProvider($printer);
         $config = new Config();
@@ -25,8 +25,7 @@ final class CoverageProviderTest extends TestCase
 
     public function testThrowsExceptionForUnknownFormat(): void
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertNotFalse($stream);
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
         $factory = new CoverageProvider($printer);
         $config = new Config();

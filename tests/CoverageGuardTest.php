@@ -10,7 +10,6 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
-use function fopen;
 use function rewind;
 use function str_replace;
 use function stream_get_contents;
@@ -18,6 +17,8 @@ use const DIRECTORY_SEPARATOR;
 
 final class CoverageGuardTest extends TestCase
 {
+
+    use StreamTestTrait;
 
     /**
      * @param list<string> $args
@@ -120,9 +121,7 @@ final class CoverageGuardTest extends TestCase
 
     public function testVerboseModeWithoutPatchShowsFilesAndCoverage(): void
     {
-        $stream = fopen('php://memory', 'rw');
-        self::assertNotFalse($stream);
-
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
         $config = $this->createConfig();
         $guard = $this->createCoverageGuard(printer: $printer);
@@ -140,9 +139,7 @@ final class CoverageGuardTest extends TestCase
 
     public function testVerboseModeWithPatchShowsFilesAndSkipped(): void
     {
-        $stream = fopen('php://memory', 'rw');
-        self::assertNotFalse($stream);
-
+        $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
         $config = $this->createConfig();
         $guard = $this->createCoverageGuard(printer: $printer);
@@ -194,8 +191,7 @@ final class CoverageGuardTest extends TestCase
 
     private function createPrinter(bool $noColor = false): Printer
     {
-        $stream = fopen('php://memory', 'rw');
-        self::assertNotFalse($stream);
+        $stream = $this->createStream();
         return new Printer($stream, noColor: $noColor);
     }
 
