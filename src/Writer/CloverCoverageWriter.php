@@ -10,7 +10,9 @@ use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Utils\Indenter;
 use function extension_loaded;
+use function str_replace;
 use function time;
+use const PHP_EOL;
 
 final class CloverCoverageWriter implements CoverageWriter
 {
@@ -36,7 +38,7 @@ final class CloverCoverageWriter implements CoverageWriter
             throw new ErrorException('Failed to generate clover XML');
         }
 
-        return Indenter::change($xml, '  ', $indent);
+        return str_replace("\n", PHP_EOL, Indenter::change($xml, '  ', $indent));
     }
 
     /**

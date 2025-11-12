@@ -24,6 +24,7 @@ use function str_starts_with;
 use function strlen;
 use function substr;
 use function time;
+use const PHP_EOL;
 
 final class CoberturaCoverageWriter implements CoverageWriter
 {
@@ -50,7 +51,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
             throw new LogicException('Failed to generate cobertura XML');
         }
 
-        return Indenter::change($xml, '  ', $indent);
+        return str_replace("\n", PHP_EOL, Indenter::change($xml, '  ', $indent));
     }
 
     /**
