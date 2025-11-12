@@ -2,9 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Extractor;
 
+use LogicException;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
-use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\XmlLoader;
 
 final class CloverCoverageExtractor implements CoverageExtractor
@@ -24,7 +24,7 @@ final class CloverCoverageExtractor implements CoverageExtractor
         $fileNodes = $xml->xpath('//file');
 
         if ($fileNodes === null) {
-            throw new ErrorException("Unable to find 'file' nodes in clover XML file '$coverageFile'");
+            throw new LogicException('Invalid usage of XPath, cannot happen');
         }
 
         foreach ($fileNodes as $fileNode) {

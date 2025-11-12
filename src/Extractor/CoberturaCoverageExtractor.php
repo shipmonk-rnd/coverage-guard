@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Extractor;
 
+use LogicException;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -27,7 +28,7 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
         $classNodes = $xml->xpath('//class');
 
         if ($classNodes === null) {
-            throw new ErrorException("Unable to find 'class' nodes in cobertura XML file '$coverageFile'");
+            throw new LogicException('Invalid usage of XPath, cannot happen');
         }
 
         foreach ($classNodes as $classNode) {

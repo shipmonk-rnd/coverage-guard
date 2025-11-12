@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Writer;
 
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use LogicException;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
@@ -37,7 +38,12 @@ final class CoberturaCoverageWriter implements CoverageWriter
         string $indent,
     ): string
     {
-        $dom = $this->generateXml($fileCoverages);
+        try {
+            $dom = $this->generateXml($fileCoverages);
+        } catch (DOMException $e) {
+            throw new LogicException('Failed to generate cobertura XML: ' . $e->getMessage(), 0, $e);
+        }
+
         $xml = $dom->saveXML();
 
         if ($xml === false) {
@@ -51,6 +57,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
      * @param array<FileCoverage> $fileCoverages
      *
      * @throws ErrorException
+     * @throws DOMException
      */
     private function generateXml(array $fileCoverages): DOMDocument
     {
@@ -104,6 +111,9 @@ final class CoberturaCoverageWriter implements CoverageWriter
         return $dom;
     }
 
+    /**
+     * @throws DOMException
+     */
     private function addSource(
         DOMDocument $dom,
         DOMElement $coverage,
@@ -170,6 +180,8 @@ final class CoberturaCoverageWriter implements CoverageWriter
 
     /**
      * @param array<FileCoverage> $fileCoverages
+     *
+     * @throws DOMException
      */
     private function addPackages(
         DOMDocument $dom,
@@ -199,6 +211,9 @@ final class CoberturaCoverageWriter implements CoverageWriter
         }
     }
 
+    /**
+     * @throws DOMException
+     */
     private function createPackageElement(
         DOMDocument $dom,
         float $lineRate,
@@ -214,6 +229,9 @@ final class CoberturaCoverageWriter implements CoverageWriter
         return $packageElement;
     }
 
+    /**
+     * @throws DOMException
+     */
     private function createClassElement(
         DOMDocument $dom,
         FileCoverage $fileCoverage,
@@ -268,6 +286,9 @@ final class CoberturaCoverageWriter implements CoverageWriter
         return $fileName;
     }
 
+    /**
+     * @throws DOMException
+     */
     private function addLines(
         DOMDocument $dom,
         DOMElement $classElement,

@@ -21,7 +21,7 @@ parameters:
     internalErrorsCountLimit: 1
     checkMissingCallableSignature: true
     checkUninitializedProperties: true
-    checkBenevolentUnionTypes: true
+    checkBenevolentUnionTypes: false # true not usable with DOMDocument::createElement usages: https://github.com/phpstan/phpstan/issues/13792
     checkImplicitMixed: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkTooWideThrowTypesInProtectedAndPublicMethods: true
@@ -57,8 +57,10 @@ parameters:
     ignoreErrors:
         # allow calling internal methods from SebastianBergmann\CodeCoverage
         -
-            message: "#Call to method .* of internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
-            path: src/Extractor/PhpUnitCoverageExtractor.php
+            message: "#internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
+            paths:
+                - src/Extractor/PhpUnitCoverageExtractor.php
+                - tests/Extractor/PhpUnitCoverageExtractorTest.php
 
         # support even old sebastian/diff
         -
@@ -66,32 +68,9 @@ parameters:
             paths:
                 - src/Utils/PatchParser.php
 
-        -
-            message: "#SebastianBergmann\\\\CodeCoverage#"
-            identifiers:
-                - classConstant.internalClass
-                - new.internalClass
-                - method.internalClass
-            paths:
-                - tests/Extractor/PhpUnitCoverageExtractorTest.php
-
+        # do not track checked exceptions in tests
         -
             identifiers:
                 - missingType.checkedException
                 - shipmonk.checkedExceptionInCallable
             path: tests/
-
-        # DOMDocument::createElement can technically return false, but in practice it won't for simple element names
-        -
-            identifiers:
-                - method.nonObject
-                - argument.type
-                - missingType.checkedException
-            paths:
-                - src/Writer/CloverCoverageWriter.php
-                - src/Writer/CoberturaCoverageWriter.php
-
-        -
-            identifiers:
-                - return.type
-            path: src/Writer/CoberturaCoverageWriter.php

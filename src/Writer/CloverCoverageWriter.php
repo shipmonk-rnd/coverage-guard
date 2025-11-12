@@ -4,6 +4,8 @@ namespace ShipMonk\CoverageGuard\Writer;
 
 use DOMDocument;
 use DOMElement;
+use DOMException;
+use LogicException;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Utils\Indenter;
@@ -23,7 +25,11 @@ final class CloverCoverageWriter implements CoverageWriter
         string $indent,
     ): string
     {
-        $dom = $this->generateXml($fileCoverages);
+        try {
+            $dom = $this->generateXml($fileCoverages);
+        } catch (DOMException $e) {
+            throw new LogicException('Failed to generate cobertura XML: ' . $e->getMessage(), 0, $e);
+        }
         $xml = $dom->saveXML();
 
         if ($xml === false) {
@@ -35,6 +41,9 @@ final class CloverCoverageWriter implements CoverageWriter
 
     /**
      * @param array<FileCoverage> $fileCoverages
+     *
+     * @throws ErrorException
+     * @throws DOMException
      */
     private function generateXml(array $fileCoverages): DOMDocument
     {
@@ -62,6 +71,9 @@ final class CloverCoverageWriter implements CoverageWriter
         return $dom;
     }
 
+    /**
+     * @throws DOMException
+     */
     private function addFileElement(
         DOMDocument $dom,
         DOMElement $project,
