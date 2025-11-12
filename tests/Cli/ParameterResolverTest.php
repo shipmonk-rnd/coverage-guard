@@ -228,4 +228,15 @@ final class ParameterResolverTest extends TestCase
         $resolver->resolveParameters($method, [], []);
     }
 
+    public function testResolveParametersWithRequiredOptionNotProvidedThrowsException(): void
+    {
+        $resolver = new ParameterResolver();
+        $method = new ReflectionMethod(TestCommandWithRequiredOption::class, '__invoke');
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Required option --output not provided');
+
+        $resolver->resolveParameters($method, [], []);
+    }
+
 }
