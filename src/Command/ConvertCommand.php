@@ -12,7 +12,7 @@ use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function fwrite;
 use const STDOUT;
 
-final class ConvertCommand extends AbstractCommand
+final class ConvertCommand implements Command
 {
 
     /**

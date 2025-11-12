@@ -14,7 +14,7 @@ use function count;
 use function fwrite;
 use const STDOUT;
 
-final class MergeCommand extends AbstractCommand
+final class MergeCommand implements Command
 {
 
     /**

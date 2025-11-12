@@ -11,7 +11,7 @@ use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function number_format;
 
-final class PatchCoverageCommand extends AbstractCommand
+final class PatchCoverageCommand implements Command
 {
 
     public function __construct(

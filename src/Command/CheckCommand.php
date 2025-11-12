@@ -14,7 +14,7 @@ use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 
-final class CheckCommand extends AbstractCommand
+final class CheckCommand implements Command
 {
 
     public function __construct(
