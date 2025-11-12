@@ -284,8 +284,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
             return $relativePath . DIRECTORY_SEPARATOR . $fileName;
         }
 
-        // Fallback to just filename if paths don't match expected pattern
-        return $fileName;
+        throw new LogicException("File path '$filePath' is not within source directory '$sourceDir', broken source detection?");
     }
 
     /**

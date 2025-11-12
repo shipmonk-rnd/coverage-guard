@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Utils;
 
 use Composer\InstalledVersions;
+use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
@@ -165,7 +166,7 @@ final class PatchParser
             // Get the normalized path with separator from config
             $gitRoot = $config->getGitRoot();
             if ($gitRoot === null) {
-                throw new ErrorException('Failed to resolve git root');
+                throw new LogicException('We just set non-nullable value, get/set broken');
             }
             return $gitRoot;
         }
