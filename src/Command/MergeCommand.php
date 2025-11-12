@@ -21,7 +21,7 @@ final class MergeCommand implements Command
      * @param resource $outputStream
      */
     public function __construct(
-        private readonly CoverageProvider $extractorFactory,
+        private readonly CoverageProvider $coverageProvider,
         private readonly CoverageMerger $coverageMerger,
         private readonly ConfigResolver $configResolver,
         private readonly mixed $outputStream = STDOUT,
@@ -54,7 +54,7 @@ final class MergeCommand implements Command
 
         $coverageSets = [];
         foreach ($files as $file) {
-            $coverageSets[] = $this->extractorFactory->getCoverage($config, $file);
+            $coverageSets[] = $this->coverageProvider->getCoverage($config, $file);
         }
 
         $merged = $this->coverageMerger->merge($coverageSets);

@@ -33,7 +33,7 @@ final class CoverageGuard
         private readonly PhpParser $phpParser,
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
-        private readonly CoverageProvider $extractorFactory,
+        private readonly CoverageProvider $coverageProvider,
     )
     {
     }
@@ -49,7 +49,7 @@ final class CoverageGuard
     ): CoverageReport
     {
         $patchMode = $patchFile !== null;
-        $coveragePerFile = $this->extractorFactory->getCoverage($config, $coverageFile);
+        $coveragePerFile = $this->coverageProvider->getCoverage($config, $coverageFile);
         $changesPerFile = $patchFile === null
             ? array_fill_keys(array_keys($coveragePerFile), null)
             : $this->patchParser->getPatchChangedLines($patchFile, $config);

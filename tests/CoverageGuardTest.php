@@ -187,9 +187,9 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
-        $extractorFactory = new CoverageProvider($printer);
+        $coverageProvider = new CoverageProvider($printer);
 
-        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $extractorFactory);
+        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $coverageProvider);
     }
 
     private function createPrinter(bool $noColor = false): Printer

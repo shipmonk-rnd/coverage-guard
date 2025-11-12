@@ -19,7 +19,7 @@ final class ConvertCommand implements Command
      * @param resource $outputStream
      */
     public function __construct(
-        private readonly CoverageProvider $extractorFactory,
+        private readonly CoverageProvider $coverageProvider,
         private readonly ConfigResolver $configResolver,
         private readonly mixed $outputStream = STDOUT,
     )
@@ -44,7 +44,7 @@ final class ConvertCommand implements Command
     ): int
     {
         $config = $this->configResolver->resolveConfig($configPath);
-        $coverage = $this->extractorFactory->getCoverage($config, $inputFile);
+        $coverage = $this->coverageProvider->getCoverage($config, $inputFile);
 
         $writer = CoverageWriterFactory::create($format);
         $xml = $writer->write($coverage, $indent);

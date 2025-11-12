@@ -119,8 +119,8 @@ final class CheckCommandTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $stderrPrinter);
-        $extractorFactory = new CoverageProvider($stderrPrinter);
-        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $extractorFactory);
+        $coverageProvider = new CoverageProvider($stderrPrinter);
+        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider);
         $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
         return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);
     }

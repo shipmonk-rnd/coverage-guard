@@ -18,7 +18,7 @@ final class PatchCoverageCommand implements Command
         private readonly Printer $stdoutPrinter,
         private readonly PatchParser $patchParser,
         private readonly ConfigResolver $configResolver,
-        private readonly CoverageProvider $extractorFactory,
+        private readonly CoverageProvider $coverageProvider,
     )
     {
     }
@@ -39,7 +39,7 @@ final class PatchCoverageCommand implements Command
     {
         $config = $this->configResolver->resolveConfig($configPath);
 
-        $coveragePerFile = $this->extractorFactory->getCoverage($config, $coverageFile);
+        $coveragePerFile = $this->coverageProvider->getCoverage($config, $coverageFile);
         $changesPerFile = $this->patchParser->getPatchChangedLines($patchPath, $config);
 
         // Calculate coverage for changed lines
