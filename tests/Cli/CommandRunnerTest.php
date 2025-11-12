@@ -4,9 +4,9 @@ namespace ShipMonk\CoverageGuard\Cli;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Command\Command;
-use ShipMonk\CoverageGuard\Command\StreamTestTrait;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\StreamTestTrait;
 
 final class CommandRunnerTest extends TestCase
 {

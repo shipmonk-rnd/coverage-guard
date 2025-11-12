@@ -10,6 +10,7 @@ use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
+use ShipMonk\CoverageGuard\StreamTestTrait;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;

@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\StreamTestTrait;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use function dirname;
 use function preg_quote;

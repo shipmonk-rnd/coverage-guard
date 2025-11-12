@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Cli\CoverageFormat;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\StreamTestTrait;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use function preg_quote;
 use const DIRECTORY_SEPARATOR;
