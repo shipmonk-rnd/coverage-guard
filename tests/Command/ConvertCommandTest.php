@@ -69,7 +69,7 @@ final class ConvertCommandTest extends TestCase
 
         $printer = new Printer($printerStream, noColor: true);
         $configResolver = new ConfigResolver(__DIR__);
-        $configPath = $fixturesDir . '/config.php';
+        $configPath = null;
 
         $command = new ConvertCommand(new CoverageProvider($printer), $configResolver, $commandStream);
         $command($inputFile, $format, $configPath, $indent);
