@@ -140,7 +140,7 @@ vendor/bin/coverage-guard check clover.xml
 Options:
 - `--verbose` – show detailed processing information
 - `--patch` – path to git diff, to check coverage only for changed files & methods
-- `--config` – path to custom PHP config file (defaults to: `coverage-guard.php`)
+- `--config` – path to custom PHP config
 
 ### `merge` & `convert`
 
@@ -157,6 +157,8 @@ vendor/bin/coverage-guard convert cobertura.xml --format clover > clover.xml
 
 Options:
 - `--format` – output format (`clover` or `cobertura`)
+- `--indent` – output XML indentation (defaults to 4 spaces); for tabs use `--indent=$'\t'`
+- `--config` – path to custom PHP config
 
 ### `patch-coverage`
 
@@ -171,6 +173,7 @@ vendor/bin/coverage-guard patch-coverage clover.xml --patch changes.patch
 
 Options:
 - `--patch` – path to diff file (required)
+- `--config` – path to custom PHP config
 
 Output example:
 ```
