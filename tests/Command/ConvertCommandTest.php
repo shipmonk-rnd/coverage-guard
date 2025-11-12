@@ -8,6 +8,8 @@ use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use function dirname;
+use function preg_quote;
+use const DIRECTORY_SEPARATOR;
 
 final class ConvertCommandTest extends TestCase
 {
@@ -76,6 +78,7 @@ final class ConvertCommandTest extends TestCase
             '/timestamp=".*?"/' => 'timestamp="dummy"',
             '/generated=".*?"/' => 'generated="dummy"',
             $this->buildRegexForPath(dirname($fixturesDir)) => 'tests/_fixtures',
+            '#' . preg_quote(DIRECTORY_SEPARATOR, '#') . '#' => '/',
         ]);
     }
 

@@ -8,6 +8,8 @@ use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use function preg_quote;
+use const DIRECTORY_SEPARATOR;
 
 final class MergeCommandTest extends TestCase
 {
@@ -78,6 +80,7 @@ final class MergeCommandTest extends TestCase
         $this->assertStreamMatchesFile($commandStream, $expectedFile, [
             '/timestamp=".*?"/' => 'timestamp="dummy"',
             $this->buildRegexForPath($fixturesDir) => '/new/absolute',
+            '#' . preg_quote(DIRECTORY_SEPARATOR, '#') . '#' => '/',
         ]);
     }
 
