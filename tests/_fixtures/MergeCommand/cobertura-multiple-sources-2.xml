@@ -11,12 +11,12 @@
                     <methods>
                         <method name="methodB" signature="" line-rate="1" branch-rate="0" complexity="0">
                             <lines>
-                                <line number="20" hits="3"/>
+                                <line number="10" hits="3"/>
                             </lines>
                         </method>
                     </methods>
                     <lines>
-                        <line number="20" hits="3"/>
+                        <line number="10" hits="3"/>
                     </lines>
                 </class>
             </classes>

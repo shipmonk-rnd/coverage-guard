@@ -20,7 +20,7 @@
                 <class name="ClassB" filename="Bar/ClassB.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
                     <methods/>
                     <lines>
-                        <line number="20" hits="3"/>
+                        <line number="10" hits="3"/>
                     </lines>
                 </class>
             </classes>
