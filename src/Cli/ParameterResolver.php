@@ -66,12 +66,14 @@ final class ParameterResolver
             $attribute = $attributes[0]->newInstance();
             $name = $attribute->name ?? $this->parameterNameToCliName($parameter->getName());
             $description = $attribute->description ?? '';
-            $requiresValue = !$this->isBooleanParameter($parameter);
+            $acceptsValue = !$this->isBooleanParameter($parameter);
+            $isRequired = !$parameter->allowsNull() && !$parameter->isDefaultValueAvailable();
 
             $definitions[] = new OptionDefinition(
                 $name,
                 $description,
-                $requiresValue,
+                $acceptsValue,
+                $isRequired,
             );
         }
 

@@ -63,9 +63,10 @@ final class HelpRenderer
         if ($options !== []) {
             $printer->printLine('<white>Options:</white>');
             foreach ($options as $opt) {
-                $optStr = $opt->requiresValue ? "--{$opt->name} <value>" : "--{$opt->name}";
+                $optStr = $opt->acceptsValue ? "--{$opt->name} <value>" : "--{$opt->name}";
                 $optStrPadded = str_pad($optStr, self::OPTION_PADDING);
-                $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$opt->description}");
+                $description = $opt->isRequired ? "{$opt->description} <white>(required)</white>" : $opt->description;
+                $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$description}");
             }
         }
     }

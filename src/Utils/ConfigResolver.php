@@ -50,8 +50,6 @@ final class ConfigResolver
     }
 
     /**
-     * Load config file
-     *
      * @throws ErrorException
      */
     private function loadConfig(string $configFile): Config

@@ -50,7 +50,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
         ];
 
         $result = $parser->parse(['--verbose'], [], $options);
@@ -65,7 +65,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $result = $parser->parse(['--config', 'config.php'], [], $options);
@@ -80,7 +80,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $result = $parser->parse(['--config=config.php'], [], $options);
@@ -99,8 +99,8 @@ final class CliParserTest extends TestCase
         ];
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $result = $parser->parse(['input.txt', '--verbose', '--config', 'config.php'], $arguments, $options);
@@ -127,7 +127,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $this->expectException(ErrorException::class);
@@ -174,7 +174,7 @@ final class CliParserTest extends TestCase
         ];
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
         ];
 
         // Test with option before argument: --verbose file.xml
@@ -194,7 +194,7 @@ final class CliParserTest extends TestCase
         ];
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
         ];
 
         // Test with option after argument: file.xml --verbose
@@ -214,8 +214,8 @@ final class CliParserTest extends TestCase
         ];
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
-            new OptionDefinition('debug', 'Debug mode', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+            new OptionDefinition('debug', 'Debug mode', acceptsValue: false, isRequired: false),
         ];
 
         // Test with options in various positions
@@ -233,7 +233,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
         ];
 
         $this->expectException(ErrorException::class);
@@ -247,7 +247,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
         ];
 
         $this->expectException(ErrorException::class);
@@ -261,7 +261,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $this->expectException(ErrorException::class);
@@ -275,13 +275,27 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $options = [
-            new OptionDefinition('config', 'Config file', requiresValue: true),
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
         ];
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Option --config cannot be specified multiple times');
 
         $parser->parse(['--config=first.php', '--config=second.php'], [], $options);
+    }
+
+    public function testParseMissingRequiredOptionThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('format', 'Output format', acceptsValue: true, isRequired: true),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Missing required option: --format');
+
+        $parser->parse([], [], $options);
     }
 
 }

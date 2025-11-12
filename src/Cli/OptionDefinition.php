@@ -8,7 +8,8 @@ final class OptionDefinition
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        public readonly bool $requiresValue,
+        public readonly bool $acceptsValue,
+        public readonly bool $isRequired,
     )
     {
     }

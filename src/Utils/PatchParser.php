@@ -121,9 +121,6 @@ final class PatchParser
         return $changes;
     }
 
-    /**
-     * Detect git repository root directory
-     */
     private function detectGitRoot(): ?string
     {
         if (is_dir($this->cwd . '/.git/')) {

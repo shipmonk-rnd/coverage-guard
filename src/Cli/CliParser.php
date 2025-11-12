@@ -132,7 +132,7 @@ final class CliParser
             // Only consume the next argument if:
             // 1. It doesn't start with '--' (not another option)
             // 2. The current option requires a value
-            if (!str_starts_with($nextArg, '--') && isset($optionMap[$optionName]) && $optionMap[$optionName]->requiresValue) {
+            if (!str_starts_with($nextArg, '--') && isset($optionMap[$optionName]) && $optionMap[$optionName]->acceptsValue) {
                 // Value is in next argument
                 $i++;
                 $optionValue = $nextArg;
@@ -163,7 +163,7 @@ final class CliParser
 
             $optionDef = $optionMap[$optionName];
 
-            if ($optionDef->requiresValue) {
+            if ($optionDef->acceptsValue) {
                 $options[$optionName] = (string) $optionValue;
             } else {
                 $options[$optionName] = true;
@@ -190,13 +190,20 @@ final class CliParser
             }
 
             $optionDef = $optionMap[$optionName];
+            unset($optionMap[$optionName]);
 
-            if ($optionDef->requiresValue && $optionValue === null) {
+            if ($optionDef->acceptsValue && $optionValue === null) {
                 throw new ErrorException("Option --{$optionName} requires a value");
             }
 
-            if (!$optionDef->requiresValue && $optionValue !== null) {
+            if (!$optionDef->acceptsValue && $optionValue !== null) {
                 throw new ErrorException("Option --{$optionName} does not accept a value");
+            }
+        }
+
+        foreach ($optionMap as $unusedOptionDefinition) {
+            if ($unusedOptionDefinition->isRequired) {
+                throw new ErrorException("Missing required option: --{$unusedOptionDefinition->name}");
             }
         }
     }

@@ -67,10 +67,10 @@ final class ParameterResolverTest extends TestCase
         self::assertCount(2, $definitions);
         self::assertSame('verbose', $definitions[0]->name);
         self::assertSame('Enable verbose output', $definitions[0]->description);
-        self::assertFalse($definitions[0]->requiresValue);
+        self::assertFalse($definitions[0]->acceptsValue);
 
         self::assertSame('config', $definitions[1]->name);
-        self::assertTrue($definitions[1]->requiresValue);
+        self::assertTrue($definitions[1]->acceptsValue);
     }
 
     public function testResolveParametersWithStringArgument(): void
