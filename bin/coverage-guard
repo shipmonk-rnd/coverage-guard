@@ -59,12 +59,13 @@ try {
     $parameterResolver = new ParameterResolver();
 
     $runner = new CommandRunner(
+        $stderrPrinter,
         $registry,
         new CliParser(),
         $parameterResolver,
         new HelpRenderer($parameterResolver)
     );
-    $exitCode = $runner->run($argv, $stderrPrinter);
+    $exitCode = $runner->run($argv);
     exit($exitCode);
 
 } catch (ErrorException $e) {

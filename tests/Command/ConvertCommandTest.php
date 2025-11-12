@@ -14,7 +14,7 @@ use const DIRECTORY_SEPARATOR;
 final class ConvertCommandTest extends TestCase
 {
 
-    use CommandTestTrait;
+    use StreamTestTrait;
 
     public function testConvertCloverToCobertura(): void
     {

@@ -14,7 +14,7 @@ use const DIRECTORY_SEPARATOR;
 final class MergeCommandTest extends TestCase
 {
 
-    use CommandTestTrait;
+    use StreamTestTrait;
 
     public function testMergeCoberturaCoverageFiles(): void
     {

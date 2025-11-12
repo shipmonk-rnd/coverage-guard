@@ -19,7 +19,7 @@ use function stream_get_contents;
 final class CheckCommandTest extends TestCase
 {
 
-    use CommandTestTrait;
+    use StreamTestTrait;
 
     public function testInvokeWithNonExistentCoverageFile(): void
     {

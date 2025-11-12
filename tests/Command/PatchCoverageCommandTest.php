@@ -18,7 +18,7 @@ use function stream_get_contents;
 final class PatchCoverageCommandTest extends TestCase
 {
 
-    use CommandTestTrait;
+    use StreamTestTrait;
 
     public function testGetName(): void
     {

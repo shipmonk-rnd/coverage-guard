@@ -18,6 +18,7 @@ final class CommandRunner
 {
 
     public function __construct(
+        private readonly Printer $printer,
         private readonly CommandRegistry $registry,
         private readonly CliParser $cliParser,
         private readonly ParameterResolver $parameterResolver,
@@ -34,14 +35,13 @@ final class CommandRunner
      */
     public function run(
         array $argv,
-        Printer $printer,
     ): int
     {
         array_shift($argv); // remove script name
         $commandName = array_shift($argv);
 
         if ($commandName === null || $commandName === '--help') {
-            $this->helpRenderer->renderGeneralHelp($this->registry, $printer);
+            $this->helpRenderer->renderGeneralHelp($this->registry, $this->printer);
             return 1;
         }
 
@@ -49,7 +49,7 @@ final class CommandRunner
 
         // command-specific help
         if (in_array('--help', $argv, true)) {
-            $this->helpRenderer->renderCommandHelp($command, $printer);
+            $this->helpRenderer->renderCommandHelp($command, $this->printer);
             return 1;
         }
 

@@ -13,7 +13,7 @@ use function realpath;
 use function rewind;
 use function stream_get_contents;
 
-trait CommandTestTrait
+trait StreamTestTrait
 {
 
     /**

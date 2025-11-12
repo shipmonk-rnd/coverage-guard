@@ -3,142 +3,110 @@
 namespace ShipMonk\CoverageGuard\Cli;
 
 use PHPUnit\Framework\TestCase;
-use ShipMonk\CoverageGuard\Command\ConvertCommand;
-use ShipMonk\CoverageGuard\CoverageProvider;
+use ShipMonk\CoverageGuard\Command\Command;
+use ShipMonk\CoverageGuard\Command\StreamTestTrait;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
-use ShipMonk\CoverageGuard\Utils\ConfigResolver;
-use function fopen;
-use function rewind;
-use function stream_get_contents;
 
 final class CommandRunnerTest extends TestCase
 {
 
+    use StreamTestTrait;
+
     public function testRunConvertCommandHappyPath(): void
     {
-        $registry = new CommandRegistry();
-        $outputStream = $this->createMemoryStream();
-        $printer = new Printer($outputStream, noColor: true);
-        $configResolver = new ConfigResolver(__DIR__);
+        $runner = $this->createRunner();
 
-        $registry->register(new ConvertCommand(new CoverageProvider($printer), $configResolver, $outputStream));
-        $runner = $this->createRunner($registry);
+        $argv = ['coverage-guard', 'test', 'arg', '--option=value'];
 
-        $printerStream = $this->createMemoryStream();
-        $printer = new Printer($printerStream, noColor: true);
+        $exitCode = $runner->run($argv);
 
-        $inputFile = __DIR__ . '/../_fixtures/ConvertCommand/clover.xml';
-        $argv = ['coverage-guard', 'convert', $inputFile, '--format', 'cobertura'];
-
-        $exitCode = $runner->run($argv, $printer);
-
-        self::assertSame(0, $exitCode);
-
-        $output = $this->getStreamContents($outputStream);
-        self::assertStringContainsString('<?xml version=', $output);
-        self::assertStringContainsString('<coverage', $output);
+        self::assertSame(1234, $exitCode);
     }
 
     public function testRunCommandWithHelp(): void
     {
-        $registry = new CommandRegistry();
-        $outputStream = $this->createMemoryStream();
-        $printer = new Printer($outputStream, noColor: true);
-        $configResolver = new ConfigResolver(__DIR__);
+        $stream = $this->createStream();
+        $runner = $this->createRunner($stream);
 
-        $registry->register(new ConvertCommand(new CoverageProvider($printer), $configResolver, $outputStream));
-        $runner = $this->createRunner($registry);
+        $argv = ['coverage-guard', 'test', '--help'];
 
-        $printerStream = $this->createMemoryStream();
-        $printer = new Printer($printerStream, noColor: true);
-
-        $argv = ['coverage-guard', 'convert', '--help'];
-
-        $exitCode = $runner->run($argv, $printer);
+        $exitCode = $runner->run($argv);
 
         self::assertSame(1, $exitCode);
 
-        $output = $this->getStreamContents($printerStream);
-        self::assertStringContainsString('convert', $output);
-        self::assertStringContainsString('Usage:', $output);
+        $expectedFile = __DIR__ . '/../_fixtures/CommandRunnerTest/command-help-expected.txt';
+        $this->assertStreamMatchesFile($stream, $expectedFile);
     }
 
     public function testRunWithNoArguments(): void
     {
-        $registry = new CommandRegistry();
-        $stream = $this->createMemoryStream();
-        $printer = new Printer($stream, noColor: true);
-        $configResolver = new ConfigResolver(__DIR__);
-        $registry->register(new ConvertCommand(new CoverageProvider($printer), $configResolver));
-        $runner = $this->createRunner($registry);
-
-        $printerStream = $this->createMemoryStream();
-        $printer = new Printer($printerStream, noColor: true);
+        $stream = $this->createStream();
+        $runner = $this->createRunner($stream);
 
         $argv = ['coverage-guard'];
 
-        $exitCode = $runner->run($argv, $printer);
+        $exitCode = $runner->run($argv);
 
         self::assertSame(1, $exitCode);
 
-        $output = $this->getStreamContents($printerStream);
-        self::assertStringContainsString('Usage:', $output);
+        $expectedFile = __DIR__ . '/../_fixtures/CommandRunnerTest/no-arguments-expected.txt';
+        $this->assertStreamMatchesFile($stream, $expectedFile);
     }
 
     public function testRunWithUnknownCommand(): void
     {
-        $registry = new CommandRegistry();
-        $stream = $this->createMemoryStream();
-        $printer = new Printer($stream, noColor: true);
-        $configResolver = new ConfigResolver(__DIR__);
-        $registry->register(new ConvertCommand(new CoverageProvider($printer), $configResolver));
-        $runner = $this->createRunner($registry);
-
-        $printerStream = $this->createMemoryStream();
-        $printer = new Printer($printerStream, noColor: true);
+        $runner = $this->createRunner();
 
         $argv = ['coverage-guard', 'unknown-command'];
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Unknown command: unknown-command');
 
-        $runner->run($argv, $printer);
+        $runner->run($argv);
     }
 
     /**
-     * @return resource
+     * @param resource|null $outputStream
      */
-    private function createMemoryStream()
+    private function createRunner(mixed $outputStream = null): CommandRunner
     {
-        $stream = fopen('php://memory', 'w+');
-        self::assertNotFalse($stream);
+        $registry = new CommandRegistry();
+        $registry->register(new class implements Command {
 
-        return $stream;
-    }
+            public function __invoke(
+                #[CliArgument(description: 'Argument description')]
+                string $argument,
 
-    private function createRunner(CommandRegistry $registry): CommandRunner
-    {
+                #[CliOption(description: 'Option description')]
+                string $option,
+            ): int
+            {
+                return 1234;
+            }
+
+            public function getName(): string
+            {
+                return 'test';
+            }
+
+            public function getDescription(): string
+            {
+                return 'Test command';
+            }
+
+        });
+
+        $stream = $outputStream ?? $this->createStream();
         $parameterResolver = new ParameterResolver();
 
         return new CommandRunner(
+            new Printer($stream, noColor: true),
             $registry,
             new CliParser(),
             $parameterResolver,
             new HelpRenderer($parameterResolver),
         );
-    }
-
-    /**
-     * @param resource $stream
-     */
-    private function getStreamContents($stream): string
-    {
-        rewind($stream);
-        $contents = stream_get_contents($stream);
-        self::assertNotFalse($contents);
-
-        return $contents;
     }
 
 }

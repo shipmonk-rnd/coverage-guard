@@ -1,0 +1,11 @@
+Test command
+
+Usage:
+  coverage-guard test <argument> [options]
+
+Arguments:
+  argument
+    Argument description
+
+Options:
+  --option <value>         Option description (required)
