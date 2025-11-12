@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Cli;
 
 use LogicException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use function array_key_exists;
 use function count;
 use function explode;
 use function implode;
@@ -83,6 +84,11 @@ final class CliParser
 
             if (str_starts_with($arg, '--')) {
                 [$optionName, $optionValue] = $this->extractOptionNameAndValue($arg, $args, $i, $optionMap);
+
+                if (array_key_exists($optionName, $options)) {
+                    throw new ErrorException("Option --{$optionName} cannot be specified multiple times");
+                }
+
                 $options[$optionName] = $optionValue;
             } else {
                 $arguments[] = $arg;
@@ -105,8 +111,6 @@ final class CliParser
      * @param int $i Current index (will be modified if value is in next argument)
      * @param array<string, OptionDefinition> $optionMap
      * @return array{string, string|null}
-     *
-     * @throws ErrorException
      */
     private function extractOptionNameAndValue(
         string $arg,
@@ -121,10 +125,7 @@ final class CliParser
         // Check for --option=value syntax
         if (str_contains($optionName, '=')) {
             $parts = explode('=', $optionName, 2);
-            if (count($parts) !== 2) {
-                throw new ErrorException("Invalid option format: --{$optionName}");
-            }
-            [$optionName, $optionValue] = $parts;
+            [$optionName, $optionValue] = $parts; // @phpstan-ignore offsetAccess.notFound (ensured by str_contains check)
 
         } elseif (isset($args[$i + 1])) {
             $nextArg = $args[$i + 1];

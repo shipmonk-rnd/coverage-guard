@@ -242,4 +242,46 @@ final class CliParserTest extends TestCase
         $parser->parse(['--verbose=something'], [], $options);
     }
 
+    public function testParseDuplicateBooleanOptionThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', requiresValue: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Option --verbose cannot be specified multiple times');
+
+        $parser->parse(['--verbose', '--verbose'], [], $options);
+    }
+
+    public function testParseDuplicateOptionWithValueThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('config', 'Config file', requiresValue: true),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Option --config cannot be specified multiple times');
+
+        $parser->parse(['--config', 'first.php', '--config', 'second.php'], [], $options);
+    }
+
+    public function testParseDuplicateOptionWithEqualsSignThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('config', 'Config file', requiresValue: true),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Option --config cannot be specified multiple times');
+
+        $parser->parse(['--config=first.php', '--config=second.php'], [], $options);
+    }
+
 }
