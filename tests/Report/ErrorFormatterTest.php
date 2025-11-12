@@ -78,10 +78,10 @@ final class ErrorFormatterTest extends TestCase
     ): string
     {
         $stream = $this->createMemoryStream();
-        $formatter = $this->createErrorFormatter($stream, $config);
+        $formatter = $this->createErrorFormatter($stream);
         $report = $this->createCoverageReport($lines, patchMode: $patchMode);
 
-        $formatter->formatReport($report);
+        $formatter->formatReport($report, $config->getEditorUrl());
 
         return $this->getStreamContents($stream);
     }
@@ -102,13 +102,11 @@ final class ErrorFormatterTest extends TestCase
      */
     private function createErrorFormatter(
         $stream,
-        Config $config,
     ): ErrorFormatter
     {
         return new ErrorFormatter(
             new PathHelper('/tmp'),
             new Printer($stream, noColor: false),
-            $config,
         );
     }
 

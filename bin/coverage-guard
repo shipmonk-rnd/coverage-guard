@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use PhpParser\ParserFactory;
 use ShipMonk\CoverageGuard\Cli\CliParser;
 use ShipMonk\CoverageGuard\Cli\CommandRegistry;
 use ShipMonk\CoverageGuard\Cli\CommandRunner;
@@ -11,9 +12,12 @@ use ShipMonk\CoverageGuard\Command\ConvertCommand;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
+use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 
@@ -41,9 +45,13 @@ try {
     $patchParser = new PatchParser($cwd, $stderrPrinter);
     $configResolver = new ConfigResolver($cwd);
     $extractorFactory = new CoverageProvider($stderrPrinter);
+    $pathHelper = new PathHelper($cwd);
+    $phpParser = (new ParserFactory())->createForHostVersion();
+    $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $extractorFactory);
+    $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
 
     $registry = new CommandRegistry();
-    $registry->register(new CheckCommand($cwd, $stderrPrinter, $stdoutPrinter, $configResolver, $patchParser, $extractorFactory));
+    $registry->register(new CheckCommand($configResolver, $coverageGuard, $errorFormatter));
     $registry->register(new MergeCommand($extractorFactory, new CoverageMerger(), $configResolver));
     $registry->register(new ConvertCommand($extractorFactory, $configResolver));
     $registry->register(new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, $extractorFactory));

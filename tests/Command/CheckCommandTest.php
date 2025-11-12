@@ -2,10 +2,14 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function fclose;
@@ -112,7 +116,13 @@ final class CheckCommandTest extends TestCase
         $stderrPrinter = new Printer($stderrStream, noColor: true);
         $stdoutPrinter = new Printer($stdoutStream, noColor: true);
         $configResolver = new ConfigResolver($cwd);
-        return new CheckCommand($cwd, $stderrPrinter, $stdoutPrinter, $configResolver, new PatchParser($cwd, $stderrPrinter), new CoverageProvider($stderrPrinter));
+        $pathHelper = new PathHelper($cwd);
+        $phpParser = (new ParserFactory())->createForHostVersion();
+        $patchParser = new PatchParser($cwd, $stderrPrinter);
+        $extractorFactory = new CoverageProvider($stderrPrinter);
+        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $extractorFactory);
+        $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
+        return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);
     }
 
 }

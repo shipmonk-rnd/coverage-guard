@@ -36,9 +36,9 @@ final class CoverageGuardTest extends TestCase
             $adjustConfig($config);
         }
 
-        $guard = $this->createCoverageGuard($config);
+        $guard = $this->createCoverageGuard();
 
-        $report = $guard->checkCoverage(...$args);
+        $report = $guard->checkCoverage($config, ...$args);
         $errors = $report->reportedErrors;
 
         self::assertCount(1, $errors);
@@ -87,8 +87,9 @@ final class CoverageGuardTest extends TestCase
 
     public function testHandlesFileWithMissingNewlineAtEof(): void
     {
+        $config = $this->createConfig();
         $guard = $this->createCoverageGuard();
-        $report = $guard->checkCoverage(__DIR__ . '/_fixtures/CoverageGuardTest/clover-no-newline.xml', patchFile: null, verbose: true);
+        $report = $guard->checkCoverage($config, __DIR__ . '/_fixtures/CoverageGuardTest/clover-no-newline.xml', patchFile: null, verbose: true);
 
         // The test passes if no exception is thrown about line count mismatch
         self::assertSame([], $report->reportedErrors);
@@ -101,9 +102,10 @@ final class CoverageGuardTest extends TestCase
         $config = $this->createConfig();
         $config->addRule($this->createFullyUncoveredAndFullyChangedRule());
 
-        $guard = $this->createCoverageGuard($config);
+        $guard = $this->createCoverageGuard();
 
         $report = $guard->checkCoverage(
+            $config,
             __DIR__ . '/_fixtures/CoverageGuardTest/clover-windows.xml',
             __DIR__ . '/_fixtures/CoverageGuardTest/sample-windows.patch',
             false,
@@ -122,9 +124,10 @@ final class CoverageGuardTest extends TestCase
         self::assertNotFalse($stream);
 
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
+        $config = $this->createConfig();
         $guard = $this->createCoverageGuard(printer: $printer);
 
-        $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', patchFile: null, verbose: true);
+        $guard->checkCoverage($config, __DIR__ . '/_fixtures/clover.xml', patchFile: null, verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);
@@ -141,9 +144,10 @@ final class CoverageGuardTest extends TestCase
         self::assertNotFalse($stream);
 
         $printer = new Printer($stream, noColor: true); // No color for easier assertions
+        $config = $this->createConfig();
         $guard = $this->createCoverageGuard(printer: $printer);
 
-        $guard->checkCoverage(__DIR__ . '/_fixtures/clover.xml', __DIR__ . '/_fixtures/sample.patch', verbose: true);
+        $guard->checkCoverage($config, __DIR__ . '/_fixtures/clover.xml', __DIR__ . '/_fixtures/sample.patch', verbose: true);
 
         rewind($stream);
         $output = stream_get_contents($stream);
@@ -156,9 +160,11 @@ final class CoverageGuardTest extends TestCase
 
     private function checkCoverageWithPatch(string $patchFile): void
     {
+        $config = $this->createConfig();
         $guard = $this->createCoverageGuard();
 
         $guard->checkCoverage(
+            $config,
             __DIR__ . '/_fixtures/clover.xml',
             $patchFile,
             false,
@@ -173,19 +179,17 @@ final class CoverageGuardTest extends TestCase
     }
 
     private function createCoverageGuard(
-        ?Config $config = null,
         ?Printer $printer = null,
     ): CoverageGuard
     {
         $cwd = __DIR__ . '/../';
         $printer ??= $this->createPrinter();
-        $config ??= $this->createConfig();
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
         $extractorFactory = new CoverageProvider($printer);
 
-        return new CoverageGuard($printer, $phpParser, $config, $pathHelper, $patchParser, $extractorFactory);
+        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $extractorFactory);
     }
 
     private function createPrinter(bool $noColor = false): Printer

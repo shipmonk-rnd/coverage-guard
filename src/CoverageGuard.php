@@ -31,7 +31,6 @@ final class CoverageGuard
     public function __construct(
         private readonly Printer $printer,
         private readonly PhpParser $phpParser,
-        private readonly Config $config,
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
         private readonly CoverageProvider $extractorFactory,
@@ -43,18 +42,19 @@ final class CoverageGuard
      * @throws ErrorException
      */
     public function checkCoverage(
+        Config $config,
         string $coverageFile,
         ?string $patchFile,
         bool $verbose,
     ): CoverageReport
     {
         $patchMode = $patchFile !== null;
-        $coveragePerFile = $this->extractorFactory->getCoverage($this->config, $coverageFile);
+        $coveragePerFile = $this->extractorFactory->getCoverage($config, $coverageFile);
         $changesPerFile = $patchFile === null
             ? array_fill_keys(array_keys($coveragePerFile), null)
-            : $this->patchParser->getPatchChangedLines($patchFile, $this->config);
+            : $this->patchParser->getPatchChangedLines($patchFile, $config);
 
-        $rules = $this->config->getRules();
+        $rules = $config->getRules();
         if ($rules === []) {
             $this->printer->printWarning('No rules configured, will report only long fully untested methods!');
 

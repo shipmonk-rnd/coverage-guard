@@ -2,7 +2,6 @@
 
 namespace ShipMonk\CoverageGuard\Report;
 
-use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\PathHelper;
@@ -117,24 +116,17 @@ final class ErrorFormatter
     private const BG_COVERED = "\033[48;5;22m"; // Dark green background
     private const BG_UNCOVERED = "\033[48;5;52m"; // Dark red background
 
-    private readonly PathHelper $pathHelper;
-
-    private readonly Printer $printer;
-
-    private readonly ?string $editorUrl;
-
     public function __construct(
-        PathHelper $pathHelper,
-        Printer $printer,
-        Config $config,
+        private readonly PathHelper $pathHelper,
+        private readonly Printer $printer,
     )
     {
-        $this->pathHelper = $pathHelper;
-        $this->printer = $printer;
-        $this->editorUrl = $config->getEditorUrl();
     }
 
-    public function formatReport(CoverageReport $report): int
+    public function formatReport(
+        CoverageReport $report,
+        ?string $editorUrl = null,
+    ): int
     {
         $reportedErrors = $report->reportedErrors;
         $analysedFilesCount = count($report->analysedFiles);
@@ -149,7 +141,7 @@ final class ErrorFormatter
         }
 
         foreach ($reportedErrors as $reportedError) {
-            $this->formatError($reportedError, $report->patchMode);
+            $this->formatError($reportedError, $report->patchMode, $editorUrl);
         }
 
         $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues (in $analysedFilesCount analysed file$plural)");
@@ -161,6 +153,7 @@ final class ErrorFormatter
     private function formatError(
         ReportedError $reportedError,
         bool $patchMode,
+        ?string $editorUrl,
     ): void
     {
         $codeBlock = $reportedError->codeBlock;
@@ -172,6 +165,7 @@ final class ErrorFormatter
             $fileLocation,
             $codeBlock->getFilePath(),
             $codeBlock->getStartLineNumber(),
+            $editorUrl,
         );
 
         $this->printer->printLine('┌─────────────────────────────────────────────────────────────────────────────────');
@@ -189,9 +183,10 @@ final class ErrorFormatter
         string $text,
         string $filePath,
         int $line,
+        ?string $editorUrl,
     ): string
     {
-        if ($this->editorUrl === null) {
+        if ($editorUrl === null) {
             return $text;
         }
 
@@ -202,7 +197,7 @@ final class ErrorFormatter
         $url = str_replace(
             ['{relFile}', '{file}', '{line}'],
             [$this->pathHelper->relativizePath($filePath), $filePath, (string) $line],
-            $this->editorUrl,
+            $editorUrl,
         );
 
         // OSC 8 hyperlink

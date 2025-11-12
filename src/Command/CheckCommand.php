@@ -2,28 +2,20 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use PhpParser\ParserFactory;
 use ShipMonk\CoverageGuard\Cli\CliArgument;
 use ShipMonk\CoverageGuard\Cli\CliOption;
 use ShipMonk\CoverageGuard\CoverageGuard;
-use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\PathHelper;
-use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
-use ShipMonk\CoverageGuard\Utils\PatchParser;
 
 final class CheckCommand implements Command
 {
 
     public function __construct(
-        private readonly string $cwd,
-        private readonly Printer $stderrPrinter,
-        private readonly Printer $stdoutPrinter,
         private readonly ConfigResolver $configResolver,
-        private readonly PatchParser $patchParser,
-        private readonly CoverageProvider $extractorFactory,
+        private readonly CoverageGuard $coverageGuard,
+        private readonly ErrorFormatter $errorFormatter,
     )
     {
     }
@@ -46,16 +38,9 @@ final class CheckCommand implements Command
     ): int
     {
         $config = $this->configResolver->resolveConfig($configPath);
+        $coverageReport = $this->coverageGuard->checkCoverage($config, $coverageFile, $patchFile, $verbose);
 
-        $pathHelper = new PathHelper($this->cwd);
-        $formatter = new ErrorFormatter($pathHelper, $this->stdoutPrinter, $config);
-        $phpParser = (new ParserFactory())->createForHostVersion();
-
-        $guard = new CoverageGuard($this->stderrPrinter, $phpParser, $config, $pathHelper, $this->patchParser, $this->extractorFactory);
-
-        $coverageReport = $guard->checkCoverage($coverageFile, $patchFile, $verbose);
-
-        return $formatter->formatReport($coverageReport);
+        return $this->errorFormatter->formatReport($coverageReport, $config->getEditorUrl());
     }
 
     public function getName(): string
