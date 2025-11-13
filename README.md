@@ -109,7 +109,6 @@ This allows you to setup huge variety of rules, examples:
 
 ## Global CLI options
 
-- `--verbose` show detailed processing information
 - `--help` show generic help (or command help when combined with command name)
 - `--no-color` to disable colors (`NO_COLOR` env is also supported)
 - `--color` to force colors even when output is not a TTY
