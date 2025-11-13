@@ -118,11 +118,11 @@ final class CoverageProvider
             throw new ErrorException("Failed to read file: {$xmlFile}");
         }
 
-        if (str_contains($content, 'cobertura')) {
-            return new CoberturaCoverageExtractor($xmlLoader);
+        if (str_contains($content, '<project')) {
+            return new CloverCoverageExtractor($xmlLoader);
         }
 
-        return new CloverCoverageExtractor($xmlLoader);
+        return new CoberturaCoverageExtractor($xmlLoader);
     }
 
     private function mapCoverageFilePath(
