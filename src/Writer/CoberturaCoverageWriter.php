@@ -94,7 +94,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
         $globalLineRate = $globalLinesValid > 0 ? $globalLinesCovered / $globalLinesValid : 0.0;
 
         $coverage = $dom->createElement('coverage');
-        $coverage->setAttribute('line-rate', number_format($globalLineRate, decimals: 14));
+        $coverage->setAttribute('line-rate', number_format($globalLineRate, decimals: 3));
         $coverage->setAttribute('branch-rate', '0');
         $coverage->setAttribute('lines-covered', (string) $globalLinesCovered);
         $coverage->setAttribute('lines-valid', (string) $globalLinesValid);
@@ -224,7 +224,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
     {
         $packageElement = $dom->createElement('package');
         $packageElement->setAttribute('name', $packageName);
-        $packageElement->setAttribute('line-rate', number_format($lineRate, decimals: 14));
+        $packageElement->setAttribute('line-rate', number_format($lineRate, decimals: 3));
         $packageElement->setAttribute('branch-rate', '0');
         $packageElement->setAttribute('complexity', '0');
 
@@ -248,7 +248,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
         $classElement = $dom->createElement('class');
         $classElement->setAttribute('name', $className);
         $classElement->setAttribute('filename', $relativeFilename);
-        $classElement->setAttribute('line-rate', number_format($lineRate, decimals: 14));
+        $classElement->setAttribute('line-rate', number_format($lineRate, decimals: 3));
         $classElement->setAttribute('branch-rate', '0');
         $classElement->setAttribute('complexity', '0');
 
