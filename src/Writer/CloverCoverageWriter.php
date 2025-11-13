@@ -30,7 +30,7 @@ final class CloverCoverageWriter implements CoverageWriter
         try {
             $dom = $this->generateXml($fileCoverages);
         } catch (DOMException $e) {
-            throw new LogicException('Failed to generate cobertura XML: ' . $e->getMessage(), 0, $e);
+            throw new LogicException('Failed to generate clover XML: ' . $e->getMessage(), 0, $e);
         }
         $xml = $dom->saveXML();
 
