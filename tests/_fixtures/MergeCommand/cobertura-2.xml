@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.66666666666667" branch-rate="0" lines-covered="2" lines-valid="3" branches-covered="0" branches-valid="0" complexity="2" version="0.4" timestamp="1700000100">
+<coverage line-rate="0.667" branch-rate="0" lines-covered="2" lines-valid="3" branches-covered="0" branches-valid="0" complexity="2" version="0.4" timestamp="1700000100">
     <sources>
         <source>/app/backend/src</source>
     </sources>
     <packages>
-        <package name="Example.php" line-rate="0.66666666666667" branch-rate="0" complexity="2">
+        <package name="Example.php" line-rate="0.667" branch-rate="0" complexity="2">
             <classes>
-                <class name="Example\ExampleClass" filename="Example.php" line-rate="0.66666666666667" branch-rate="0" complexity="2">
+                <class name="Example\ExampleClass" filename="Example.php" line-rate="0.667" branch-rate="0" complexity="2">
                     <methods>
                         <method name="methodA" signature="" line-rate="1" branch-rate="0" complexity="1">
                             <lines>
