@@ -3,7 +3,6 @@
 namespace ShipMonk\CoverageGuard\Utils;
 
 use Composer\InstalledVersions;
-use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
@@ -20,6 +19,7 @@ use function str_starts_with;
 use function strlen;
 use function substr;
 use function trim;
+use const DIRECTORY_SEPARATOR;
 
 final class PatchParser
 {
@@ -159,13 +159,8 @@ final class PatchParser
             if ($detected === null) {
                 throw new ErrorException('In order to process patch files, you need to be inside git repository folder, install git or specify git root');
             }
-            $config->setGitRoot($detected);
-            // Get the normalized path with separator from config
-            $gitRoot = $config->getGitRoot();
-            if ($gitRoot === null) {
-                throw new LogicException('We just set non-nullable value, get/set broken');
-            }
-            return $gitRoot;
+
+            return FileUtils::realpath($detected) . DIRECTORY_SEPARATOR;
         }
 
         return $gitRoot;
