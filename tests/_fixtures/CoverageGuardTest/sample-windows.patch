@@ -1,0 +1,15 @@
+diff --git a/tests/_fixtures/CoverageGuardTest/SampleWindows.php b/tests/_fixtures/CoverageGuardTest/SampleWindows.php
+index 1234567..abcdefg 100644
+--- a/tests/_fixtures/CoverageGuardTest/SampleWindows.php
++++ b/tests/_fixtures/CoverageGuardTest/SampleWindows.php
+@@ -10,4 +10,10 @@ class SampleWindows
+         return 42;
+     }
+
+-    // TODO: implement this
++    public function untestedMethod(): string
++    {
++        return 'hello';
++    }
++
+ }

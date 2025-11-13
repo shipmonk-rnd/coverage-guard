@@ -6,7 +6,10 @@ use LogicException;
 use function array_keys;
 use function array_values;
 use function fwrite;
+use function getenv;
+use function in_array;
 use function str_replace;
+use function stream_isatty;
 use const PHP_EOL;
 
 final class Printer
@@ -26,22 +29,29 @@ final class Printer
     ];
 
     /**
-     * @var resource
-     */
-    private $resource;
-
-    private bool $noColor;
-
-    /**
      * @param resource $resource
      */
     public function __construct(
-        $resource,
-        bool $noColor,
+        private readonly mixed $resource,
+        private readonly bool $noColor,
     )
     {
-        $this->resource = $resource;
-        $this->noColor = $noColor;
+    }
+
+    /**
+     * @param resource $resource
+     * @param list<string> $argv
+     */
+    public static function create(
+        $resource,
+        array $argv,
+    ): self
+    {
+        $noColor = in_array('--no-color', $argv, true)
+            || getenv('NO_COLOR') !== false
+            || (!stream_isatty($resource) && !in_array('--color', $argv, true));
+
+        return new self($resource, $noColor);
     }
 
     public function hasDisabledColors(): bool

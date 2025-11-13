@@ -13,13 +13,14 @@ final class BinTest extends TestCase
     public function testBinDetectsUntestedChangedMethod(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
@@ -43,12 +44,13 @@ final class BinTest extends TestCase
     public function testBinSucceedsWithNoCoverageIssues(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover_with_package.xml';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest-no-rule.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover_with_package.xml';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest-no-rule.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--config',
             escapeshellarg($configFile),
@@ -79,25 +81,27 @@ final class BinTest extends TestCase
         self::assertSame(1, $exitCode, 'Expected exit code 1 on invalid arguments');
 
         $outputString = implode("\n", $output);
-        self::assertStringContainsString('Error', $outputString, 'Expected error message in output');
+        self::assertStringContainsString('Available commands:', $outputString, 'Expected help message in output');
     }
 
     public function testBinWithNoColorFlag(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
             '--config',
             escapeshellarg($configFile),
             '--no-color',
+            '2>&1',
         ]);
 
         $output = [];
@@ -112,13 +116,14 @@ final class BinTest extends TestCase
     public function testBinWithColorFlag(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),
@@ -140,13 +145,14 @@ final class BinTest extends TestCase
     public function testBinDefaultBehaviorWithoutTty(): void
     {
         $binPath = __DIR__ . '/../bin/coverage-guard';
-        $coverageFile = __DIR__ . '/fixtures/clover.xml';
-        $patchFile = __DIR__ . '/fixtures/sample.patch';
-        $configFile = __DIR__ . '/fixtures/config-for-bintest.php';
+        $coverageFile = __DIR__ . '/_fixtures/clover.xml';
+        $patchFile = __DIR__ . '/_fixtures/sample.patch';
+        $configFile = __DIR__ . '/_fixtures/config-for-bintest.php';
 
         $command = implode(' ', [
             'php',
             escapeshellarg($binPath),
+            'check',
             escapeshellarg($coverageFile),
             '--patch',
             escapeshellarg($patchFile),

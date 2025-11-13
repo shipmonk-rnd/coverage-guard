@@ -18,8 +18,10 @@ final class XmlLoader
      */
     public function readXml(string $xmlFile): SimpleXMLElement
     {
-        if (!extension_loaded('simplexml')) {
-            throw new ErrorException('In order to use xml coverage files, you need to enable the simplexml extension');
+        foreach (['simplexml', 'libxml'] as $ext) {
+            if (!extension_loaded($ext)) {
+                throw new ErrorException("In order to use xml coverage files, you need to enable the $ext extension");
+            }
         }
 
         $libXmlErrorsOld = libxml_use_internal_errors(true);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage line-rate="1.00000000000000" branch-rate="0" lines-covered="2" lines-valid="2" branches-covered="0" branches-valid="0" complexity="0" version="0.4" timestamp="dummy">
+    <sources>
+        <source>/new/absolute/src/Foo</source>
+    </sources>
+    <packages>
+        <package name="ClassA.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+            <classes>
+                <class name="ClassA" filename="ClassA.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+                    <methods/>
+                    <lines>
+                        <line number="10" hits="5"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+        <package name="Bar/ClassB.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+            <classes>
+                <class name="ClassB" filename="Bar/ClassB.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+                    <methods/>
+                    <lines>
+                        <line number="10" hits="3"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
+</coverage>

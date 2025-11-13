@@ -1,8 +1,9 @@
 {
-  "Exclude": [
-    "tests/fixtures/SampleWindows.php",
-    "tests/fixtures/SampleNoNewline.php",
-    "tests/fixtures/clover-windows.xml",
-    "tests/fixtures/sample-windows.patch"
-  ]
+    "Exclude": [
+        "tests/_fixtures/CommandRunnerTest",
+        "tests/_fixtures/CoverageGuardTest/SampleWindows.php",
+        "tests/_fixtures/CoverageGuardTest/SampleNoNewline.php",
+        "tests/_fixtures/CoverageGuardTest/clover-windows.xml",
+        "tests/_fixtures/CoverageGuardTest/sample-windows.patch"
+    ]
 }

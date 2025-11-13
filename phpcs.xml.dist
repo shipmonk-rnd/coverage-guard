@@ -12,7 +12,7 @@
     <file>coverage-guard.php</file>
     <file>composer-dependency-analyser.php</file>
 
-    <exclude-pattern>tests/fixtures/*</exclude-pattern>
+    <exclude-pattern>tests/_fixtures/*</exclude-pattern>
 
     <config name="php_version" value="80100"/>
     <config name="installed_paths" value="vendor/slevomat/coding-standard,vendor/shipmonk/coding-standard"/>

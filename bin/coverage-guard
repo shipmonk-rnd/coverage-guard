@@ -1,13 +1,25 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use PhpParser\ParserFactory;
+use ShipMonk\CoverageGuard\Cli\CliParser;
+use ShipMonk\CoverageGuard\Cli\CommandRegistry;
+use ShipMonk\CoverageGuard\Cli\CommandRunner;
+use ShipMonk\CoverageGuard\Cli\HelpRenderer;
+use ShipMonk\CoverageGuard\Cli\ParameterResolver;
+use ShipMonk\CoverageGuard\Command\CheckCommand;
+use ShipMonk\CoverageGuard\Command\ConvertCommand;
+use ShipMonk\CoverageGuard\Command\MergeCommand;
+use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
+use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageGuard;
+use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use ShipMonk\CoverageGuard\Exception\HelpException;
-use ShipMonk\CoverageGuard\Initializer;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
+use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\PatchParser;
 
 $autoloadPaths = [
     __DIR__ . '/../vendor/autoload.php',
@@ -22,48 +34,49 @@ foreach ($autoloadPaths as $autoloadPath) {
 }
 
 $cwd = getcwd();
-$noColor = in_array('--no-color', $argv, true)
-    || getenv('NO_COLOR') !== false
-    || (!stream_isatty(STDOUT) && !in_array('--color', $argv, true));
-
-$printer = new Printer(STDOUT, $noColor);
-
 if ($cwd === false) {
-    throw new LogicException('Cannot determine current working directory via getcwd()');
+    throw new LogicException('Cannot determine current working directory');
 }
 
+$stderrPrinter = Printer::create(STDERR, $argv);
+$stdoutPrinter = Printer::create(STDOUT, $argv);
+
 try {
-    $initializer = new Initializer($printer);
-    $initResult = $initializer->initialize($cwd, $argv);
-    $verbose = $initResult->cliOptions->verbose;
-
+    $patchParser = new PatchParser($cwd, $stderrPrinter);
+    $configResolver = new ConfigResolver($cwd);
+    $coverageProvider = new CoverageProvider($stderrPrinter);
     $pathHelper = new PathHelper($cwd);
-    $formatter = new ErrorFormatter($pathHelper, $printer, $initResult->config);
-    $guard = new CoverageGuard($initResult->config, $printer, $pathHelper);
-    $coverageReport = $guard->checkCoverage(
-        $initResult->cliOptions->coverageFile,
-        $initResult->cliOptions->patchFile,
-        $initResult->cliOptions->verbose,
-    );
+    $phpParser = (new ParserFactory())->createForHostVersion();
+    $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider);
+    $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
 
-    $exitCode = $formatter->formatReport($coverageReport);
+    $registry = new CommandRegistry();
+    $registry->register(new CheckCommand($configResolver, $coverageGuard, $errorFormatter));
+    $registry->register(new MergeCommand($coverageProvider, new CoverageMerger(), $configResolver));
+    $registry->register(new ConvertCommand($coverageProvider, $configResolver));
+    $registry->register(new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, $coverageProvider));
+
+    $parameterResolver = new ParameterResolver();
+
+    $runner = new CommandRunner(
+        $stderrPrinter,
+        $registry,
+        new CliParser(),
+        $parameterResolver,
+        new HelpRenderer($parameterResolver)
+    );
+    $exitCode = $runner->run($argv);
     exit($exitCode);
 
-} catch (HelpException $e) {
-    $printer->printLine('');
-    $printer->printLine($e->getMessage());
-    $printer->printLine('');
-    exit(1);
-
 } catch (ErrorException $e) {
-    $printer->printLine('');
-    $printer->printLine('⚠️  <orange>Error:</orange> ' . $e->getMessage());
-    $printer->printLine('');
+    $stderrPrinter->printLine('');
+    $stderrPrinter->printLine('⚠️  <orange>Error:</orange> ' . $e->getMessage());
+    $stderrPrinter->printLine('');
     exit(1);
 
 } catch (Throwable $e) {
-    $printer->printLine('');
-    $printer->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
-    $printer->printLine($e->getTraceAsString());
+    $stderrPrinter->printLine('');
+    $stderrPrinter->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
+    $stderrPrinter->printLine($e->getTraceAsString());
     exit(1);
 }

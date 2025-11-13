@@ -2,12 +2,11 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use LogicException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Utils\FileUtils;
 use function file_exists;
 use function is_dir;
-use function realpath;
 use const DIRECTORY_SEPARATOR;
 
 /**
@@ -43,7 +42,7 @@ final class Config
             throw new ErrorException("Provided git root '$gitRoot' is not a directory");
         }
 
-        $this->gitRoot = $this->realpath($gitRoot) . DIRECTORY_SEPARATOR;
+        $this->gitRoot = FileUtils::realpath($gitRoot) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
@@ -115,15 +114,6 @@ final class Config
     public function getEditorUrl(): ?string
     {
         return $this->editorUrl;
-    }
-
-    private function realpath(string $path): string
-    {
-        $realpath = realpath($path);
-        if ($realpath === false) {
-            throw new LogicException("Could not realpath '$path'");
-        }
-        return $realpath;
     }
 
 }

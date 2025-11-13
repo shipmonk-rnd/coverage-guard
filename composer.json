@@ -18,7 +18,7 @@
     "require-dev": {
         "editorconfig-checker/editorconfig-checker": "10.7.0",
         "ergebnis/composer-normalize": "2.48.2",
-        "phpstan/phpstan": "2.1.29",
+        "phpstan/phpstan": "2.1.31",
         "phpstan/phpstan-phpunit": "2.0.7",
         "phpstan/phpstan-strict-rules": "2.0.7",
         "phpunit/php-code-coverage": "^10.1",
@@ -38,7 +38,10 @@
     "autoload-dev": {
         "psr-4": {
             "ShipMonk\\CoverageGuard\\": "tests/"
-        }
+        },
+        "classmap": [
+            "tests/_fixtures/"
+        ]
     },
     "bin": [
         "bin/coverage-guard"
@@ -63,14 +66,15 @@
         "check:collisions": "detect-collisions src tests",
         "check:composer": [
             "composer normalize --dry-run --no-update-lock",
-            "composer validate --strict"
+            "composer validate --strict",
+            "composer dump -o --strict-psr"
         ],
         "check:cs": "phpcs",
         "check:dependencies": "composer-dependency-analyser",
         "check:ec": "ec src tests",
         "check:self": [
             "XDEBUG_MODE=coverage phpunit tests --coverage-clover cache/clover.xml",
-            "bin/coverage-guard cache/clover.xml"
+            "bin/coverage-guard check cache/clover.xml"
         ],
         "check:tests": "phpunit tests",
         "check:types": "phpstan analyse -vv --ansi",

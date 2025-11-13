@@ -16,20 +16,22 @@ parameters:
         - tests
     excludePaths:
         analyseAndScan:
-            - tests/fixtures/*
+            - tests/_fixtures/*
     tmpDir: cache/phpstan/
     internalErrorsCountLimit: 1
     checkMissingCallableSignature: true
     checkUninitializedProperties: true
-    checkBenevolentUnionTypes: true
+    checkBenevolentUnionTypes: false # true not usable with DOMDocument::createElement usages: https://github.com/phpstan/phpstan/issues/13792
     checkImplicitMixed: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkTooWideThrowTypesInProtectedAndPublicMethods: true
     reportAnyTypeWideningInVarTag: true
     reportPossiblyNonexistentConstantArrayOffset: true
     reportPossiblyNonexistentGeneralArrayOffset: true
     exceptions:
         check:
             missingCheckedExceptionInThrows: true
+            throwTypeCovariance: true
             tooWideThrowType: true
         implicitThrows: false
         uncheckedExceptionClasses:
@@ -55,21 +57,18 @@ parameters:
     ignoreErrors:
         # allow calling internal methods from SebastianBergmann\CodeCoverage
         -
-            message: "#Call to method .* of internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
-            path: src/Extractor/PhpUnitCoverageExtractor.php
+            message: "#internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
+            paths:
+                - src/Extractor/PhpUnitCoverageExtractor.php
+                - tests/Extractor/PhpUnitCoverageExtractorTest.php
 
         # support even old sebastian/diff
         -
             message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
-            path: src/CoverageGuard.php
+            paths:
+                - src/Utils/PatchParser.php
 
-        -
-            identifiers:
-                - classConstant.internalClass
-                - new.internalClass
-                - method.internalClass
-            path: tests/Extractor/PhpUnitCoverageExtractorTest.php
-
+        # do not track checked exceptions in tests
         -
             identifiers:
                 - missingType.checkedException

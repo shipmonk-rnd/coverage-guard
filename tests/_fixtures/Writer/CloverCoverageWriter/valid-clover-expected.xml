@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1234567890">
+    <project timestamp="1234567890">
+        <file name="/path/to/Sample.php">
+            <metrics loc="50"/>
+            <line num="10" type="stmt" count="5"/>
+            <line num="20" type="stmt" count="0"/>
+            <line num="30" type="stmt" count="3"/>
+        </file>
+    </project>
+</coverage>

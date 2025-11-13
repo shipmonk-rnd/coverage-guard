@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Report;
+namespace ShipMonk\CoverageGuard\Report;
 
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Config;
@@ -8,11 +8,8 @@ use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
-use ShipMonk\CoverageGuard\Report\CoverageReport;
-use ShipMonk\CoverageGuard\Report\ErrorFormatter;
-use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
-use function fopen;
+use ShipMonk\CoverageGuard\StreamTestTrait;
 use function rewind;
 use function str_replace;
 use function stream_get_contents;
@@ -20,6 +17,8 @@ use const DIRECTORY_SEPARATOR;
 
 final class ErrorFormatterTest extends TestCase
 {
+
+    use StreamTestTrait;
 
     public function testHighlightWithColors(): void
     {
@@ -80,24 +79,13 @@ final class ErrorFormatterTest extends TestCase
         bool $patchMode,
     ): string
     {
-        $stream = $this->createMemoryStream();
-        $formatter = $this->createErrorFormatter($stream, $config);
+        $stream = $this->createStream();
+        $formatter = $this->createErrorFormatter($stream);
         $report = $this->createCoverageReport($lines, patchMode: $patchMode);
 
-        $formatter->formatReport($report);
+        $formatter->formatReport($report, $config->getEditorUrl());
 
         return $this->getStreamContents($stream);
-    }
-
-    /**
-     * @return resource
-     */
-    private function createMemoryStream()
-    {
-        $stream = fopen('php://memory', 'rw');
-        self::assertNotFalse($stream);
-
-        return $stream;
     }
 
     /**
@@ -105,13 +93,11 @@ final class ErrorFormatterTest extends TestCase
      */
     private function createErrorFormatter(
         $stream,
-        Config $config,
     ): ErrorFormatter
     {
         return new ErrorFormatter(
             new PathHelper('/tmp'),
             new Printer($stream, noColor: false),
-            $config,
         );
     }
 

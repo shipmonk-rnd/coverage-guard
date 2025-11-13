@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage line-rate="0.66666666666667" branch-rate="0" lines-covered="2" lines-valid="3" branches-covered="0" branches-valid="0" complexity="0" version="0.4" timestamp="1234567890">
+    <sources>
+        <source>/path/to</source>
+    </sources>
+    <packages>
+        <package name="File1.php" line-rate="0.50000000000000" branch-rate="0" complexity="0">
+            <classes>
+                <class name="File1" filename="File1.php" line-rate="0.50000000000000" branch-rate="0" complexity="0">
+                    <methods/>
+                    <lines>
+                        <line number="10" hits="5"/>
+                        <line number="20" hits="0"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+        <package name="File2.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+            <classes>
+                <class name="File2" filename="File2.php" line-rate="1.00000000000000" branch-rate="0" complexity="0">
+                    <methods/>
+                    <lines>
+                        <line number="15" hits="3"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
+</coverage>
