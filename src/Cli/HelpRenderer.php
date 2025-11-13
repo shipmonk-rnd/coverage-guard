@@ -91,7 +91,6 @@ final class HelpRenderer
         $printer->printLine('');
         $printer->printLine('<white>Global options:</white>');
         $printer->printLine(self::INDENT . '<green>--help             </green>Show help message');
-        $printer->printLine(self::INDENT . '<green>--verbose          </green>Show detailed processing information');
         $printer->printLine(self::INDENT . '<green>--no-color         </green>Disable colored output');
         $printer->printLine(self::INDENT . '<green>--color            </green>Force colored output');
         $printer->printLine('');

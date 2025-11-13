@@ -8,7 +8,6 @@ Available commands:
 
 Global options:
   --help             Show help message
-  --verbose          Show detailed processing information
   --no-color         Disable colored output
   --color            Force colored output
 
