@@ -52,16 +52,16 @@ final class PatchCoverageCommand implements Command
             }
 
             $fileCoverage = $coveragePerFile[$file];
-            $coveredLinesMap = [];
+            $executableLinesMap = [];
 
             foreach ($fileCoverage->executableLines as $line) {
-                $coveredLinesMap[$line->lineNumber] = $line->hits > 0;
+                $executableLinesMap[$line->lineNumber] = $line->hits > 0;
             }
 
             foreach ($changedLines as $lineNumber) {
-                if (isset($coveredLinesMap[$lineNumber])) {
+                if (isset($executableLinesMap[$lineNumber])) {
                     $totalChangedLines++;
-                    if ($coveredLinesMap[$lineNumber]) {
+                    if ($executableLinesMap[$lineNumber]) {
                         $totalCoveredLines++;
                     }
                 }
