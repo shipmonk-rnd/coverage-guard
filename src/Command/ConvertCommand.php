@@ -33,7 +33,7 @@ final class ConvertCommand implements Command
         #[CliArgument('input-file', description: 'Input coverage file (clover.xml, cobertura.xml, or .cov)')]
         string $inputFile,
 
-        #[CliOption(description: 'Output format: clover or cobertura')]
+        #[CliOption(name: 'output-format', description: 'Output format: clover or cobertura')]
         CoverageFormat $format,
 
         #[CliOption(name: 'config', description: 'Path to PHP config file')]
