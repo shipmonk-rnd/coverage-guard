@@ -33,7 +33,7 @@ final class MergeCommand implements Command
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliOption(description: 'Output format, use clover|cobertura')]
+        #[CliOption(name: 'output-format', description: 'Output format, use clover|cobertura')]
         CoverageFormat $format = CoverageFormat::Clover,
 
         #[CliOption(description: 'XML indent to use')]

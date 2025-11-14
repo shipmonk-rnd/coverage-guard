@@ -150,12 +150,12 @@ Options:
 - Output formats: `clover`, `cobertura`
 
 ```sh
-vendor/bin/coverage-guard merge coverage/*.xml --format clover > merged-clover.xml
-vendor/bin/coverage-guard convert cobertura.xml --format clover > clover.xml
+vendor/bin/coverage-guard merge coverage/*.xml --output-format clover > merged-clover.xml
+vendor/bin/coverage-guard convert cobertura.xml --output-format clover > clover.xml
 ```
 
 Options:
-- `--format` – output format (`clover` or `cobertura`)
+- `--output-format` – output format (`clover` or `cobertura`)
 - `--indent` – output XML indentation (defaults to 4 spaces); for tabs use `--indent=$'\t'`
 - `--config` – path to custom PHP config
 
