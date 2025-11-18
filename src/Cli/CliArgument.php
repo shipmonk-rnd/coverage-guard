@@ -2,15 +2,12 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
-use Attribute;
-
-#[Attribute(Attribute::TARGET_PARAMETER)]
-final class CliArgument
+abstract class CliArgument
 {
 
     public function __construct(
-        public readonly ?string $name = null,
-        public readonly ?string $description = null,
+        public readonly string $name,
+        public readonly string $description,
     )
     {
     }

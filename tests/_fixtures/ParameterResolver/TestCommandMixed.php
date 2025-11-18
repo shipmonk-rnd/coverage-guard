@@ -2,17 +2,20 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
+use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\VerboseCliOption;
+
 final class TestCommandMixed
 {
 
     public function __invoke(
-        #[CliArgument]
+        #[TestCliArgument('input')]
         string $input,
 
-        #[CliOption]
+        #[VerboseCliOption]
         bool $verbose = false,
 
-        #[CliOption]
+        #[OutputFormatCliOption]
         ?string $output = null,
     ): void
     {

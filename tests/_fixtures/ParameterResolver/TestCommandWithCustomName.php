@@ -6,7 +6,7 @@ final class TestCommandWithCustomName
 {
 
     public function __invoke(
-        #[CliArgument('custom-file')]
+        #[TestCliArgument('custom-file')]
         string $inputFile,
     ): void
     {

@@ -2,9 +2,11 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use ShipMonk\CoverageGuard\Cli\CliArgument;
-use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\IndentCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -33,16 +35,16 @@ final class MergeCommand implements Command
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliOption(name: 'output-format', description: 'Output format, use clover|cobertura')]
+        #[OutputFormatCliOption]
         CoverageFormat $format = CoverageFormat::Clover,
 
-        #[CliOption(description: 'XML indent to use')]
+        #[IndentCliOption]
         string $indent = '    ',
 
-        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        #[ConfigCliOption]
         ?string $configPath = null,
 
-        #[CliArgument(description: 'Coverage files to merge (clover.xml, cobertura.xml, or .cov)')]
+        #[CoverageFileCliArgument]
         string ...$files,
     ): int
     {

@@ -2,8 +2,10 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use ShipMonk\CoverageGuard\Cli\CliArgument;
-use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
+use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\PatchCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\VerboseCliOption;
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
@@ -24,16 +26,16 @@ final class CheckCommand implements Command
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliArgument(description: 'Path to PHPUnit coverage file (.xml or .cov)')]
+        #[CoverageFileCliArgument]
         string $coverageFile,
 
-        #[CliOption(name: 'patch', description: 'Path to git diff result to check only changed code')]
+        #[PatchCliOption]
         ?string $patchFile = null,
 
-        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        #[ConfigCliOption]
         ?string $configPath = null,
 
-        #[CliOption(description: 'Print all processed files')]
+        #[VerboseCliOption]
         bool $verbose = false,
     ): int
     {

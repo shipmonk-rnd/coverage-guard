@@ -51,7 +51,12 @@ parameters:
             superclassToSuffixMapping:
                 Exception: Exception
                 PHPUnit\Framework\TestCase: Test
+                ShipMonk\CoverageGuard\Cli\CliOption: CliOption
+                ShipMonk\CoverageGuard\Cli\CliArgument: CliArgument
+                ShipMonk\CoverageGuard\Command\Command: Command
+                ShipMonk\CoverageGuard\Hierarchy\CodeBlock: Block
                 ShipMonk\CoverageGuard\Rule\CoverageRule: Rule
+                ShipMonk\CoverageGuard\Writer\CoverageWriter: CoverageWriter
                 ShipMonk\CoverageGuard\Extractor\CoverageExtractor: Extractor
 
     ignoreErrors:

@@ -2,8 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use ShipMonk\CoverageGuard\Cli\CliArgument;
-use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
+use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\PatchCliOption;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
@@ -27,13 +28,13 @@ final class PatchCoverageCommand implements Command
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliArgument('coverage-file', description: 'Path to PHPUnit coverage file (.xml or .cov)')]
+        #[CoverageFileCliArgument]
         string $coverageFile,
 
-        #[CliOption(name: 'patch', description: 'Patch file to analyze')]
+        #[PatchCliOption]
         string $patchPath,
 
-        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        #[ConfigCliOption]
         ?string $configPath = null,
     ): int
     {
