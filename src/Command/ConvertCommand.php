@@ -2,9 +2,11 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
-use ShipMonk\CoverageGuard\Cli\CliArgument;
-use ShipMonk\CoverageGuard\Cli\CliOption;
+use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
 use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\IndentCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
@@ -30,16 +32,16 @@ final class ConvertCommand implements Command
      * @throws ErrorException
      */
     public function __invoke(
-        #[CliArgument('input-file', description: 'Input coverage file (clover.xml, cobertura.xml, or .cov)')]
+        #[CoverageFileCliArgument]
         string $inputFile,
 
-        #[CliOption(name: 'output-format', description: 'Output format: clover or cobertura')]
+        #[OutputFormatCliOption]
         CoverageFormat $format,
 
-        #[CliOption(name: 'config', description: 'Path to PHP config file')]
+        #[ConfigCliOption]
         ?string $configPath = null,
 
-        #[CliOption(description: 'XML indent to use')]
+        #[IndentCliOption]
         string $indent = '    ',
     ): int
     {

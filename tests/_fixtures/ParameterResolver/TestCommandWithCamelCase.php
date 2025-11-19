@@ -6,7 +6,7 @@ final class TestCommandWithCamelCase
 {
 
     public function __invoke(
-        #[CliArgument]
+        #[TestCliArgument('input-file')]
         string $inputFile,
     ): void
     {

@@ -2,14 +2,17 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
+use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
+use ShipMonk\CoverageGuard\Cli\Options\VerboseCliOption;
+
 final class TestCommandWithOptions
 {
 
     public function __invoke(
-        #[CliOption(description: 'Enable verbose output')]
+        #[VerboseCliOption]
         bool $verbose = false,
 
-        #[CliOption]
+        #[ConfigCliOption]
         ?string $config = null,
     ): void
     {

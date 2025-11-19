@@ -2,11 +2,13 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
+use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
+
 final class TestCommandWithRequiredOption
 {
 
     public function __invoke(
-        #[CliOption]
+        #[OutputFormatCliOption]
         string $output,
     ): void
     {

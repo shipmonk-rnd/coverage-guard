@@ -6,7 +6,7 @@ final class TestCommandWithArguments
 {
 
     public function __invoke(
-        #[CliArgument('file', 'Path to file')]
+        #[TestCliArgument('file', 'Path to file')]
         string $file,
     ): void
     {

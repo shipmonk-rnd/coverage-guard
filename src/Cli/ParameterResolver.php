@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Cli;
 
 use BackedEnum;
 use LogicException;
+use ReflectionAttribute;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -15,8 +16,6 @@ use function implode;
 use function is_a;
 use function is_bool;
 use function is_numeric;
-use function preg_replace;
-use function strtolower;
 
 final class ParameterResolver
 {
@@ -29,15 +28,15 @@ final class ParameterResolver
         $definitions = [];
 
         foreach ($method->getParameters() as $parameter) {
-            $attributes = $parameter->getAttributes(CliArgument::class);
+            $attributes = $parameter->getAttributes(CliArgument::class, ReflectionAttribute::IS_INSTANCEOF);
 
             if ($attributes === []) {
                 continue;
             }
 
             $attribute = $attributes[0]->newInstance();
-            $name = $attribute->name ?? $this->parameterNameToCliName($parameter->getName());
-            $description = $attribute->description ?? '';
+            $name = $attribute->name;
+            $description = $attribute->description;
 
             $definitions[] = new ArgumentDefinition(
                 $name,
@@ -57,21 +56,20 @@ final class ParameterResolver
         $definitions = [];
 
         foreach ($method->getParameters() as $parameter) {
-            $attributes = $parameter->getAttributes(CliOption::class);
+            $attributes = $parameter->getAttributes(CliOption::class, ReflectionAttribute::IS_INSTANCEOF);
 
             if ($attributes === []) {
                 continue;
             }
 
-            $attribute = $attributes[0]->newInstance();
-            $name = $attribute->name ?? $this->parameterNameToCliName($parameter->getName());
-            $description = $attribute->description ?? '';
+            /** @var CliOption $cliOption */
+            $cliOption = $attributes[0]->newInstance();
             $acceptsValue = !$this->isBooleanParameter($parameter);
-            $isRequired = !$parameter->allowsNull() && !$parameter->isDefaultValueAvailable();
+            $isRequired = !$parameter->isDefaultValueAvailable();
 
             $definitions[] = new OptionDefinition(
-                $name,
-                $description,
+                $cliOption->name,
+                $cliOption->description,
                 $acceptsValue,
                 $isRequired,
             );
@@ -98,8 +96,8 @@ final class ParameterResolver
         $resolved = [];
 
         foreach ($method->getParameters() as $parameter) {
-            $argumentAttrs = $parameter->getAttributes(CliArgument::class);
-            $optionAttrs = $parameter->getAttributes(CliOption::class);
+            $argumentAttrs = $parameter->getAttributes(CliArgument::class, ReflectionAttribute::IS_INSTANCEOF);
+            $optionAttrs = $parameter->getAttributes(CliOption::class, ReflectionAttribute::IS_INSTANCEOF);
 
             if ($argumentAttrs !== []) {
                 if ($parameter->isVariadic()) { // only last parameter can be variadic
@@ -135,13 +133,14 @@ final class ParameterResolver
         array $options,
     ): string|int|BackedEnum|bool|null
     {
-        $attributes = $parameter->getAttributes(CliOption::class);
+        $attributes = $parameter->getAttributes(CliOption::class, ReflectionAttribute::IS_INSTANCEOF);
         if ($attributes === []) {
             throw new LogicException("Parameter {$parameter->getName()} does not have CliOption attribute");
         }
 
+        /** @var CliOption $attribute */
         $attribute = $attributes[0]->newInstance();
-        $optionName = $attribute->name ?? $this->parameterNameToCliName($parameter->getName());
+        $optionName = $attribute->name;
 
         if (!isset($options[$optionName])) {
             if ($parameter->allowsNull()) {
@@ -226,15 +225,6 @@ final class ParameterResolver
         }
 
         return $type->getName() === 'bool';
-    }
-
-    /**
-     * camelCase -> kebab-case
-     */
-    private function parameterNameToCliName(string $name): string
-    {
-        $kebab = preg_replace('/([a-z])([A-Z])/', '$1-$2', $name);
-        return strtolower($kebab ?? $name);
     }
 
 }

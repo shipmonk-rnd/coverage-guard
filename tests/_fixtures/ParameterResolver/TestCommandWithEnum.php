@@ -6,7 +6,7 @@ final class TestCommandWithEnum
 {
 
     public function __invoke(
-        #[CliArgument]
+        #[TestCliArgument('format')]
         CoverageFormat $format,
     ): void
     {

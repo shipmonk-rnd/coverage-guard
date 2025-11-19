@@ -6,7 +6,7 @@ final class TestCommandWithVariadic
 {
 
     public function __invoke(
-        #[CliArgument('files', 'Input files')]
+        #[TestCliArgument('files', 'Input files')]
         string ...$files,
     ): void
     {

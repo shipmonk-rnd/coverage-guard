@@ -8,4 +8,4 @@ Arguments:
     Argument description
 
 Options:
-  --option <value>         Option description (required)
+  --verbose <value>        Print more details (required)

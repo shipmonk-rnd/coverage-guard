@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Cli;
 
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Cli\Options\VerboseCliOption;
 use ShipMonk\CoverageGuard\Command\Command;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
@@ -17,7 +18,7 @@ final class CommandRunnerTest extends TestCase
     {
         $runner = $this->createRunner();
 
-        $argv = ['coverage-guard', 'test', 'arg', '--option=value'];
+        $argv = ['coverage-guard', 'test', 'arg', '--verbose=value'];
 
         $exitCode = $runner->run($argv);
 
@@ -75,10 +76,10 @@ final class CommandRunnerTest extends TestCase
         $registry->register(new class implements Command {
 
             public function __invoke(
-                #[CliArgument(description: 'Argument description')]
+                #[TestCliArgument(name: 'argument', description: 'Argument description')]
                 string $argument,
 
-                #[CliOption(description: 'Option description')]
+                #[VerboseCliOption]
                 string $option,
             ): int
             {

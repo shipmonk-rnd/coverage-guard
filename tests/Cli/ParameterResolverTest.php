@@ -66,7 +66,7 @@ final class ParameterResolverTest extends TestCase
 
         self::assertCount(2, $definitions);
         self::assertSame('verbose', $definitions[0]->name);
-        self::assertSame('Enable verbose output', $definitions[0]->description);
+        self::assertSame('Print more details', $definitions[0]->description);
         self::assertFalse($definitions[0]->acceptsValue);
 
         self::assertSame('config', $definitions[1]->name);
@@ -172,9 +172,9 @@ final class ParameterResolverTest extends TestCase
         $method = new ReflectionMethod(TestCommandWithRequiredOption::class, '__invoke');
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Option --output requires a value');
+        $this->expectExceptionMessage('Option --output-format requires a value');
 
-        $resolver->resolveParameters($method, [], ['output' => true]);
+        $resolver->resolveParameters($method, [], ['output-format' => true]);
     }
 
     public function testResolveParametersWithEnumArgument(): void
@@ -208,7 +208,7 @@ final class ParameterResolverTest extends TestCase
         $resolved = $resolver->resolveParameters(
             $method,
             ['input.txt'],
-            ['verbose' => true, 'output' => 'output.txt'],
+            ['verbose' => true, 'output-format' => 'output.txt'],
         );
 
         self::assertCount(3, $resolved);
@@ -234,7 +234,7 @@ final class ParameterResolverTest extends TestCase
         $method = new ReflectionMethod(TestCommandWithRequiredOption::class, '__invoke');
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Required option --output not provided');
+        $this->expectExceptionMessage('Required option --output-format not provided');
 
         $resolver->resolveParameters($method, [], []);
     }

@@ -39,8 +39,12 @@ final class HelpRenderer
         $usageParts = ['coverage-guard', $command->getName()];
 
         foreach ($arguments as $arg) {
-            $argStr = $arg->variadic ? "{$arg->name}..." : $arg->name;
-            $usageParts[] = "<{$argStr}>";
+            if ($arg->variadic) {
+                $usageParts[] = "<{$arg->name}1>";
+                $usageParts[] = "[<{$arg->name}2> ...]";
+            } else {
+                $usageParts[] = "<{$arg->name}>";
+            }
         }
 
         if ($options !== []) {
@@ -53,7 +57,7 @@ final class HelpRenderer
         if ($arguments !== []) {
             $printer->printLine('<white>Arguments:</white>');
             foreach ($arguments as $arg) {
-                $argName = $arg->variadic ? "{$arg->name}..." : $arg->name;
+                $argName = $arg->name;
                 $printer->printLine(self::INDENT . "<green>{$argName}</green>");
                 $printer->printLine(str_repeat(self::INDENT, 2) . $arg->description);
             }

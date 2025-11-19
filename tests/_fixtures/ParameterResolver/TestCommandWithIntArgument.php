@@ -6,7 +6,7 @@ final class TestCommandWithIntArgument
 {
 
     public function __invoke(
-        #[CliArgument]
+        #[TestCliArgument('count')]
         int $count,
     ): void
     {
