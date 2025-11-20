@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
@@ -143,7 +144,7 @@ final class PatchCoverageCommandTest extends TestCase
         $stderrPrinter = new Printer($stderrStream, noColor: true);
         $patchParser = new PatchParser($gitRoot, $stderrPrinter);
         $configResolver = new ConfigResolver($gitRoot);
-        return new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, new CoverageProvider($stderrPrinter));
+        return new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter));
     }
 
 }

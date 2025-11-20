@@ -185,8 +185,8 @@ final class ParameterResolverTest extends TestCase
         $resolved = $resolver->resolveParameters($method, ['clover'], []);
 
         self::assertCount(1, $resolved);
-        self::assertInstanceOf(CoverageFormat::class, $resolved[0]);
-        self::assertSame(CoverageFormat::Clover, $resolved[0]);
+        self::assertInstanceOf(CoverageOutputFormat::class, $resolved[0]);
+        self::assertSame(CoverageOutputFormat::Clover, $resolved[0]);
     }
 
     public function testResolveParametersWithInvalidEnumValueThrowsException(): void

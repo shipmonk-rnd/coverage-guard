@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard\Command;
 
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -120,7 +121,7 @@ final class CheckCommandTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $stderrPrinter);
-        $coverageProvider = new CoverageProvider($stderrPrinter);
+        $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter);
         $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider);
         $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
         return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);

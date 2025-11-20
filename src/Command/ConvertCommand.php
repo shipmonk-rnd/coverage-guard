@@ -3,7 +3,7 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
-use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageOutputFormat;
 use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\IndentCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
@@ -36,7 +36,7 @@ final class ConvertCommand implements Command
         string $inputFile,
 
         #[OutputFormatCliOption]
-        CoverageFormat $format,
+        CoverageOutputFormat $format,
 
         #[ConfigCliOption]
         ?string $configPath = null,

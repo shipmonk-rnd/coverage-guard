@@ -3,15 +3,19 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
-use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageInputFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageOutputFormat;
 use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\IndentCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
+use function array_map;
+use function array_unique;
 use function count;
 use function fwrite;
 use const STDOUT;
@@ -25,6 +29,7 @@ final class MergeCommand implements Command
     public function __construct(
         private readonly CoverageProvider $coverageProvider,
         private readonly CoverageMerger $coverageMerger,
+        private readonly CoverageFormatDetector $coverageFormatDetector,
         private readonly ConfigResolver $configResolver,
         private readonly mixed $outputStream = STDOUT,
     )
@@ -36,7 +41,7 @@ final class MergeCommand implements Command
      */
     public function __invoke(
         #[OutputFormatCliOption]
-        CoverageFormat $format = CoverageFormat::Clover,
+        ?CoverageOutputFormat $format = null,
 
         #[IndentCliOption]
         string $indent = '    ',
@@ -54,9 +59,15 @@ final class MergeCommand implements Command
 
         $config = $this->configResolver->resolveConfig($configPath);
 
+        $inputFormats = [];
         $coverageSets = [];
         foreach ($files as $file) {
+            $inputFormats[] = $this->coverageFormatDetector->detectFormat($file);
             $coverageSets[] = $this->coverageProvider->getCoverage($config, $file);
+        }
+
+        if ($format === null) {
+            $format = $this->autodetectOutputFormat($inputFormats);
         }
 
         $merged = $this->coverageMerger->merge($coverageSets);
@@ -75,6 +86,28 @@ final class MergeCommand implements Command
     public function getDescription(): string
     {
         return 'Merge multiple coverage files into one';
+    }
+
+    /**
+     * @param non-empty-list<CoverageInputFormat> $formats
+     *
+     * @throws ErrorException
+     */
+    private function autodetectOutputFormat(array $formats): CoverageOutputFormat
+    {
+        $uniqueFormats = array_unique(array_map(static fn (CoverageInputFormat $format): string => $format->value, $formats));
+
+        if (count($uniqueFormats) > 1) {
+            throw new ErrorException('Merging coverage files of different formats requires --output-format option to be specified');
+        }
+
+        $format = $formats[0];
+
+        return match ($format) {
+            CoverageInputFormat::Clover => CoverageOutputFormat::Clover,
+            CoverageInputFormat::Cobertura => CoverageOutputFormat::Cobertura,
+            CoverageInputFormat::Php => throw new ErrorException('Merging PHP coverage formats requires --output-format option to be specified'),
+        };
     }
 
 }

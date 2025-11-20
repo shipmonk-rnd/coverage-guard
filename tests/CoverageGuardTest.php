@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
@@ -184,7 +185,7 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
-        $coverageProvider = new CoverageProvider($printer);
+        $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $printer);
 
         return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $coverageProvider);
     }

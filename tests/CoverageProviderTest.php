@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard;
 
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 
 final class CoverageProviderTest extends TestCase
@@ -14,7 +15,7 @@ final class CoverageProviderTest extends TestCase
     {
         $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
-        $factory = new CoverageProvider($printer);
+        $factory = new CoverageProvider(new CoverageFormatDetector(), $printer);
         $config = new Config();
 
         $this->expectException(ErrorException::class);
@@ -27,7 +28,7 @@ final class CoverageProviderTest extends TestCase
     {
         $stream = $this->createStream();
         $printer = new Printer($stream, noColor: true);
-        $factory = new CoverageProvider($printer);
+        $factory = new CoverageProvider(new CoverageFormatDetector(), $printer);
         $config = new Config();
 
         $this->expectException(ErrorException::class);
