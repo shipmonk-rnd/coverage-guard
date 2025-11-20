@@ -9,21 +9,17 @@ use ShipMonk\CoverageGuard\Cli\Options\IndentCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\OutputFormatCliOption;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
-use function fwrite;
-use const STDOUT;
 
 final class ConvertCommand implements Command
 {
 
-    /**
-     * @param resource $outputStream
-     */
     public function __construct(
         private readonly CoverageProvider $coverageProvider,
         private readonly ConfigResolver $configResolver,
-        private readonly mixed $outputStream = STDOUT,
+        private readonly Printer $stdOutPrinter,
     )
     {
     }
@@ -51,7 +47,7 @@ final class ConvertCommand implements Command
         $writer = CoverageWriterFactory::create($format);
         $xml = $writer->write($coverage, $indent);
 
-        fwrite($this->outputStream, $xml);
+        $this->stdOutPrinter->print($xml);
 
         return 0;
     }

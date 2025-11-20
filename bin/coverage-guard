@@ -54,8 +54,8 @@ try {
 
     $registry = new CommandRegistry();
     $registry->register(new CheckCommand($configResolver, $coverageGuard, $errorFormatter));
-    $registry->register(new MergeCommand($coverageProvider, new CoverageMerger(), $coverageFormatDetector, $configResolver));
-    $registry->register(new ConvertCommand($coverageProvider, $configResolver));
+    $registry->register(new MergeCommand($coverageProvider, new CoverageMerger(), $coverageFormatDetector, $configResolver, $stdoutPrinter));
+    $registry->register(new ConvertCommand($coverageProvider, $configResolver, $stdoutPrinter));
     $registry->register(new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, $coverageProvider));
 
     $parameterResolver = new ParameterResolver();

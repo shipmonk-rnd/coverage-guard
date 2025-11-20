@@ -5,11 +5,14 @@ namespace ShipMonk\CoverageGuard;
 use LogicException;
 use function array_keys;
 use function array_values;
+use function error_get_last;
 use function fwrite;
 use function getenv;
 use function in_array;
+use function str_contains;
 use function str_replace;
 use function stream_isatty;
+use function strlen;
 use const PHP_EOL;
 
 final class Printer
@@ -80,10 +83,18 @@ final class Printer
 
     public function print(string $string): void
     {
-        $result = fwrite($this->resource, $this->colorize($string));
+        $colorized = $this->colorize($string);
+        $result = @fwrite($this->resource, $colorized);
 
-        if ($result === false) {
-            throw new LogicException('Could not write to output stream.');
+        if ($result === false || $result < strlen($colorized)) {
+            $error = error_get_last();
+
+            // errno 32 = EPIPE (Broken pipe) - expected when piping to head, grep -q, etc.
+            if ($error !== null && str_contains($error['message'], 'errno=32')) {
+                return;
+            }
+
+            throw new LogicException('Could not write to output stream: ' . ($error['message'] ?? 'unknown error'));
         }
     }
 

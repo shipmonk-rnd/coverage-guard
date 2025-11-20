@@ -12,26 +12,22 @@ use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Writer\CoverageWriterFactory;
 use function array_map;
 use function array_unique;
 use function count;
-use function fwrite;
-use const STDOUT;
 
 final class MergeCommand implements Command
 {
 
-    /**
-     * @param resource $outputStream
-     */
     public function __construct(
         private readonly CoverageProvider $coverageProvider,
         private readonly CoverageMerger $coverageMerger,
         private readonly CoverageFormatDetector $coverageFormatDetector,
         private readonly ConfigResolver $configResolver,
-        private readonly mixed $outputStream = STDOUT,
+        private readonly Printer $stdOutPrinter,
     )
     {
     }
@@ -73,7 +69,7 @@ final class MergeCommand implements Command
         $merged = $this->coverageMerger->merge($coverageSets);
         $xml = CoverageWriterFactory::create($format)->write($merged, $indent);
 
-        fwrite($this->outputStream, $xml);
+        $this->stdOutPrinter->print($xml);
 
         return 0;
     }
