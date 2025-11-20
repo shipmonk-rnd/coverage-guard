@@ -35,10 +35,9 @@ final class XmlLoader
                 throw new ErrorException("Failed to parse XML file: {$xmlFile}." . $libXmlErrorMessage);
             }
 
-            libxml_clear_errors();
-
             return $xml;
         } finally {
+            libxml_clear_errors();
             libxml_use_internal_errors($libXmlErrorsOld);
         }
     }
