@@ -374,4 +374,52 @@ final class CliParserTest extends TestCase
         $parser->parse(['--conf', 'file.php'], [], $options);
     }
 
+    public function testParseShortOptionThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: -x, short options are not supported');
+
+        $parser->parse(['-x'], [], []);
+    }
+
+    public function testParseShortOptionWithValueThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: -o, short options are not supported');
+
+        $parser->parse(['-o', 'value'], [], []);
+    }
+
+    public function testParseShortOptionEvenWhenLongOptionExistsThrowsException(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: -v, short options are not supported');
+
+        $parser->parse(['-v'], [], $options);
+    }
+
+    public function testParseSingleDashAsArgumentIsAllowed(): void
+    {
+        $parser = new CliParser();
+
+        $arguments = [
+            new ArgumentDefinition('file', 'Input file', variadic: false),
+        ];
+
+        // Single dash "-" is commonly used to mean stdin/stdout in Unix tools
+        $result = $parser->parse(['-'], $arguments, []);
+
+        self::assertSame(['-'], $result['arguments']);
+    }
+
 }
