@@ -96,6 +96,9 @@ final class CliParser
                 }
 
                 $options[$optionName] = $optionValue;
+            } elseif (str_starts_with($arg, '-') && $arg !== '-') {
+                $shortOption = substr($arg, 1);
+                throw new ErrorException("Unknown option: -{$shortOption}, short options are not supported");
             } else {
                 $arguments[] = $arg;
             }
