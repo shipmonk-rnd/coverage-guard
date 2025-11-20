@@ -9,6 +9,7 @@ use ShipMonk\CoverageGuard\Command\Command;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
 use function array_filter;
+use function array_keys;
 use function array_shift;
 use function array_values;
 use function in_array;
@@ -16,6 +17,12 @@ use function is_int;
 
 final class CommandRunner
 {
+
+    public const GLOBAL_OPTIONS = [
+        'help' => 'Show help message',
+        'color' => 'Force colored output',
+        'no-color' => 'Disable colored output',
+    ];
 
     public function __construct(
         private readonly Printer $printer,
@@ -59,10 +66,13 @@ final class CommandRunner
         $argumentDefinitions = $this->parameterResolver->getArgumentDefinitions($invokeMethod);
         $optionDefinitions = $this->parameterResolver->getOptionDefinitions($invokeMethod);
 
+        $globalOptionNames = array_keys(self::GLOBAL_OPTIONS);
+
         $parsed = $this->cliParser->parse(
             $commandArgs,
             $argumentDefinitions,
             $optionDefinitions,
+            $globalOptionNames,
         );
 
         $parameters = $this->parameterResolver->resolveParameters(
@@ -98,10 +108,15 @@ final class CommandRunner
      */
     private function removeGlobalCliOptions(array $argv): array
     {
-        return array_values(array_filter($argv, static function (string $arg): bool {
-            return $arg !== '--no-color'
-                && $arg !== '--color'
-                && $arg !== '--help';
+        $globalOptionNames = array_keys(self::GLOBAL_OPTIONS);
+
+        return array_values(array_filter($argv, static function (string $arg) use ($globalOptionNames): bool {
+            foreach ($globalOptionNames as $name) {
+                if ($arg === "--{$name}") {
+                    return false;
+                }
+            }
+            return true;
         }));
     }
 

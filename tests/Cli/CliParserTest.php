@@ -117,7 +117,7 @@ final class CliParserTest extends TestCase
         $parser = new CliParser();
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('Unknown option: --unknown');
+        $this->expectExceptionMessage('Unknown option: --unknown, see --help');
 
         $parser->parse(['--unknown'], [], []);
     }
@@ -296,6 +296,82 @@ final class CliParserTest extends TestCase
         $this->expectExceptionMessage('Missing required option: --format');
 
         $parser->parse([], [], $options);
+    }
+
+    public function testParseUnknownOptionWithTypoSuggestsSimilarOption(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --confg. Did you mean: --config?');
+
+        $parser->parse(['--confg', 'file.php'], [], $options);
+    }
+
+    public function testParseUnknownOptionWithSubstringSuggestsMatchingOption(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('output-format', 'Output format', acceptsValue: true, isRequired: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --output. Did you mean: --output-format?');
+
+        $parser->parse(['--output', 'clover'], [], $options);
+    }
+
+    public function testParseUnknownOptionWithSubstringInMiddleSuggestsMatchingOption(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('output-format', 'Output format', acceptsValue: true, isRequired: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --format. Did you mean: --output-format?');
+
+        $parser->parse(['--format', 'clover'], [], $options);
+    }
+
+    public function testParseUnknownOptionWithNoSimilarOptionPointsToHelp(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
+            new OptionDefinition('verbose', 'Verbose output', acceptsValue: false, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --totally-invalid-option, see --help');
+
+        $parser->parse(['--totally-invalid-option'], [], $options);
+    }
+
+    public function testParseUnknownOptionPrefersShortestSubstringMatch(): void
+    {
+        $parser = new CliParser();
+
+        $options = [
+            new OptionDefinition('config', 'Config file', acceptsValue: true, isRequired: false),
+            new OptionDefinition('config-path', 'Config path', acceptsValue: true, isRequired: false),
+            new OptionDefinition('config-path-override', 'Config path override', acceptsValue: true, isRequired: false),
+        ];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --conf. Did you mean: --config?');
+
+        $parser->parse(['--conf', 'file.php'], [], $options);
     }
 
 }

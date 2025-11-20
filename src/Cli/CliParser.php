@@ -5,12 +5,16 @@ namespace ShipMonk\CoverageGuard\Cli;
 use LogicException;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function array_key_exists;
+use function array_keys;
 use function count;
 use function explode;
 use function implode;
+use function levenshtein;
 use function str_contains;
 use function str_starts_with;
+use function strlen;
 use function substr;
+use function usort;
 
 final class CliParser
 {
@@ -21,6 +25,7 @@ final class CliParser
      * @param list<string> $args Raw CLI arguments (without script name and command name)
      * @param list<ArgumentDefinition> $argumentDefinitions
      * @param list<OptionDefinition> $optionDefinitions
+     * @param list<string> $globalOptionNames Global option names for suggestions
      * @return array{arguments: list<string>, options: array<string, string|bool>}
      *
      * @throws ErrorException
@@ -29,12 +34,13 @@ final class CliParser
         array $args,
         array $argumentDefinitions,
         array $optionDefinitions,
+        array $globalOptionNames = [],
     ): array
     {
         $optionMap = $this->buildOptionMap($optionDefinitions);
         $all = $this->parseOptionsAndArguments($args, $optionMap);
 
-        $this->validateOptions($all['options'], $optionMap);
+        $this->validateOptions($all['options'], $optionMap, $globalOptionNames);
         $this->validateArguments($all['arguments'], $argumentDefinitions);
 
         $options = $this->buildOptionsArray($all['options'], $optionMap);
@@ -176,17 +182,28 @@ final class CliParser
     /**
      * @param array<string, string|null> $parsedOptions Map of option names to values (null if no value provided)
      * @param array<string, OptionDefinition> $optionMap Map of option names to definitions
+     * @param list<string> $globalOptionNames Global option names for suggestions
      *
      * @throws ErrorException
      */
     private function validateOptions(
         array $parsedOptions,
         array $optionMap,
+        array $globalOptionNames,
     ): void
     {
         foreach ($parsedOptions as $optionName => $optionValue) {
             if (!isset($optionMap[$optionName])) {
-                throw new ErrorException("Unknown option: --{$optionName}");
+                $message = "Unknown option: --{$optionName}";
+                $suggestion = $this->findSimilarOptionNames($optionName, array_keys($optionMap), $globalOptionNames);
+
+                if ($suggestion !== null) {
+                    $message .= ". Did you mean: --{$suggestion}?";
+                } else {
+                    $message .= ', see --help';
+                }
+
+                throw new ErrorException($message);
             }
 
             $optionDef = $optionMap[$optionName];
@@ -206,6 +223,48 @@ final class CliParser
                 throw new ErrorException("Missing required option: --{$unusedOptionDefinition->name}");
             }
         }
+    }
+
+    /**
+     * @param list<string> $validOptions
+     * @param list<string> $globalOptionNames
+     */
+    private function findSimilarOptionNames(
+        string $invalidOption,
+        array $validOptions,
+        array $globalOptionNames,
+    ): ?string
+    {
+        $allValidOptions = [...$validOptions, ...$globalOptionNames];
+
+        // First, check for substring matches (e.g., --output -> --output-format)
+        $substringMatches = [];
+        foreach ($allValidOptions as $validOption) {
+            if (str_contains($validOption, $invalidOption)) {
+                $substringMatches[] = $validOption;
+            }
+        }
+
+        // If we found substring matches, return the shortest one (most likely candidate)
+        if ($substringMatches !== []) {
+            usort($substringMatches, static fn (string $a, string $b): int => strlen($a) <=> strlen($b));
+            return $substringMatches[0];
+        }
+
+        // Otherwise, fall back to Levenshtein distance
+        $bestGuess = null;
+        $minDistance = (strlen($invalidOption) / 4 + 1) * 10 + 0.1;
+
+        foreach ($allValidOptions as $validOption) {
+            $distance = levenshtein($invalidOption, $validOption, 9, 11, 9);
+
+            if ($distance > 0 && $distance < $minDistance) {
+                $minDistance = $distance;
+                $bestGuess = $validOption;
+            }
+        }
+
+        return $bestGuess;
     }
 
     /**

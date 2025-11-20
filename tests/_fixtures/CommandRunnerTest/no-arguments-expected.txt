@@ -1,14 +1,14 @@
 PHP Code Coverage Guard
 
 Usage:
-  coverage-guard <command> [arguments] [options]
+  vendor/bin/coverage-guard <command> [arguments] [options]
 
 Available commands:
   test                Test command
 
 Global options:
   --help             Show help message
-  --no-color         Disable colored output
   --color            Force colored output
+  --no-color         Disable colored output
 
-Run "coverage-guard <command> --help" for more information on a specific command.
+Run "vendor/bin/coverage-guard <command> --help" for more information on a specific command.
