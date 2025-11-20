@@ -25,18 +25,22 @@ final class XmlLoader
         }
 
         $libXmlErrorsOld = libxml_use_internal_errors(true);
-        $xml = simplexml_load_file($xmlFile);
 
-        if ($xml === false) {
-            $libXmlError = libxml_get_last_error();
-            $libXmlErrorMessage = $libXmlError === false ? '' : ' Error: ' . $libXmlError->message;
-            throw new ErrorException("Failed to parse XML file: {$xmlFile}." . $libXmlErrorMessage);
+        try {
+            $xml = simplexml_load_file($xmlFile);
+
+            if ($xml === false) {
+                $libXmlError = libxml_get_last_error();
+                $libXmlErrorMessage = $libXmlError === false ? '' : ' Error: ' . $libXmlError->message;
+                throw new ErrorException("Failed to parse XML file: {$xmlFile}." . $libXmlErrorMessage);
+            }
+
+            libxml_clear_errors();
+
+            return $xml;
+        } finally {
+            libxml_use_internal_errors($libXmlErrorsOld);
         }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($libXmlErrorsOld);
-
-        return $xml;
     }
 
 }
