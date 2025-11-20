@@ -1,7 +1,7 @@
 Test command
 
 Usage:
-  coverage-guard test <argument> [options]
+  vendor/bin/coverage-guard test <argument> [options]
 
 Arguments:
   argument
@@ -9,3 +9,8 @@ Arguments:
 
 Options:
   --verbose <value>        Print more details (required)
+
+Global options:
+  --help             Show help message
+  --color            Force colored output
+  --no-color         Disable colored output

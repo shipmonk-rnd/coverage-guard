@@ -67,6 +67,42 @@ final class CommandRunnerTest extends TestCase
         $runner->run($argv);
     }
 
+    public function testRunWithTypoInGlobalOptionSuggestsCorrectOption(): void
+    {
+        $runner = $this->createRunner();
+
+        $argv = ['coverage-guard', 'test', 'arg', '--helpp'];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --helpp. Did you mean: --help?');
+
+        $runner->run($argv);
+    }
+
+    public function testRunWithTypoInColorOptionSuggestsCorrectOption(): void
+    {
+        $runner = $this->createRunner();
+
+        $argv = ['coverage-guard', 'test', 'arg', '--colours'];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --colours. Did you mean: --color?');
+
+        $runner->run($argv);
+    }
+
+    public function testRunWithTypoInNoColorOptionSuggestsCorrectOption(): void
+    {
+        $runner = $this->createRunner();
+
+        $argv = ['coverage-guard', 'test', 'arg', '--no-colours'];
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Unknown option: --no-colours. Did you mean: --no-color?');
+
+        $runner->run($argv);
+    }
+
     /**
      * @param resource|null $outputStream
      */

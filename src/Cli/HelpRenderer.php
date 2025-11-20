@@ -36,7 +36,7 @@ final class HelpRenderer
         $printer->printLine('');
         $printer->printLine('<white>Usage:</white>');
 
-        $usageParts = ['coverage-guard', $command->getName()];
+        $usageParts = ['vendor/bin/coverage-guard', $command->getName()];
 
         foreach ($arguments as $arg) {
             if ($arg->variadic) {
@@ -72,6 +72,14 @@ final class HelpRenderer
                 $description = $opt->isRequired ? "{$opt->description} <white>(required)</white>" : $opt->description;
                 $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$description}");
             }
+            $printer->printLine('');
+        }
+
+        $printer->printLine('<white>Global options:</white>');
+        foreach (CommandRunner::GLOBAL_OPTIONS as $name => $description) {
+            $optStr = "--{$name}";
+            $optStrPadded = str_pad($optStr, 19);
+            $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$description}");
         }
     }
 
@@ -83,7 +91,7 @@ final class HelpRenderer
         $printer->printLine('<white>PHP Code Coverage Guard</white>');
         $printer->printLine('');
         $printer->printLine('<white>Usage:</white>');
-        $printer->printLine(self::INDENT . 'coverage-guard <command> [arguments] [options]');
+        $printer->printLine(self::INDENT . 'vendor/bin/coverage-guard <command> [arguments] [options]');
         $printer->printLine('');
         $printer->printLine('<white>Available commands:</white>');
 
@@ -94,11 +102,13 @@ final class HelpRenderer
 
         $printer->printLine('');
         $printer->printLine('<white>Global options:</white>');
-        $printer->printLine(self::INDENT . '<green>--help             </green>Show help message');
-        $printer->printLine(self::INDENT . '<green>--no-color         </green>Disable colored output');
-        $printer->printLine(self::INDENT . '<green>--color            </green>Force colored output');
+        foreach (CommandRunner::GLOBAL_OPTIONS as $name => $description) {
+            $optStr = "--{$name}";
+            $optStrPadded = str_pad($optStr, 19);
+            $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$description}");
+        }
         $printer->printLine('');
-        $printer->printLine('Run "coverage-guard <command> --help" for more information on a specific command.');
+        $printer->printLine('Run "vendor/bin/coverage-guard <command> --help" for more information on a specific command.');
     }
 
     private function getInvokeMethod(Command $command): ReflectionMethod
