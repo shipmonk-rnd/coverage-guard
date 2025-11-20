@@ -80,20 +80,21 @@ final class MergeCommandTest extends TestCase
         ?CoverageOutputFormat $format,
     ): void
     {
-        $commandStream = $this->createStream();
-        $printerStream = $this->createStream();
+        $outStream = $this->createStream();
+        $errStream = $this->createStream();
 
         $fixturesDir = __DIR__ . '/../_fixtures/MergeCommand';
 
         $indent = '    ';
-        $printer = new Printer($printerStream, noColor: true);
+        $outPrinter = new Printer($outStream, noColor: true);
+        $errPrinter = new Printer($errStream, noColor: true);
         $configResolver = new ConfigResolver(__DIR__);
         $configPath = $fixturesDir . '/config.php';
 
-        $command = new MergeCommand(new CoverageProvider(new CoverageFormatDetector(), $printer), new CoverageMerger(), new CoverageFormatDetector(), $configResolver, $commandStream);
+        $command = new MergeCommand(new CoverageProvider(new CoverageFormatDetector(), $errPrinter), new CoverageMerger(), new CoverageFormatDetector(), $configResolver, $outPrinter);
         $command($format, $indent, $configPath, ...$inputFiles);
 
-        $this->assertStreamMatchesFile($commandStream, $expectedFile, [
+        $this->assertStreamMatchesFile($outStream, $expectedFile, [
             '/timestamp=".*?"/' => 'timestamp="dummy"',
             $this->buildRegexForPath($fixturesDir) => '/new/absolute',
             '#' . preg_quote(DIRECTORY_SEPARATOR, '#') . '#' => '/',

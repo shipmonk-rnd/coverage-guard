@@ -64,19 +64,20 @@ final class ConvertCommandTest extends TestCase
         string $indent,
     ): void
     {
-        $commandStream = $this->createStream();
-        $printerStream = $this->createStream();
+        $outStream = $this->createStream();
+        $errStream = $this->createStream();
 
         $fixturesDir = __DIR__ . '/../_fixtures/ConvertCommand';
 
-        $printer = new Printer($printerStream, noColor: true);
+        $outPrinter = new Printer($outStream, noColor: true);
+        $errPrinter = new Printer($errStream, noColor: true);
         $configResolver = new ConfigResolver(__DIR__);
         $configPath = null;
 
-        $command = new ConvertCommand(new CoverageProvider(new CoverageFormatDetector(), $printer), $configResolver, $commandStream);
+        $command = new ConvertCommand(new CoverageProvider(new CoverageFormatDetector(), $errPrinter), $configResolver, $outPrinter);
         $command($inputFile, $format, $configPath, $indent);
 
-        $this->assertStreamMatchesFile($commandStream, $expectedFile, [
+        $this->assertStreamMatchesFile($outStream, $expectedFile, [
             '/timestamp=".*?"/' => 'timestamp="dummy"',
             '/generated=".*?"/' => 'generated="dummy"',
             $this->buildRegexForPath(dirname($fixturesDir)) => 'tests/_fixtures',
