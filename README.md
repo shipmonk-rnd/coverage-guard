@@ -150,7 +150,7 @@ Options:
 - Output formats: `clover`, `cobertura`
 
 ```sh
-vendor/bin/coverage-guard merge coverage/*.xml --output-format clover > merged-clover.xml
+vendor/bin/coverage-guard merge coverage/*.xml > merged.xml
 vendor/bin/coverage-guard convert cobertura.xml --output-format clover > clover.xml
 ```
 

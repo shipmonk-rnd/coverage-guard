@@ -3,7 +3,8 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
-use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageOutputFormat;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Coverage\CoverageMerger;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
@@ -26,7 +27,7 @@ final class MergeCommandTest extends TestCase
         $this->assertMergeProducesExpectedOutput(
             [$input1, $input2],
             $expectedFile,
-            CoverageFormat::Cobertura,
+            CoverageOutputFormat::Cobertura,
         );
     }
 
@@ -39,7 +40,7 @@ final class MergeCommandTest extends TestCase
         $this->assertMergeProducesExpectedOutput(
             [$input1, $input2],
             $expectedFile,
-            CoverageFormat::Cobertura,
+            CoverageOutputFormat::Cobertura,
         );
     }
 
@@ -52,7 +53,7 @@ final class MergeCommandTest extends TestCase
         $this->assertMergeProducesExpectedOutput(
             [$emptyInput, $validInput],
             $expectedFile,
-            CoverageFormat::Cobertura,
+            CoverageOutputFormat::Cobertura,
         );
     }
 
@@ -62,7 +63,7 @@ final class MergeCommandTest extends TestCase
     private function assertMergeProducesExpectedOutput(
         array $inputFiles,
         string $expectedFile,
-        CoverageFormat $format,
+        CoverageOutputFormat $format,
     ): void
     {
         $commandStream = $this->createStream();
@@ -75,7 +76,7 @@ final class MergeCommandTest extends TestCase
         $configResolver = new ConfigResolver(__DIR__);
         $configPath = $fixturesDir . '/config.php';
 
-        $command = new MergeCommand(new CoverageProvider($printer), new CoverageMerger(), $configResolver, $commandStream);
+        $command = new MergeCommand(new CoverageProvider(new CoverageFormatDetector(), $printer), new CoverageMerger(), new CoverageFormatDetector(), $configResolver, $commandStream);
         $command($format, $indent, $configPath, ...$inputFiles);
 
         $this->assertStreamMatchesFile($commandStream, $expectedFile, [

@@ -3,7 +3,8 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PHPUnit\Framework\TestCase;
-use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageOutputFormat;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\StreamTestTrait;
@@ -25,7 +26,7 @@ final class ConvertCommandTest extends TestCase
         $this->assertConvertProducesExpectedOutput(
             $inputFile,
             $expectedFile,
-            CoverageFormat::Cobertura,
+            CoverageOutputFormat::Cobertura,
             '    ',
         );
     }
@@ -38,7 +39,7 @@ final class ConvertCommandTest extends TestCase
         $this->assertConvertProducesExpectedOutput(
             $inputFile,
             $expectedFile,
-            CoverageFormat::Clover,
+            CoverageOutputFormat::Clover,
             '    ',
         );
     }
@@ -51,7 +52,7 @@ final class ConvertCommandTest extends TestCase
         $this->assertConvertProducesExpectedOutput(
             $inputFile,
             $expectedFile,
-            CoverageFormat::Cobertura,
+            CoverageOutputFormat::Cobertura,
             '        ',
         );
     }
@@ -59,7 +60,7 @@ final class ConvertCommandTest extends TestCase
     private function assertConvertProducesExpectedOutput(
         string $inputFile,
         string $expectedFile,
-        CoverageFormat $format,
+        CoverageOutputFormat $format,
         string $indent,
     ): void
     {
@@ -72,7 +73,7 @@ final class ConvertCommandTest extends TestCase
         $configResolver = new ConfigResolver(__DIR__);
         $configPath = null;
 
-        $command = new ConvertCommand(new CoverageProvider($printer), $configResolver, $commandStream);
+        $command = new ConvertCommand(new CoverageProvider(new CoverageFormatDetector(), $printer), $configResolver, $commandStream);
         $command($inputFile, $format, $configPath, $indent);
 
         $this->assertStreamMatchesFile($commandStream, $expectedFile, [

@@ -2,7 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Cli;
 
-enum CoverageFormat: string
+enum CoverageOutputFormat: string
 {
 
     case Clover = 'clover';

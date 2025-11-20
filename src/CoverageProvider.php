@@ -2,6 +2,8 @@
 
 namespace ShipMonk\CoverageGuard;
 
+use ShipMonk\CoverageGuard\Cli\CoverageInputFormat;
+use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Extractor\CloverCoverageExtractor;
@@ -10,10 +12,7 @@ use ShipMonk\CoverageGuard\Extractor\CoverageExtractor;
 use ShipMonk\CoverageGuard\Extractor\PhpUnitCoverageExtractor;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use function count;
-use function file_get_contents;
 use function is_file;
-use function str_contains;
-use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function substr;
@@ -22,6 +21,7 @@ final class CoverageProvider
 {
 
     public function __construct(
+        private readonly CoverageFormatDetector $coverageFormatDetector,
         private readonly Printer $printer,
     )
     {
@@ -91,38 +91,13 @@ final class CoverageProvider
      */
     private function createExtractor(string $coverageFile): CoverageExtractor
     {
-        if (!is_file($coverageFile)) {
-            throw new ErrorException("Coverage file not found: {$coverageFile}");
-        }
+        $format = $this->coverageFormatDetector->detectFormat($coverageFile);
 
-        if (str_ends_with($coverageFile, '.cov')) {
-            return new PhpUnitCoverageExtractor();
-        }
-
-        if (str_ends_with($coverageFile, '.xml')) {
-            return $this->detectExtractorForXml($coverageFile);
-        }
-
-        throw new ErrorException("Unknown coverage file format: '{$coverageFile}'. Expecting .cov or .xml");
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    private function detectExtractorForXml(string $xmlFile): CoverageExtractor
-    {
-        $xmlLoader = new XmlLoader();
-        $content = file_get_contents($xmlFile);
-
-        if ($content === false) {
-            throw new ErrorException("Failed to read file: {$xmlFile}");
-        }
-
-        if (str_contains($content, '<project')) {
-            return new CloverCoverageExtractor($xmlLoader);
-        }
-
-        return new CoberturaCoverageExtractor($xmlLoader);
+        return match ($format) {
+            CoverageInputFormat::Php => new PhpUnitCoverageExtractor(),
+            CoverageInputFormat::Clover => new CloverCoverageExtractor(new XmlLoader()),
+            CoverageInputFormat::Cobertura => new CoberturaCoverageExtractor(new XmlLoader()),
+        };
     }
 
     private function mapCoverageFilePath(

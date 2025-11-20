@@ -2,16 +2,16 @@
 
 namespace ShipMonk\CoverageGuard\Writer;
 
-use ShipMonk\CoverageGuard\Cli\CoverageFormat;
+use ShipMonk\CoverageGuard\Cli\CoverageOutputFormat;
 
 final class CoverageWriterFactory
 {
 
-    public static function create(CoverageFormat $format): CoverageWriter
+    public static function create(CoverageOutputFormat $format): CoverageWriter
     {
         return match ($format) {
-            CoverageFormat::Clover => new CloverCoverageWriter(),
-            CoverageFormat::Cobertura => new CoberturaCoverageWriter(),
+            CoverageOutputFormat::Clover => new CloverCoverageWriter(),
+            CoverageOutputFormat::Cobertura => new CoberturaCoverageWriter(),
         };
     }
 
