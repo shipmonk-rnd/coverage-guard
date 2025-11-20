@@ -57,13 +57,27 @@ final class MergeCommandTest extends TestCase
         );
     }
 
+    public function testAutodetectCoberturaFormat(): void
+    {
+        $input1 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-1.xml';
+        $input2 = __DIR__ . '/../_fixtures/MergeCommand/cobertura-2.xml';
+        $expectedFile = __DIR__ . '/../_fixtures/MergeCommand/cobertura-merged-expected.xml';
+
+        // When format is null, it should autodetect from input files
+        $this->assertMergeProducesExpectedOutput(
+            [$input1, $input2],
+            $expectedFile,
+            format: null,
+        );
+    }
+
     /**
      * @param list<string> $inputFiles
      */
     private function assertMergeProducesExpectedOutput(
         array $inputFiles,
         string $expectedFile,
-        CoverageOutputFormat $format,
+        ?CoverageOutputFormat $format,
     ): void
     {
         $commandStream = $this->createStream();
