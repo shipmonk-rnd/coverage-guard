@@ -40,6 +40,10 @@ if ($cwd === false) {
     throw new LogicException('Cannot determine current working directory');
 }
 
+if (!isset($argv)) {
+    throw new LogicException('Missing $argv, check your register_argc_argv setting');
+}
+
 $stderrPrinter = Printer::create(STDERR, $argv);
 $stdoutPrinter = Printer::create(STDOUT, $argv);
 
