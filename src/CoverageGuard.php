@@ -86,8 +86,8 @@ final class CoverageGuard
 
             if ($verbose) {
                 $relativePath = $this->pathHelper->relativizePath($file);
-                $coveragePerc = $fileCoverage->getCoveragePercentage();
-                $this->printer->printLine("<white>{$relativePath}</white> - $coveragePerc%");
+                $coveragePercentage = (int) $fileCoverage->getCoveragePercentage();
+                $this->printer->printLine("<white>{$relativePath}</white> - $coveragePercentage%");
             }
 
             foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {

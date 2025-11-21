@@ -2,9 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Coverage;
 
-use function array_reduce;
 use function count;
-use function round;
 
 final class FileCoverage
 {
@@ -20,13 +18,16 @@ final class FileCoverage
     {
     }
 
-    public function getCoveragePercentage(): int
+    public function getCoveragePercentage(): float
     {
-        $coveredLines = array_reduce($this->executableLines, static function (int $carry, ExecutableLine $line): int {
-            return $line->hits > 0 ? $carry + 1 : $carry;
-        }, 0);
+        $coveredLines = 0;
+        foreach ($this->executableLines as $line) {
+            if ($line->hits > 0) {
+                $coveredLines++;
+            }
+        }
         $totalLines = count($this->executableLines);
-        return (int) round($coveredLines / $totalLines * 100, 0);
+        return $coveredLines / $totalLines * 100;
     }
 
 }
