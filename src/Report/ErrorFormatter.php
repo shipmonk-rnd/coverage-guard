@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function count;
+use function explode;
 use function extension_loaded;
 use function is_array;
 use function ltrim;
@@ -174,7 +175,12 @@ final class ErrorFormatter
         $this->printer->printLine('┌─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine("│ {$clickableFileLocation}");
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
-        $this->printer->printLine("│ {$coverageError->getMessage()}");
+
+        $messageLines = explode("\n", $coverageError->getMessage());
+        foreach ($messageLines as $messageLine) {
+            $this->printer->printLine("│ {$messageLine}");
+        }
+
         $this->printer->printLine('├─────────────────────────────────────────────────────────────────────────────────');
         $this->printer->printLine($this->formatBlock($codeBlock, $patchMode));
         $this->printer->printLine('└─────────────────────────────────────────────────────────────────────────────────');
