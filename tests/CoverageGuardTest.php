@@ -12,6 +12,7 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
+use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function rewind;
 use function str_replace;
 use function stream_get_contents;
