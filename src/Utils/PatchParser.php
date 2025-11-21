@@ -8,17 +8,14 @@ use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
-use function exec;
+use function dirname;
+use function file_exists;
 use function file_get_contents;
-use function function_exists;
-use function is_dir;
 use function is_file;
 use function method_exists;
 use function str_ends_with;
 use function str_starts_with;
-use function strlen;
 use function substr;
-use function trim;
 use const DIRECTORY_SEPARATOR;
 
 final class PatchParser
@@ -123,27 +120,22 @@ final class PatchParser
 
     private function detectGitRoot(): ?string
     {
-        if (is_dir($this->cwd . '/.git/')) {
-            return $this->cwd;
-        }
+        $dir = $this->cwd;
 
-        if (!function_exists('exec')) {
-            return null;
-        }
-
-        $output = [];
-        $returnCode = 0;
-
-        @exec('git rev-parse --show-toplevel 2>/dev/null', $output, $returnCode);
-
-        if ($returnCode === 0 && isset($output[0]) && strlen($output[0]) !== 0) {
-            $gitRoot = trim($output[0]);
-            if (is_dir($gitRoot)) {
-                return $gitRoot;
+        while (true) {
+            if (file_exists($dir . '/.git')) {
+                return $dir;
             }
-        }
 
-        return null;
+            $parent = dirname($dir);
+
+            if ($parent === $dir) {
+                // Reached filesystem root
+                return null;
+            }
+
+            $dir = $parent;
+        }
     }
 
     /**
