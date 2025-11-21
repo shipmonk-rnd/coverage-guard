@@ -2,9 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Coverage;
 
-use function array_reduce;
 use function count;
-use function round;
 
 final class FileCoverage
 {
