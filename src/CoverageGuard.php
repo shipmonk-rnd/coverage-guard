@@ -16,6 +16,7 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
+use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function array_combine;
 use function array_fill_keys;
 use function array_keys;

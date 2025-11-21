@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace ShipMonk\CoverageGuard;
+namespace ShipMonk\CoverageGuard\Utils;
 
 use function rtrim;
 use function str_replace;

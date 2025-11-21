@@ -4,8 +4,8 @@ namespace ShipMonk\CoverageGuard\Report;
 
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
-use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
+use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function count;
 use function extension_loaded;
 use function is_array;
