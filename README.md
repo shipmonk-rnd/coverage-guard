@@ -26,6 +26,10 @@ XDEBUG_MODE=coverage vendor/bin/phpunit tests --coverage-filter src --coverage-c
 vendor/bin/coverage-guard check clover.xml
 ```
 
+### Example output:
+
+<img src="img/error_output.png" width="593"/>
+
 
 In real application, you will probably use `phpunit.xml` to [configure PHPUnit coverage](https://docs.phpunit.de/en/10.5/code-coverage.html#including-files):
 
