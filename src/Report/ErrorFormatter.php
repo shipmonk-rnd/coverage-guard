@@ -133,11 +133,12 @@ final class ErrorFormatter
         $analysedFilesCount = count($report->analysedFiles);
         $plural = $analysedFilesCount > 1 ? 's' : '';
         $timeFormatted = $this->formatTime($report->elapsedTime);
+        $suffix = " (analysed $analysedFilesCount file$plural in $timeFormatted)";
 
         $this->printer->printLine('');
 
         if (count($reportedErrors) === 0) {
-            $this->printer->printLine("✅ No coverage issue found (analysed $analysedFilesCount file$plural in $timeFormatted)");
+            $this->printer->printLine("✅ No coverage issue found$suffix");
             $this->printer->printLine('');
             return 0;
         }
@@ -146,7 +147,7 @@ final class ErrorFormatter
             $this->formatError($reportedError, $report->patchMode, $editorUrl);
         }
 
-        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues (in $analysedFilesCount analysed file$plural in $timeFormatted)");
+        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues$suffix");
         $this->printer->printLine('');
 
         return 1;
