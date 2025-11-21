@@ -19,6 +19,7 @@ use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
+use ShipMonk\CoverageGuard\Stopwatch;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 
@@ -49,7 +50,8 @@ try {
     $coverageProvider = new CoverageProvider($coverageFormatDetector, $stderrPrinter);
     $pathHelper = new PathHelper($cwd);
     $phpParser = (new ParserFactory())->createForHostVersion();
-    $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider);
+    $stopwatch = new Stopwatch();
+    $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
     $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
 
     $registry = new CommandRegistry();

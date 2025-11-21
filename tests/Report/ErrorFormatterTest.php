@@ -120,7 +120,7 @@ final class ErrorFormatterTest extends TestCase
             CoverageError::message('Message'),
         );
 
-        return new CoverageReport([$reportedError], ['/tmp/test.php'], patchMode: $patchMode);
+        return new CoverageReport([$reportedError], ['/tmp/test.php'], patchMode: $patchMode, elapsedTime: 0.0);
     }
 
     /**
