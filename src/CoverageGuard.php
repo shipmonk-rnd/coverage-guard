@@ -34,6 +34,7 @@ final class CoverageGuard
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
         private readonly CoverageProvider $coverageProvider,
+        private readonly Stopwatch $stopwatch,
     )
     {
     }
@@ -48,6 +49,8 @@ final class CoverageGuard
         bool $verbose,
     ): CoverageReport
     {
+        $this->stopwatch->start();
+
         $patchMode = $patchFile !== null;
         $coveragePerFile = $this->coverageProvider->getCoverage($config, $coverageFile);
         $changesPerFile = $patchFile === null
@@ -92,7 +95,9 @@ final class CoverageGuard
             }
         }
 
-        return new CoverageReport($reportedErrors, $analysedFiles, $patchMode);
+        $elapsedTime = $this->stopwatch->stop();
+
+        return new CoverageReport($reportedErrors, $analysedFiles, $patchMode, $elapsedTime);
     }
 
     /**

@@ -13,6 +13,7 @@ final class CoverageReport
         public readonly array $reportedErrors,
         public readonly array $analysedFiles,
         public readonly bool $patchMode,
+        public readonly float $elapsedTime,
     )
     {
     }

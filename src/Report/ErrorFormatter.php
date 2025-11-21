@@ -11,6 +11,7 @@ use function extension_loaded;
 use function is_array;
 use function ltrim;
 use function min;
+use function number_format;
 use function rtrim;
 use function str_pad;
 use function str_replace;
@@ -131,11 +132,13 @@ final class ErrorFormatter
         $reportedErrors = $report->reportedErrors;
         $analysedFilesCount = count($report->analysedFiles);
         $plural = $analysedFilesCount > 1 ? 's' : '';
+        $timeFormatted = $this->formatTime($report->elapsedTime);
+        $suffix = " (analysed $analysedFilesCount file$plural in $timeFormatted)";
 
         $this->printer->printLine('');
 
         if (count($reportedErrors) === 0) {
-            $this->printer->printLine("✅ No coverage issue found (analysed $analysedFilesCount file$plural)");
+            $this->printer->printLine("✅ No coverage issue found$suffix");
             $this->printer->printLine('');
             return 0;
         }
@@ -144,7 +147,7 @@ final class ErrorFormatter
             $this->formatError($reportedError, $report->patchMode, $editorUrl);
         }
 
-        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues (in $analysedFilesCount analysed file$plural)");
+        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues$suffix");
         $this->printer->printLine('');
 
         return 1;
@@ -339,6 +342,11 @@ final class ErrorFormatter
             T_DOUBLE_COLON, T_OBJECT_OPERATOR => true,
             default => false,
         };
+    }
+
+    private function formatTime(float $seconds): string
+    {
+        return number_format($seconds, 3) . 's';
     }
 
 }

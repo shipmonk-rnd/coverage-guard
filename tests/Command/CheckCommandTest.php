@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageGuard;
@@ -11,6 +12,7 @@ use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\PathHelper;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Report\ErrorFormatter;
+use ShipMonk\CoverageGuard\Stopwatch;
 use ShipMonk\CoverageGuard\StreamTestTrait;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
@@ -122,9 +124,18 @@ final class CheckCommandTest extends TestCase
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $stderrPrinter);
         $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter);
-        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider);
+        $stopwatch = $this->createStopwatchMock();
+        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
         $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
         return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);
+    }
+
+    private function createStopwatchMock(): MockObject&Stopwatch
+    {
+        $stopwatch = $this->createMock(Stopwatch::class);
+        $stopwatch->expects(self::any())->method('stop')->willReturn(0.0);
+
+        return $stopwatch;
     }
 
 }

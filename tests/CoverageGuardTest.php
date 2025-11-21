@@ -4,6 +4,7 @@ namespace ShipMonk\CoverageGuard;
 
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -186,8 +187,17 @@ final class CoverageGuardTest extends TestCase
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
         $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $printer);
+        $stopwatch = $this->createStopwatchMock();
 
-        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $coverageProvider);
+        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
+    }
+
+    private function createStopwatchMock(): MockObject&Stopwatch
+    {
+        $stopwatch = $this->createMock(Stopwatch::class);
+        $stopwatch->expects(self::any())->method('stop')->willReturn(0.0);
+
+        return $stopwatch;
     }
 
     private function createPrinter(bool $noColor = false): Printer
