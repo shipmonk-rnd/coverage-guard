@@ -2,9 +2,9 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use LogicException;
 use function array_filter;
 use function count;
+use function round;
 
 /**
  * @api
@@ -41,53 +41,26 @@ abstract class CodeBlock
     }
 
     /**
-     * @param int $requiredPercentage 0-100
+     * Calculates the coverage percentage of the code block.
+     *
+     * @return int 0-100
      */
-    public function isCoveredAtLeastByPercent(int $requiredPercentage): bool
+    public function getCoveragePercentage(): int
     {
-        if ($requiredPercentage < 0 || $requiredPercentage > 100) {
-            throw new LogicException('Minimal required percentage must be between 0 and 100');
-        }
+        $totalExecutableLines = $this->getExecutableLinesCount();
 
-        $executableLines = $this->getExecutableLines();
-        $totalLines = count($executableLines);
-
-        if ($totalLines === 0) {
-            return false;
-        }
-
-        $coveredLines = 0;
-
-        foreach ($executableLines as $line) {
-            if ($line->isCovered()) {
-                $coveredLines++;
-            }
-        }
-
-        $coveragePercentage = ($coveredLines / $totalLines) * 100;
-        return $coveragePercentage >= $requiredPercentage;
-    }
-
-    public function getCoveragePercentage(): float
-    {
-        $executableLines = $this->getExecutableLines();
-        $totalLines = count($executableLines);
-
-        if ($totalLines === 0) {
+        if ($totalExecutableLines === 0) {
             return 0;
         }
 
-        $coveredLines = 0;
+        $coveredLines = $this->getCoveredLinesCount();
 
-        foreach ($executableLines as $line) {
-            if ($line->isCovered()) {
-                $coveredLines++;
-            }
-        }
-
-        return ($coveredLines / $totalLines) * 100;
+        return (int) round(($coveredLines / $totalExecutableLines) * 100, 0);
     }
 
+    /**
+     * Calculates the number of covered executable lines in the code block.
+     */
     public function getCoveredLinesCount(): int
     {
         $coveredLines = 0;
@@ -100,21 +73,30 @@ abstract class CodeBlock
     }
 
     /**
-     * @param int $requiredPercentage 0-100
+     * Calculates the percentage of changed executable lines in the code block.
+     *
+     * @return int 0-100
      */
-    public function isChangedAtLeastByPercent(int $requiredPercentage): bool
+    public function getChangePercentage(): int
     {
-        if ($requiredPercentage < 0 || $requiredPercentage > 100) {
-            throw new LogicException('Minimal required percentage must be between 0 and 100');
-        }
-
         $executableLines = $this->getExecutableLines();
-        $totalLines = count($executableLines);
+        $totalExecutableLines = count($executableLines);
 
-        if ($totalLines === 0) {
-            return false;
+        if ($totalExecutableLines === 0) {
+            return 0;
         }
 
+        $changedLines = $this->getChangedLinesCount();
+
+        return (int) round(($changedLines / $totalExecutableLines) * 100, 0);
+    }
+
+    /**
+     * Calculates the number of changed executable lines in the code block.
+     */
+    public function getChangedLinesCount(): int
+    {
+        $executableLines = $this->getExecutableLines();
         $changedLines = 0;
 
         foreach ($executableLines as $line) {
@@ -123,60 +105,12 @@ abstract class CodeBlock
             }
         }
 
-        $changedPercentage = ($changedLines / $totalLines) * 100;
-        return $changedPercentage >= $requiredPercentage;
+        return $changedLines;
     }
 
-    /**
-     * True if block has 100% coverage
-     */
-    public function isFullyCovered(): bool
+    public function getStartLineNumber(): int
     {
-        foreach ($this->getExecutableLines() as $line) {
-            if (!$line->isCovered()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * True if block is completely new or changed (in provided patch file)
-     */
-    public function isFullyChanged(): bool
-    {
-        foreach ($this->getExecutableLines() as $line) {
-            if (!$line->isChanged()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * True if block has at least one executable line changed
-     */
-    public function isChanged(): bool
-    {
-        foreach ($this->getExecutableLines() as $line) {
-            if ($line->isChanged()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * True if block is not tested at all
-     */
-    public function isFullyUncovered(): bool
-    {
-        foreach ($this->getExecutableLines() as $line) {
-            if ($line->isCovered()) {
-                return false;
-            }
-        }
-        return true;
+        return $this->lines[0]->getNumber();
     }
 
     /**
@@ -187,11 +121,6 @@ abstract class CodeBlock
         return array_filter($this->lines, static function (LineOfCode $line): bool {
             return $line->isExecutable();
         });
-    }
-
-    public function getStartLineNumber(): int
-    {
-        return $this->lines[0]->getNumber();
     }
 
 }

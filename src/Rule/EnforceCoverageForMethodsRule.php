@@ -40,17 +40,17 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
 
         if (
             $this->minMethodChangePercentage !== null
-            && !$codeBlock->isChangedAtLeastByPercent($this->minMethodChangePercentage)
+            && $codeBlock->getChangePercentage() < $this->minMethodChangePercentage
         ) {
             return null;
         }
 
         if (
             $codeBlock->getExecutableLinesCount() >= $this->minExecutableLines
-            && !$codeBlock->isCoveredAtLeastByPercent($this->requiredCoveragePercentage)
+            && $codeBlock->getCoveragePercentage() < $this->requiredCoveragePercentage
         ) {
             $ref = "{$codeBlock->getClassName()}::{$codeBlock->getMethodName()}";
-            $coverage = (int) $codeBlock->getCoveragePercentage();
+            $coverage = $codeBlock->getCoveragePercentage();
             $currentString = $coverage === 0 ? 'no' : "only {$coverage}%";
 
             return CoverageError::message("Method <white>$ref</white> has $currentString coverage, expected at least $this->requiredCoveragePercentage%.");

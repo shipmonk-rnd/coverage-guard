@@ -217,8 +217,8 @@ final class CoverageGuardTest extends TestCase
             ): ?CoverageError
             {
                 if (
-                    $codeBlock->isFullyUncovered()
-                    && $codeBlock->isFullyChanged()
+                    $codeBlock->getCoveragePercentage() === 0
+                    && $codeBlock->getChangePercentage() === 100
                 ) {
                     return CoverageError::message('Not 100% covered');
                 }
