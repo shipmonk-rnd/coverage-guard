@@ -68,7 +68,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
                 $lines,
             );
 
-            if ($this->patchMode && !$block->isChanged()) {
+            if ($this->patchMode && $block->getChangedLinesCount() === 0) {
                 return null; // unchanged methods not passed to rules in patch mode
             }
 

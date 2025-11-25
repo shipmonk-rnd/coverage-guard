@@ -23,6 +23,9 @@ final class LineOfCode
         }
     }
 
+    /**
+     * Starting at 1
+     */
     public function getNumber(): int
     {
         return $this->number;
@@ -43,6 +46,9 @@ final class LineOfCode
         return $this->changed;
     }
 
+    /**
+     * Without trailing EOL
+     */
     public function getContents(): string
     {
         return $this->contents;

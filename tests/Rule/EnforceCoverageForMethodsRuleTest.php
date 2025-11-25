@@ -55,7 +55,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $error = $rule->inspect(codeBlock: $block, patchMode: false);
 
         self::assertNotNull($error);
-        self::assertSame('Method <white>TestClass::testMethod</white> has only 16% coverage, expected at least 50%.', $error->getMessage());
+        self::assertSame('Method <white>TestClass::testMethod</white> has only 17% coverage, expected at least 50%.', $error->getMessage());
     }
 
     public function testReturnsNullWhenMethodHasLessThanMinExecutableLinesDefault(): void

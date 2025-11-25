@@ -11,7 +11,7 @@ $config->addRule(new class implements CoverageRule {
 
     public function inspect(CodeBlock $codeBlock, bool $patchMode,): ?CoverageError
     {
-        if (!$codeBlock->isCoveredAtLeastByPercent(100)) {
+        if ($codeBlock->getCoveragePercentage() < 100) {
             return CoverageError::message('We need 100% coverage!');
         }
         return null;

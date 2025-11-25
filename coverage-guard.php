@@ -19,10 +19,10 @@ $config->addRule(new class implements CoverageRule {
         }
 
         $classReflection = $codeBlock->getMethodReflection()->getDeclaringClass();
-        $coverage = (int) $codeBlock->getCoveragePercentage();
+        $coverage = $codeBlock->getCoveragePercentage();
 
         // @api class methods to have at least 50% coverage
-        if ($this->isPublicApiClass($classReflection) && !$codeBlock->isCoveredAtLeastByPercent(50)) {
+        if ($this->isPublicApiClass($classReflection) && $codeBlock->getCoveragePercentage() < 50) {
             return CoverageError::message("Method <white>{$codeBlock->getMethodName()}</white> of @api class has only $coverage% coverage, expected at least 50%.");
         }
 
