@@ -91,6 +91,9 @@ abstract class CodeBlock
         return (int) round(($changedLines / $totalExecutableLines) * 100, 0);
     }
 
+    /**
+     * Calculates the number of changed executable lines in the code block.
+     */
     public function getChangedLinesCount(): int
     {
         $executableLines = $this->getExecutableLines();
