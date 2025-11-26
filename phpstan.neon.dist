@@ -45,6 +45,8 @@ parameters:
         usageExcluders:
             tests:
                 enabled: true
+        detect:
+            deadEnumCases: true
 
     shipmonkRules:
         classSuffixNaming:
