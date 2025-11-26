@@ -94,7 +94,7 @@ final class CoberturaCoverageWriter implements CoverageWriter
         $globalLineRate = $globalLinesValid > 0 ? $globalLinesCovered / $globalLinesValid : 0.0;
 
         $coverage = $dom->createElement('coverage');
-        $coverage->setAttribute('line-rate', number_format($globalLineRate, decimals: 3));
+        $coverage->setAttribute('line-rate', number_format($globalLineRate, decimals: 5));
         $coverage->setAttribute('branch-rate', '0');
         $coverage->setAttribute('lines-covered', (string) $globalLinesCovered);
         $coverage->setAttribute('lines-valid', (string) $globalLinesValid);
