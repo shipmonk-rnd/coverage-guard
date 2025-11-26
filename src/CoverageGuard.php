@@ -60,7 +60,7 @@ final class CoverageGuard
 
         $rules = $config->getRules();
         if ($rules === []) {
-            $this->printer->printWarning('No rules configured, will report only long fully untested methods!');
+            $this->printer->printWarning('No rules configured, will report only long fully untested methods! Run <green>vendor/bin/coverage-guard init</green> to generate basic config file.');
 
             $rules[] = new EnforceCoverageForMethodsRule(minExecutableLines: 5);
         }

@@ -9,6 +9,7 @@ use ShipMonk\CoverageGuard\Cli\HelpRenderer;
 use ShipMonk\CoverageGuard\Cli\ParameterResolver;
 use ShipMonk\CoverageGuard\Command\CheckCommand;
 use ShipMonk\CoverageGuard\Command\ConvertCommand;
+use ShipMonk\CoverageGuard\Command\InitCommand;
 use ShipMonk\CoverageGuard\Command\MergeCommand;
 use ShipMonk\CoverageGuard\Command\PatchCoverageCommand;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
@@ -63,6 +64,7 @@ try {
     $registry->register(new MergeCommand($coverageProvider, new CoverageMerger(), $coverageFormatDetector, $configResolver, $stdoutPrinter));
     $registry->register(new ConvertCommand($coverageProvider, $configResolver, $stdoutPrinter));
     $registry->register(new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, $coverageProvider));
+    $registry->register(new InitCommand($cwd, $stdoutPrinter));
 
     $parameterResolver = new ParameterResolver();
 
