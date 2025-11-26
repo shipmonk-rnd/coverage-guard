@@ -60,8 +60,10 @@ vendor/bin/coverage-guard check clover.xml --patch changes.patch
 
 ## Configuration
 
-Create a `coverage-guard.php` file in your project root to customize behavior and set up your `CoverageRules`.
-The config file must return an instance of `ShipMonk\CoverageGuard\Config`:
+- Create a `coverage-guard.php` file in your project root to customize behavior and set up your `CoverageRules`.
+  - You can generate quick-start one by `vendor/bin/coverage-guard init`
+- The config file must return an instance of `ShipMonk\CoverageGuard\Config`
+- Here is what you can configure:
 
 ```php
 <?php
@@ -83,7 +85,7 @@ $config->addRule(new EnforceCoverageForMethodsRule(
 $config->addCoveragePathMapping('/absolute/ci/prefix', __DIR__);
 
 // As filepaths in git patches are relative to the project root, you can specify the root directory here
-// It gets autodetected if cwd is beside /.git/ or if git binary is available
+// It gets autodetected if cwd is inside some git repository
 $config->setGitRoot(__DIR__);
 
 // Make CLI file paths clickable to your IDE
@@ -186,6 +188,15 @@ Patch Coverage Statistics:
   Covered lines:            38
   Uncovered lines:          7
   Coverage:                 84.44%
+```
+
+### `init`
+
+- Generates sample `coverage-guard.php` configuration file in your current directory.
+  - You should customize it to your needs.
+
+```sh
+vendor/bin/coverage-guard init
 ```
 
 ## Optional dependencies
