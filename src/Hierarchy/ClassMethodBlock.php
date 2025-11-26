@@ -30,6 +30,9 @@ final class ClassMethodBlock extends CodeBlock
         $this->className = $className;
     }
 
+    /**
+     * Returns FQN of class/trait/enum name
+     */
     public function getClassName(): string
     {
         return $this->className;
