@@ -53,7 +53,7 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
             $coverage = $codeBlock->getCoveragePercentage();
             $currentString = $coverage === 0 ? 'no' : "only {$coverage}%";
 
-            return CoverageError::message("Method <white>$ref</white> has $currentString coverage, expected at least $this->requiredCoveragePercentage%.");
+            return CoverageError::create("Method <white>$ref</white> has $currentString coverage, expected at least $this->requiredCoveragePercentage%.");
         }
 
         return null;

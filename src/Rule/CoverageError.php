@@ -14,7 +14,7 @@ final class CoverageError
     {
     }
 
-    public static function message(string $message): self
+    public static function create(string $message): self
     {
         return new self($message);
     }

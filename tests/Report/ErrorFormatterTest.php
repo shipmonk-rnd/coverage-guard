@@ -117,7 +117,7 @@ final class ErrorFormatterTest extends TestCase
         );
         $reportedError = new ReportedError(
             $codeBlock,
-            CoverageError::message('Message'),
+            CoverageError::create('Message'),
         );
 
         return new CoverageReport([$reportedError], ['/tmp/test.php'], patchMode: $patchMode, elapsedTime: 0.0);
