@@ -31,7 +31,7 @@ final class ClassMethodBlock extends CodeBlock
     }
 
     /**
-     * Returns FQN of class/trait/enum name
+     * Returns FQN of class/trait/enum
      */
     public function getClassName(): string
     {
