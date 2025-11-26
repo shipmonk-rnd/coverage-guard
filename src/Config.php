@@ -10,6 +10,8 @@ use function is_dir;
 use const DIRECTORY_SEPARATOR;
 
 /**
+ * This class is expected to be returned from a config file passed via --config option.
+ *
  * @api
  */
 final class Config

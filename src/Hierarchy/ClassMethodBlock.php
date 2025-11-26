@@ -7,6 +7,8 @@ use ReflectionException;
 use ReflectionMethod;
 
 /**
+ * Represents a non-empty block of code for a specific method in a class/trait/enum
+ *
  * @api
  */
 final class ClassMethodBlock extends CodeBlock

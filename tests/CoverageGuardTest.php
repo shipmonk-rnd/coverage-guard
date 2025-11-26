@@ -220,7 +220,7 @@ final class CoverageGuardTest extends TestCase
                     $codeBlock->getCoveragePercentage() === 0
                     && $codeBlock->getChangePercentage() === 100
                 ) {
-                    return CoverageError::message('Not 100% covered');
+                    return CoverageError::create('Not 100% covered');
                 }
 
                 return null;
