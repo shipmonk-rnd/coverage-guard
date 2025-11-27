@@ -10,7 +10,7 @@ use ReflectionMethod;
 /**
  * @api
  */
-final class AnalysisContext
+final class InspectionContext
 {
 
     public function __construct(

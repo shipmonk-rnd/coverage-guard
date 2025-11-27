@@ -2,7 +2,7 @@
 
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
-use ShipMonk\CoverageGuard\Rule\AnalysisContext;
+use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 
@@ -10,7 +10,7 @@ $config = new Config();
 $config->setGitRoot(__DIR__ . '/../..');
 $config->addRule(new class implements CoverageRule {
 
-    public function inspect(CodeBlock $codeBlock, AnalysisContext $context): ?CoverageError
+    public function inspect(CodeBlock $codeBlock, InspectionContext $context): ?CoverageError
     {
         if ($codeBlock->getCoveragePercentage() < 100) {
             return CoverageError::create('We need 100% coverage!');

@@ -10,8 +10,8 @@ use PhpParser\NodeVisitorAbstract;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
-use ShipMonk\CoverageGuard\Rule\AnalysisContext;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use function assert;
 use function range;
 
@@ -27,7 +27,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
      */
     private array $reportedErrors = [];
 
-    private AnalysisContext $context;
+    private InspectionContext $context;
 
     /**
      * @param array<int, int> $linesChanged line => line
@@ -153,7 +153,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     private function updateContext(): void
     {
-        $this->context = new AnalysisContext(
+        $this->context = new InspectionContext(
             className: $this->currentClass,
             methodName: $this->currentMethod,
             filePath: $this->filePath,

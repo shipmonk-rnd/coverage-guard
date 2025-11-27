@@ -14,7 +14,7 @@ interface CoverageRule
 
     public function inspect(
         CodeBlock $codeBlock,
-        AnalysisContext $context,
+        InspectionContext $context,
     ): ?CoverageError;
 
 }

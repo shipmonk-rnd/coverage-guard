@@ -27,7 +27,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -57,7 +57,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -85,7 +85,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -113,7 +113,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -142,7 +142,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -175,7 +175,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -208,7 +208,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',

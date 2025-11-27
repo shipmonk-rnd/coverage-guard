@@ -9,9 +9,9 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
-use ShipMonk\CoverageGuard\Rule\AnalysisContext;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function rewind;
@@ -214,7 +214,7 @@ final class CoverageGuardTest extends TestCase
 
             public function inspect(
                 CodeBlock $codeBlock,
-                AnalysisContext $context,
+                InspectionContext $context,
             ): ?CoverageError
             {
                 if (

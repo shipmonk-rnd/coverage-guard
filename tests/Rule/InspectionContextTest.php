@@ -7,12 +7,12 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 
-final class AnalysisContextTest extends TestCase
+final class InspectionContextTest extends TestCase
 {
 
     public function testGetClassName(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -24,7 +24,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetClassNameReturnsNull(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: null,
             methodName: null,
             filePath: '/path/to/file.php',
@@ -36,7 +36,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodName(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -48,7 +48,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodNameReturnsNull(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: null,
             methodName: null,
             filePath: '/path/to/file.php',
@@ -60,7 +60,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetFilePath(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -72,7 +72,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testIsPatchModeReturnsFalse(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -84,7 +84,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testIsPatchModeReturnsTrue(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'TestClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -96,7 +96,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetClassReflection(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: self::class,
             methodName: 'testGetClassReflection',
             filePath: __FILE__,
@@ -110,7 +110,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetClassReflectionReturnsNullWhenClassNameIsNull(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: null,
             methodName: null,
             filePath: '/path/to/file.php',
@@ -122,7 +122,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetClassReflectionThrowsExceptionForNonExistentClass(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: 'NonExistentClass',
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -137,7 +137,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodReflection(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: self::class,
             methodName: 'testGetMethodReflection',
             filePath: __FILE__,
@@ -151,7 +151,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodReflectionReturnsNullWhenClassNameIsNull(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: null,
             methodName: 'testMethod',
             filePath: '/path/to/file.php',
@@ -163,7 +163,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodReflectionReturnsNullWhenMethodNameIsNull(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: self::class,
             methodName: null,
             filePath: __FILE__,
@@ -175,7 +175,7 @@ final class AnalysisContextTest extends TestCase
 
     public function testGetMethodReflectionThrowsExceptionForNonExistentMethod(): void
     {
-        $context = new AnalysisContext(
+        $context = new InspectionContext(
             className: self::class,
             methodName: 'nonExistentMethod',
             filePath: __FILE__,

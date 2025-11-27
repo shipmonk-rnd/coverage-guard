@@ -31,7 +31,7 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
 
     public function inspect(
         CodeBlock $codeBlock,
-        AnalysisContext $context,
+        InspectionContext $context,
     ): ?CoverageError
     {
         if (!$codeBlock instanceof ClassMethodBlock) {
