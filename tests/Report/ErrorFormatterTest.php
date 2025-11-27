@@ -112,10 +112,10 @@ final class ErrorFormatterTest extends TestCase
         $codeBlock = new ClassMethodBlock(
             'TestClass',
             'testMethod',
-            '/tmp/test.php',
             $lines,
         );
         $reportedError = new ReportedError(
+            '/tmp/test.php',
             $codeBlock,
             CoverageError::create('Message'),
         );

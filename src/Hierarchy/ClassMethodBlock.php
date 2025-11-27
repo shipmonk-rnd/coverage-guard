@@ -21,11 +21,10 @@ final class ClassMethodBlock extends CodeBlock
     public function __construct(
         string $className,
         string $methodName,
-        string $filePath,
         array $lines,
     )
     {
-        parent::__construct($filePath, $lines);
+        parent::__construct($lines);
         $this->methodName = $methodName;
         $this->className = $className;
     }

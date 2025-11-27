@@ -16,15 +16,9 @@ abstract class CodeBlock
      * @param non-empty-list<LineOfCode> $lines
      */
     public function __construct(
-        private readonly string $filePath,
         private readonly array $lines,
     )
     {
-    }
-
-    public function getFilePath(): string
-    {
-        return $this->filePath;
     }
 
     /**

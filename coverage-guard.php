@@ -3,6 +3,7 @@
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
+use ShipMonk\CoverageGuard\Rule\AnalysisContext;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 
@@ -11,7 +12,7 @@ $config->addRule(new class implements CoverageRule {
 
     public function inspect(
         CodeBlock $codeBlock,
-        bool $patchMode,
+        AnalysisContext $context,
     ): ?CoverageError
     {
         if (!$codeBlock instanceof ClassMethodBlock) {

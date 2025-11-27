@@ -162,12 +162,13 @@ final class ErrorFormatter
     {
         $codeBlock = $reportedError->codeBlock;
         $coverageError = $reportedError->error;
+        $filePath = $reportedError->filePath;
 
-        $relativePath = $this->pathHelper->relativizePath($codeBlock->getFilePath());
+        $relativePath = $this->pathHelper->relativizePath($filePath);
         $fileLocation = "{$relativePath}:{$codeBlock->getStartLineNumber()}";
         $clickableFileLocation = $this->makeClickable(
             $fileLocation,
-            $codeBlock->getFilePath(),
+            $filePath,
             $codeBlock->getStartLineNumber(),
             $editorUrl,
         );

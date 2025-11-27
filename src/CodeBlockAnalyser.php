@@ -10,6 +10,7 @@ use PhpParser\NodeVisitorAbstract;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
+use ShipMonk\CoverageGuard\Rule\AnalysisContext;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use function assert;
 use function range;
@@ -19,10 +20,14 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     private ?string $currentClass = null;
 
+    private ?string $currentMethod = null;
+
     /**
      * @var list<ReportedError>
      */
     private array $reportedErrors = [];
+
+    private AnalysisContext $context;
 
     /**
      * @param array<int, int> $linesChanged line => line
@@ -39,6 +44,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         private readonly array $rules,
     )
     {
+        $this->updateContext();
     }
 
     public function enterNode(Node $node): ?int
@@ -46,6 +52,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         if ($node instanceof ClassLike && $node->name !== null) {
             assert($node->namespacedName !== null); // using NameResolver
             $this->currentClass = $node->namespacedName->toString();
+            $this->updateContext();
         }
 
         if ($node instanceof ClassMethod && $node->stmts !== null) {
@@ -55,6 +62,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
             $startLine = $node->name->getStartLine();
             $endLine = $node->getEndLine();
+            $methodName = $node->name->toString();
 
             $lines = $this->getLines($startLine, $endLine);
             if ($lines === []) {
@@ -63,10 +71,12 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
             $block = new ClassMethodBlock(
                 $this->currentClass,
-                $node->name->toString(),
-                $this->filePath,
+                $methodName,
                 $lines,
             );
+
+            $this->currentMethod = $methodName;
+            $this->updateContext();
 
             if ($this->patchMode && $block->getChangedLinesCount() === 0) {
                 return null; // unchanged methods not passed to rules in patch mode
@@ -123,10 +133,10 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     {
         $reportedErrors = [];
         foreach ($this->rules as $rule) {
-            $coverageError = $rule->inspect($block, $this->patchMode);
+            $coverageError = $rule->inspect($block, $this->context);
 
             if ($coverageError !== null) {
-                $reportedErrors[] = new ReportedError($block, $coverageError);
+                $reportedErrors[] = new ReportedError($this->filePath, $block, $coverageError);
             }
         }
 
@@ -139,6 +149,16 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     public function getReportedErrors(): array
     {
         return $this->reportedErrors;
+    }
+
+    private function updateContext(): void
+    {
+        $this->context = new AnalysisContext(
+            className: $this->currentClass,
+            methodName: $this->currentMethod,
+            filePath: $this->filePath,
+            patchMode: $this->patchMode,
+        );
     }
 
 }
