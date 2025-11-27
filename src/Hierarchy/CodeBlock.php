@@ -17,6 +17,7 @@ abstract class CodeBlock
      */
     public function __construct(
         private readonly array $lines,
+        private readonly ?CodeBlock $parent = null,
     )
     {
     }
@@ -27,6 +28,14 @@ abstract class CodeBlock
     public function getLines(): array
     {
         return $this->lines;
+    }
+
+    /**
+     * Returns the enclosing code block, if any
+     */
+    public function getParent(): ?CodeBlock
+    {
+        return $this->parent;
     }
 
     /**

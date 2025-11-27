@@ -2,18 +2,18 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 
 /**
- * Represents a non-empty method in class, trait or enum
+ * Represents a non-empty standalone function (not a class method)
  *
  * @api
  */
-final class ClassMethodBlock extends CodeBlock
+final class FunctionBlock extends CodeBlock
 {
 
     public function __construct(
-        private readonly ClassMethod $node,
+        private readonly Function_ $node,
         array $lines,
         ?CodeBlock $parent = null,
     )
@@ -21,12 +21,12 @@ final class ClassMethodBlock extends CodeBlock
         parent::__construct($lines, $parent);
     }
 
-    public function getNode(): ClassMethod
+    public function getNode(): Function_
     {
         return $this->node;
     }
 
-    public function getMethodName(): string
+    public function getFunctionName(): string
     {
         return $this->node->name->toString();
     }
