@@ -18,6 +18,7 @@ abstract class CodeBlock
     public function __construct(
         private readonly string $filePath,
         private readonly array $lines,
+        private readonly ?CodeBlock $parent = null,
     )
     {
     }
@@ -33,6 +34,11 @@ abstract class CodeBlock
     public function getLines(): array
     {
         return $this->lines;
+    }
+
+    public function getParent(): ?CodeBlock
+    {
+        return $this->parent;
     }
 
     public function getExecutableLinesCount(): int
