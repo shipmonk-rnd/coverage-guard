@@ -7,7 +7,7 @@ use ReflectionException;
 use ReflectionMethod;
 
 /**
- * Represents a non-empty block of code for a specific method in a class/trait/enum
+ * Represents a non-empty method in a non-anonymous class, trait or enum
  *
  * @api
  */

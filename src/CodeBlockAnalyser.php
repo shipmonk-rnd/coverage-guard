@@ -22,6 +22,8 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     private ?string $currentMethod = null;
 
+    private bool $inAnonymousClass = false;
+
     /**
      * @var list<ReportedError>
      */
@@ -49,13 +51,20 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?int
     {
-        if ($node instanceof ClassLike && $node->name !== null) {
-            assert($node->namespacedName !== null); // using NameResolver
-            $this->currentClass = $node->namespacedName->toString();
-            $this->updateContext();
+        if ($node instanceof ClassLike) {
+            if ($node->name === null) {
+                $this->inAnonymousClass = true;
+            } else {
+                assert($node->namespacedName !== null); // using NameResolver
+                $this->currentClass = $node->namespacedName->toString();
+                $this->updateContext();
+            }
         }
 
         if ($node instanceof ClassMethod && $node->stmts !== null) {
+            if ($this->inAnonymousClass) {
+                return null; // ClassMethodBlock is emitted only for real methods
+            }
             if ($this->currentClass === null) {
                 throw new LogicException('Found class method without a class, should never happen');
             }
@@ -94,8 +103,12 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     public function leaveNode(Node $node): mixed
     {
-        if ($node instanceof ClassLike && $node->name !== null) {
-            $this->currentClass = null;
+        if ($node instanceof ClassLike) {
+            if ($node->name !== null) {
+                $this->currentClass = null;
+            } else {
+                $this->inAnonymousClass = false;
+            }
         }
 
         return null;
