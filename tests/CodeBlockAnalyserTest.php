@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard;
 
+use LogicException;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
@@ -12,8 +13,9 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
-use function explode;
+use function file;
 use function file_get_contents;
+use const FILE_IGNORE_NEW_LINES;
 
 final class CodeBlockAnalyserTest extends TestCase
 {
@@ -184,14 +186,12 @@ final class CodeBlockAnalyserTest extends TestCase
      */
     private function getFileLines(string $filePath): array
     {
-        $content = file_get_contents($filePath);
-        if ($content === false) {
-            throw new RuntimeException("Could not read file: $filePath");
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES);
+        if ($lines === false) {
+            throw new LogicException("Failed to read file: {$filePath}");
         }
 
-        $lines = explode("\n", $content);
         $result = [];
-
         foreach ($lines as $index => $line) {
             $result[$index + 1] = $line; // Line numbers start at 1
         }
