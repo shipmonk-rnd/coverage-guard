@@ -132,9 +132,10 @@ final class ErrorFormatter
     {
         $reportedErrors = $report->reportedErrors;
         $analysedFilesCount = count($report->analysedFiles);
-        $plural = $analysedFilesCount > 1 ? 's' : '';
+        $filesPlural = $analysedFilesCount > 1 ? 's' : '';
+        $issuesPlural = count($reportedErrors) > 1 ? 's' : '';
         $timeFormatted = $this->formatTime($report->elapsedTime);
-        $suffix = " (analysed $analysedFilesCount file$plural in $timeFormatted)";
+        $suffix = " (analysed $analysedFilesCount file$filesPlural in $timeFormatted)";
 
         $this->printer->printLine('');
 
@@ -148,7 +149,7 @@ final class ErrorFormatter
             $this->formatError($reportedError, $report->patchMode, $editorUrl);
         }
 
-        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issues$suffix");
+        $this->printer->printLine('❌ Found ' . count($reportedErrors) . " coverage issue$issuesPlural$suffix");
         $this->printer->printLine('');
 
         return 1;
