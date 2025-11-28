@@ -36,6 +36,8 @@ final class Config
     }
 
     /**
+     * Git root is autodetected by .git presence, but you can override it here if needed.
+     *
      * @throws ErrorException
      */
     public function setGitRoot(string $gitRoot): self
@@ -49,6 +51,9 @@ final class Config
     }
 
     /**
+     * Allows you to remap paths in coverage files to existing directories on your filesystem.
+     * Handy for CI-generated coverage reports that contain absolute paths in CI environment.
+     *
      * @throws ErrorException
      */
     public function addCoveragePathMapping(
@@ -67,6 +72,9 @@ final class Config
         return $this;
     }
 
+    /**
+     * Main entry point for your custom rules, see EnforceCoverageForMethodsRule for inspiration.
+     */
     public function addRule(CoverageRule $rule): self
     {
         $this->rules[] = $rule;
@@ -74,7 +82,7 @@ final class Config
     }
 
     /**
-     * Set the editor URL pattern for making file paths clickable in CLI output via OSC 8 hyperlink
+     * Set the editor URL pattern to make filepaths clickable in CLI output via OSC 8 hyperlink
      *
      * Available placeholders:
      * - {file} - Absolute file path

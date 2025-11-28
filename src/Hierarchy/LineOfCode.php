@@ -36,11 +36,17 @@ final class LineOfCode
         return $this->executable;
     }
 
+    /**
+     * True if this line was executed in tests
+     */
     public function isCovered(): bool
     {
         return $this->covered;
     }
 
+    /**
+     * Always true if --patch was not used, otherwise determined from patch file
+     */
     public function isChanged(): bool
     {
         return $this->changed;
