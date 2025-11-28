@@ -8,15 +8,6 @@ use PHPUnit\Framework\TestCase;
 final class CodeBlockTest extends TestCase
 {
 
-    public function testGetFilePath(): void
-    {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-        ]);
-
-        self::assertSame('/path/to/file.php', $block->getFilePath());
-    }
-
     public function testGetLines(): void
     {
         $lines = [
@@ -24,14 +15,14 @@ final class CodeBlockTest extends TestCase
             new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
         ];
 
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: $lines);
+        $block = $this->createBlock(lines: $lines);
 
         self::assertSame($lines, $block->getLines());
     }
 
     public function testGetStartLineNumber(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 5, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 6, executable: true, covered: false, changed: false, contents: 'code'),
         ]);
@@ -41,7 +32,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetExecutableLinesCount(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
             new LineOfCode(number: 3, executable: true, covered: false, changed: false, contents: 'code'),
@@ -53,7 +44,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetCoveredLinesCount(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
             new LineOfCode(number: 3, executable: true, covered: true, changed: false, contents: 'code'),
@@ -65,7 +56,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetCoveragePercentageFullyCovered(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: true, changed: false, contents: 'code'),
         ]);
@@ -75,7 +66,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetCoveragePercentagePartiallyCovered(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
             new LineOfCode(number: 3, executable: true, covered: true, changed: false, contents: 'code'),
@@ -87,7 +78,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetCoveragePercentageNoExecutableLines(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: false, covered: false, changed: false, contents: 'comment'),
             new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'whitespace'),
         ]);
@@ -97,7 +88,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetCoveragePercentageFullyUncovered(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
         ]);
@@ -107,7 +98,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetChangedLinesCount(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
             new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
@@ -119,7 +110,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetChangePercentageFullyChanged(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
         ]);
@@ -129,7 +120,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetChangePercentagePartiallyChanged(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
             new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
         ]);
@@ -139,7 +130,7 @@ final class CodeBlockTest extends TestCase
 
     public function testGetChangePercentageNoExecutableLines(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: false, covered: false, changed: true, contents: 'comment'),
         ]);
 
@@ -148,7 +139,7 @@ final class CodeBlockTest extends TestCase
 
     public function testMethodReflectionCanBeRetrieved(): void
     {
-        $block = $this->createBlock(filePath: '/path/to/file.php', lines: [
+        $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
         ]);
@@ -161,7 +152,6 @@ final class CodeBlockTest extends TestCase
         $block = new ClassMethodBlock(
             className: self::class,
             methodName: 'nonExistentMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: false, contents: 'code'),
             ],
@@ -177,14 +167,12 @@ final class CodeBlockTest extends TestCase
      * @param non-empty-list<LineOfCode> $lines
      */
     private function createBlock(
-        string $filePath,
         array $lines,
     ): ClassMethodBlock
     {
         return new ClassMethodBlock(
             className: self::class,
             methodName: 'createBlock',
-            filePath: $filePath,
             lines: $lines,
         );
     }

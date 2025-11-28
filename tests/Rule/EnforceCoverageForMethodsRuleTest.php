@@ -17,7 +17,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
@@ -28,7 +27,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: false);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNotNull($error);
         self::assertSame('Method <white>TestClass::testMethod</white> has no coverage, expected at least 1%.', $error->getMessage());
@@ -41,7 +40,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: true, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
@@ -52,7 +50,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: false);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNotNull($error);
         self::assertSame('Method <white>TestClass::testMethod</white> has only 17% coverage, expected at least 50%.', $error->getMessage());
@@ -65,7 +63,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
@@ -74,7 +71,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: false);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNull($error);
     }
@@ -86,7 +83,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
@@ -96,7 +92,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: false);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNull($error);
     }
@@ -108,7 +104,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: true, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: true, changed: true, contents: 'code'),
@@ -119,7 +114,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: false);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNull($error);
     }
@@ -135,7 +130,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
@@ -146,7 +140,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: true);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext(patchMode: true));
 
         self::assertNull($error);
     }
@@ -162,7 +156,6 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $block = new ClassMethodBlock(
             className: 'TestClass',
             methodName: 'testMethod',
-            filePath: '/path/to/file.php',
             lines: [
                 new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
                 new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
@@ -173,7 +166,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
             ],
         );
 
-        $error = $rule->inspect(codeBlock: $block, patchMode: true);
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext(patchMode: true));
 
         self::assertNotNull($error);
         self::assertSame('Method <white>TestClass::testMethod</white> has no coverage, expected at least 50%.', $error->getMessage());
@@ -217,6 +210,21 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $this->expectExceptionMessage('Minimal required executable lines must be at least 0');
 
         new EnforceCoverageForMethodsRule(minExecutableLines: -1);
+    }
+
+    private function createContext(
+        string $className = 'TestClass',
+        string $methodName = 'testMethod',
+        string $filePath = '/path/to/file.php',
+        bool $patchMode = false,
+    ): InspectionContext
+    {
+        return new InspectionContext(
+            className: $className,
+            methodName: $methodName,
+            filePath: $filePath,
+            patchMode: $patchMode,
+        );
     }
 
 }

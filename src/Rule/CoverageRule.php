@@ -12,12 +12,9 @@ use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 interface CoverageRule
 {
 
-    /**
-     * @param bool $patchMode True when --patch option is used (and only changed code blocks are analyzed)
-     */
     public function inspect(
         CodeBlock $codeBlock,
-        bool $patchMode,
+        InspectionContext $context,
     ): ?CoverageError;
 
 }

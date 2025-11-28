@@ -7,7 +7,7 @@ use ReflectionException;
 use ReflectionMethod;
 
 /**
- * Represents a non-empty block of code for a specific method in a class/trait/enum
+ * Represents a non-empty method in a non-anonymous class, trait or enum
  *
  * @api
  */
@@ -21,11 +21,10 @@ final class ClassMethodBlock extends CodeBlock
     public function __construct(
         string $className,
         string $methodName,
-        string $filePath,
         array $lines,
     )
     {
-        parent::__construct($filePath, $lines);
+        parent::__construct($lines);
         $this->methodName = $methodName;
         $this->className = $className;
     }

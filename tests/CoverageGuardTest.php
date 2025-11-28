@@ -11,6 +11,7 @@ use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function rewind;
@@ -47,7 +48,7 @@ final class CoverageGuardTest extends TestCase
 
         self::assertCount(1, $errors);
         self::assertSame('Not 100% covered', $errors[0]->error->getMessage());
-        self::assertStringEndsWith('Sample.php', $errors[0]->codeBlock->getFilePath());
+        self::assertStringEndsWith('Sample.php', $errors[0]->filePath);
         self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
@@ -118,7 +119,7 @@ final class CoverageGuardTest extends TestCase
 
         self::assertCount(1, $errors);
         self::assertSame('Not 100% covered', $errors[0]->error->getMessage());
-        self::assertStringEndsWith('SampleWindows.php', $errors[0]->codeBlock->getFilePath());
+        self::assertStringEndsWith('SampleWindows.php', $errors[0]->filePath);
         self::assertSame(13, $errors[0]->codeBlock->getStartLineNumber());
     }
 
@@ -213,7 +214,7 @@ final class CoverageGuardTest extends TestCase
 
             public function inspect(
                 CodeBlock $codeBlock,
-                bool $patchMode,
+                InspectionContext $context,
             ): ?CoverageError
             {
                 if (
