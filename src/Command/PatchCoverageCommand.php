@@ -79,7 +79,7 @@ final class PatchCoverageCommand implements Command
 
         $this->stdoutPrinter->printLine('Patch Coverage Statistics:');
         $this->stdoutPrinter->printLine('');
-        $this->stdoutPrinter->printLine("  Changed executable lines: {$totalChangedLines}");
+        $this->stdoutPrinter->printLine("  Changed executable lines: {$totalChangedLines}"); // TODO excluders should be used
         $this->stdoutPrinter->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
         $this->stdoutPrinter->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
         $this->stdoutPrinter->printLine("  Coverage:                 {$percentageFormatted}%");

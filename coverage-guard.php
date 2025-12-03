@@ -1,6 +1,8 @@
 <?php declare(strict_types = 1);
 
 use ShipMonk\CoverageGuard\Config;
+use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
+use ShipMonk\CoverageGuard\Excluder\NormalizeMultilineCallsLineExcluder;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
@@ -44,6 +46,9 @@ $config->addRule(new class implements CoverageRule {
     }
 
 });
+
+$config->addExecutableLineExcluder(new NormalizeMultilineCallsLineExcluder());
+$config->addExecutableLineExcluder(new IgnoreThrowNewExceptionLineExcluder([LogicException::class]));
 
 $localConfig = __DIR__ . '/coverage-guard.local.php';
 if (is_file($localConfig)) {

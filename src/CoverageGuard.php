@@ -6,6 +6,7 @@ use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
@@ -58,6 +59,7 @@ final class CoverageGuard
 
             $rules[] = new EnforceCoverageForMethodsRule(minExecutableLines: 5);
         }
+        $excluders = $config->getExecutableLineExcluders();
 
         $analysedFiles = [];
         $reportedErrors = [];
@@ -85,7 +87,7 @@ final class CoverageGuard
                 $this->printer->printLine("<bold>{$relativePath}</bold> - $coveragePercentage%");
             }
 
-            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {
+            foreach ($this->getReportedErrors($rules, $excluders, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {
                 $reportedErrors[] = $reportedError;
             }
         }
@@ -97,6 +99,7 @@ final class CoverageGuard
 
     /**
      * @param list<CoverageRule> $rules
+     * @param list<ExecutableLineExcluder> $excluders
      * @param list<int>|null $linesChanged
      * @return list<ReportedError>
      *
@@ -104,6 +107,7 @@ final class CoverageGuard
      */
     private function getReportedErrors(
         array $rules,
+        array $excluders,
         bool $patchMode,
         string $file,
         ?array $linesChanged,
@@ -124,7 +128,7 @@ final class CoverageGuard
 
         $linesContents = array_combine($lineNumbers, $codeLines);
 
-        $analyser = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules);
+        $analyser = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules, $excluders);
 
         $this->fileTraverser->traverse($file, $codeLines, $analyser);
 
