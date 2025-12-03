@@ -117,6 +117,7 @@ final class ErrorFormatter
     private const COLOR_NUMBER = "\033[93m"; // Bright yellow
     private const BG_COVERED = "\033[48;5;22m"; // Dark green background
     private const BG_UNCOVERED = "\033[48;5;52m"; // Dark red background
+    private const BG_EXCLUDED = "\033[48;5;236m"; // Gray background for excluded lines
 
     public function __construct(
         private readonly PathHelper $pathHelper,
@@ -234,6 +235,7 @@ final class ErrorFormatter
             $isChanged = $line->isChanged();
             $isCovered = $line->isCovered();
             $isExecutable = $line->isExecutable();
+            $isExcluded = $line->isExcluded();
 
             // Format line number (right-aligned)
             $lineNumberFormatted = str_pad((string) $lineNumber, $maxLineNumberWidth, ' ', STR_PAD_LEFT);
@@ -245,13 +247,17 @@ final class ErrorFormatter
                 $bgColor = $isCovered ? self::BG_COVERED : self::BG_UNCOVERED;
                 $resetColor = self::COLOR_RESET;
             }
+            if ($isExcluded) {
+                $bgColor = self::BG_EXCLUDED;
+                $resetColor = self::COLOR_RESET;
+            }
 
             // Add change indicator
             $changeIndicator = $patchMode && $isChanged ? '+' : ' ';
 
             // Coverage indicator (for plain text mode)
             $coverageIndicator = ' ';
-            if ($isExecutable && $this->printer->hasDisabledColors()) {
+            if (!$isExcluded && $isExecutable && $this->printer->hasDisabledColors()) {
                 $coverageIndicator = $isCovered ? '|' : 'X';
             }
 

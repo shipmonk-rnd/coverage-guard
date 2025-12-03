@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard;
 
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use function file_exists;
@@ -28,6 +29,11 @@ final class Config
      * @var list<CoverageRule>
      */
     private array $rules = [];
+
+    /**
+     * @var list<ExecutableLineExcluder>
+     */
+    private array $excluders = [];
 
     private ?string $editorUrl = null;
 
@@ -82,6 +88,15 @@ final class Config
     }
 
     /**
+     * Allows you to ignore/exclude certain executable lines from coverage calculations.
+     */
+    public function addExecutableLineExcluder(ExecutableLineExcluder $excluder): self
+    {
+        $this->excluders[] = $excluder;
+        return $this;
+    }
+
+    /**
      * Set the editor URL pattern to make filepaths clickable in CLI output via OSC 8 hyperlink
      *
      * Available placeholders:
@@ -111,6 +126,14 @@ final class Config
     public function getCoveragePathMapping(): array
     {
         return $this->coveragePathMapping;
+    }
+
+    /**
+     * @return list<ExecutableLineExcluder>
+     */
+    public function getExecutableLineExcluders(): array
+    {
+        return $this->excluders;
     }
 
     /**
