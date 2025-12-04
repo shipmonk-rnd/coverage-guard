@@ -19,7 +19,12 @@ $config->addRule(new class implements CoverageRule {
             return null;
         }
 
-        $classReflection = $codeBlock->getMethodReflection()->getDeclaringClass();
+        $methodReflection = $context->getMethodReflection();
+        if ($methodReflection === null) {
+            return null; // e.g. anonymous class methods
+        }
+
+        $classReflection = $methodReflection->getDeclaringClass();
         $coverage = $codeBlock->getCoveragePercentage();
 
         // @api class methods to have at least 50% coverage

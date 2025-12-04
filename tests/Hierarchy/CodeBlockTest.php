@@ -2,7 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use LogicException;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
 
 final class CodeBlockTest extends TestCase
@@ -137,30 +138,23 @@ final class CodeBlockTest extends TestCase
         self::assertSame(0, $block->getChangePercentage());
     }
 
-    public function testMethodReflectionCanBeRetrieved(): void
+    public function testGetMethodName(): void
     {
         $block = $this->createBlock(lines: [
             new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
             new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
         ]);
 
-        self::assertSame('createBlock', $block->getMethodReflection()->getShortName());
+        self::assertSame('testMethod', $block->getMethodName());
     }
 
-    public function testMethodReflectionThrowsExceptionForNonExistentMethod(): void
+    public function testGetNode(): void
     {
-        $block = new ClassMethodBlock(
-            className: self::class,
-            methodName: 'nonExistentMethod',
-            lines: [
-                new LineOfCode(number: 1, executable: true, covered: false, changed: false, contents: 'code'),
-            ],
-        );
+        $block = $this->createBlock(lines: [
+            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
+        ]);
 
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Could not get reflection for method');
-
-        $block->getMethodReflection();
+        self::assertSame('testMethod', $block->getNode()->name->toString());
     }
 
     /**
@@ -170,9 +164,12 @@ final class CodeBlockTest extends TestCase
         array $lines,
     ): ClassMethodBlock
     {
+        $node = new ClassMethod(
+            name: new Identifier('testMethod'),
+        );
+
         return new ClassMethodBlock(
-            className: self::class,
-            methodName: 'createBlock',
+            node: $node,
             lines: $lines,
         );
     }

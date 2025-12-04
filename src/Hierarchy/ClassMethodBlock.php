@@ -2,53 +2,32 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use LogicException;
-use ReflectionException;
-use ReflectionMethod;
+use PhpParser\Node\Stmt\ClassMethod;
 
 /**
- * Represents a non-empty method in a non-anonymous class, trait or enum
+ * Represents a non-empty method in class, trait or enum
  *
  * @api
  */
 final class ClassMethodBlock extends CodeBlock
 {
 
-    private readonly string $className;
-
-    private readonly string $methodName;
-
     public function __construct(
-        string $className,
-        string $methodName,
+        private readonly ClassMethod $node,
         array $lines,
     )
     {
         parent::__construct($lines);
-        $this->methodName = $methodName;
-        $this->className = $className;
     }
 
-    /**
-     * Returns FQN of class/trait/enum
-     */
-    public function getClassName(): string
+    public function getNode(): ClassMethod
     {
-        return $this->className;
+        return $this->node;
     }
 
     public function getMethodName(): string
     {
-        return $this->methodName;
-    }
-
-    public function getMethodReflection(): ReflectionMethod
-    {
-        try {
-            return new ReflectionMethod($this->className, $this->methodName);
-        } catch (ReflectionException $e) {
-            throw new LogicException("Could not get reflection for method {$this->className}::{$this->methodName}", 0, $e);
-        }
+        return $this->node->name->toString();
     }
 
 }
