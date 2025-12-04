@@ -10,6 +10,7 @@ use function stream_get_contents;
 use function stream_wrapper_register;
 use function trigger_error;
 use const E_USER_WARNING;
+use const PHP_EOL;
 
 final class PrinterTest extends TestCase
 {
@@ -25,7 +26,7 @@ final class PrinterTest extends TestCase
         rewind($stream);
         $output = stream_get_contents($stream);
 
-        self::assertSame("Hello World\n", $output);
+        self::assertSame('Hello World' . PHP_EOL, $output);
     }
 
     public function testCreateWithNoColorArgument(): void
