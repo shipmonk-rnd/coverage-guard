@@ -76,6 +76,13 @@ parameters:
             paths:
                 - src/Utils/PatchParser.php
 
+        # support even old nikic/php-parser
+        -
+            message: '#PhpParser\\Node\\Stmt\\Throw_#'
+            identifier: class.notFound
+            paths:
+                - src/Excluder/IgnoreThrowNewExceptionLineExcluder.php
+
         # do not track checked exceptions in tests
         -
             identifiers:
