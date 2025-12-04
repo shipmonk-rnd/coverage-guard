@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
-use ShipMonk\CoverageGuard\Excluder\NormalizeMultilineCallsLineExcluder;
 use ShipMonk\CoverageGuard\Fixtures\MyLogicException;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
@@ -170,14 +169,6 @@ final class CodeBlockAnalyserTest extends TestCase
     {
         $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithThrowStatements.php';
         $excluder = new IgnoreThrowNewExceptionLineExcluder([MyLogicException::class]);
-
-        $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
-    }
-
-    public function testNormalizeMultilineCallsLineExcluder(): void
-    {
-        $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithMultilineCalls.php';
-        $excluder = new NormalizeMultilineCallsLineExcluder();
 
         $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
     }
