@@ -2,6 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Report;
 
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
@@ -109,9 +111,11 @@ final class ErrorFormatterTest extends TestCase
         bool $patchMode,
     ): CoverageReport
     {
+        $node = new ClassMethod(
+            name: new Identifier('testMethod'),
+        );
         $codeBlock = new ClassMethodBlock(
-            'TestClass',
-            'testMethod',
+            $node,
             $lines,
         );
         $reportedError = new ReportedError(

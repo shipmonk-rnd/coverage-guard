@@ -79,8 +79,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             }
 
             $block = new ClassMethodBlock(
-                $this->currentClass,
-                $methodName,
+                $node,
                 $lines,
             );
 
