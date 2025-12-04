@@ -3,14 +3,13 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
 use ShipMonk\CoverageGuard\Excluder\NormalizeMultilineCallsLineExcluder;
+use ShipMonk\CoverageGuard\Fixtures\MyLogicException;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
@@ -18,7 +17,6 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use function array_keys;
 use function file;
-use function file_get_contents;
 use function sort;
 use function str_contains;
 use const FILE_IGNORE_NEW_LINES;
@@ -171,7 +169,7 @@ final class CodeBlockAnalyserTest extends TestCase
     public function testIgnoreThrowNewExceptionLineExcluder(): void
     {
         $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithThrowStatements.php';
-        $excluder = new IgnoreThrowNewExceptionLineExcluder([RuntimeException::class]);
+        $excluder = new IgnoreThrowNewExceptionLineExcluder([MyLogicException::class]);
 
         $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
     }
@@ -234,22 +232,8 @@ final class CodeBlockAnalyserTest extends TestCase
     ): void
     {
         $parser = (new ParserFactory())->createForNewestSupportedVersion();
-        $content = file_get_contents($filePath);
-
-        if ($content === false) {
-            throw new RuntimeException("Could not read file: $filePath");
-        }
-
-        $stmts = $parser->parse($content);
-
-        if ($stmts === null) {
-            throw new RuntimeException("Could not parse file: $filePath");
-        }
-
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver()); // Required to resolve namespaced names
-        $traverser->addVisitor($analyser);
-        $traverser->traverse($stmts);
+        $traverser = new FileTraverser($parser);
+        $traverser->traverse($filePath, $this->getFileLines($filePath), $analyser);
     }
 
     /**

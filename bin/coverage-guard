@@ -2,6 +2,7 @@
 <?php declare(strict_types=1);
 
 use PhpParser\ParserFactory;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Cli\CliParser;
 use ShipMonk\CoverageGuard\Cli\CommandRegistry;
 use ShipMonk\CoverageGuard\Cli\CommandRunner;
@@ -56,7 +57,8 @@ try {
     $pathHelper = new PathHelper($cwd);
     $phpParser = (new ParserFactory())->createForHostVersion();
     $stopwatch = new Stopwatch();
-    $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
+    $fileTraverser = new FileTraverser($phpParser);
+    $coverageGuard = new CoverageGuard($stderrPrinter, $fileTraverser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
     $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
 
     $registry = new CommandRegistry();

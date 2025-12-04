@@ -6,6 +6,7 @@ use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
@@ -188,10 +189,11 @@ final class CoverageGuardTest extends TestCase
         $pathHelper = new PathHelper($cwd);
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $printer);
+        $fileTraverser = new FileTraverser($phpParser);
         $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $printer);
         $stopwatch = $this->createStopwatchMock();
 
-        return new CoverageGuard($printer, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
+        return new CoverageGuard($printer, $fileTraverser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
     }
 
     private function createStopwatchMock(): MockObject&Stopwatch

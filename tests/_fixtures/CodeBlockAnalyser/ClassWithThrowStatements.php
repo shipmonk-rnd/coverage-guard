@@ -3,26 +3,27 @@
 namespace ShipMonk\CoverageGuard\Fixtures;
 
 use LogicException;
-use RuntimeException;
+
+final class MyLogicException extends LogicException {}
 
 class ClassWithThrowStatements
 {
 
     public function methodWithSingleLineThrow(): void
     {
-        throw new RuntimeException('error'); // excluded
+        throw new MyLogicException('error'); // excluded
     }
 
     public function methodWithMultilineThrow(): void
     {
-        throw new RuntimeException( // excluded
+        throw new MyLogicException( // excluded
             'multi-line error message' // excluded
         ); // excluded
     }
 
     public function methodWithThrowVariable(): void
     {
-        $exception = new RuntimeException('error');
+        $exception = new MyLogicException('error');
         throw $exception;
     }
 
