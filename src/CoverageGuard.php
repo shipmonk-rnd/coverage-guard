@@ -2,14 +2,11 @@
 
 namespace ShipMonk\CoverageGuard;
 
-use LogicException;
-use PhpParser\Error as ParseError;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser as PhpParser;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
@@ -22,16 +19,14 @@ use function array_fill_keys;
 use function array_keys;
 use function array_map;
 use function count;
-use function implode;
 use function range;
-use const PHP_EOL;
 
 final class CoverageGuard
 {
 
     public function __construct(
         private readonly Printer $printer,
-        private readonly PhpParser $phpParser,
+        private readonly FileTraverser $fileTraverser,
         private readonly PathHelper $pathHelper,
         private readonly PatchParser $patchParser,
         private readonly CoverageProvider $coverageProvider,
@@ -64,6 +59,7 @@ final class CoverageGuard
 
             $rules[] = new EnforceCoverageForMethodsRule(minExecutableLines: 5);
         }
+        $excluders = $config->getExecutableLineExcluders();
 
         $analysedFiles = [];
         $reportedErrors = [];
@@ -91,7 +87,7 @@ final class CoverageGuard
                 $this->printer->printLine("<white>{$relativePath}</white> - $coveragePercentage%");
             }
 
-            foreach ($this->getReportedErrors($rules, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {
+            foreach ($this->getReportedErrors($rules, $excluders, $patchMode, $file, $changedLinesOrNull, $fileCoverage) as $reportedError) {
                 $reportedErrors[] = $reportedError;
             }
         }
@@ -103,6 +99,7 @@ final class CoverageGuard
 
     /**
      * @param list<CoverageRule> $rules
+     * @param list<ExecutableLineExcluder> $excluders
      * @param list<int>|null $linesChanged
      * @return list<ReportedError>
      *
@@ -110,6 +107,7 @@ final class CoverageGuard
      */
     private function getReportedErrors(
         array $rules,
+        array $excluders,
         bool $patchMode,
         string $file,
         ?array $linesChanged,
@@ -119,7 +117,6 @@ final class CoverageGuard
         $codeLines = FileUtils::readFileLines($file);
         $lineNumbers = range(1, count($codeLines));
 
-        $nameResolver = new NameResolver();
         $linesChangedMap = $linesChanged === null
             ? array_combine($lineNumbers, $lineNumbers)
             : array_combine($linesChanged, $linesChanged);
@@ -131,25 +128,11 @@ final class CoverageGuard
 
         $linesContents = array_combine($lineNumbers, $codeLines);
 
-        $extractor = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules);
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($nameResolver);
-        $traverser->addVisitor($extractor);
+        $analyser = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules, $excluders);
 
-        try {
-            /** @throws ParseError */
-            $ast = $this->phpParser->parse(implode(PHP_EOL, $codeLines));
-        } catch (ParseError $e) {
-            throw new ErrorException("Failed to parse PHP code in file {$file}: {$e->getMessage()}", $e);
-        }
+        $this->fileTraverser->traverse($file, $codeLines, $analyser);
 
-        if ($ast === null) {
-            throw new LogicException("Failed to parse PHP code in file {$file}. Should never happen as Throwing error handler is used.");
-        }
-
-        $traverser->traverse($ast);
-
-        return $extractor->getReportedErrors();
+        return $analyser->getReportedErrors();
     }
 
 }

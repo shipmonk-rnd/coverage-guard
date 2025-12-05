@@ -3,18 +3,21 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
+use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
+use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
+use ShipMonk\CoverageGuard\Fixtures\MyLogicException;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
+use function array_keys;
 use function file;
-use function file_get_contents;
+use function sort;
+use function str_contains;
 use const FILE_IGNORE_NEW_LINES;
 
 final class CodeBlockAnalyserTest extends TestCase
@@ -55,27 +58,32 @@ final class CodeBlockAnalyserTest extends TestCase
 
         $this->traverseFile($filePath, $analyser);
 
+        /** @var list<InspectionContext> $capturedContexts */
         $capturedContexts = $rule->capturedContexts;
 
-        self::assertCount(2, $capturedContexts);
+        self::assertCount(3, $capturedContexts);
 
         $methodsByClass = [];
         foreach ($capturedContexts as $context) {
             $className = $context->getClassName();
             $methodName = $context->getMethodName();
 
-            self::assertNotNull($className);
+            $classNameKey = $className ?? '';
             self::assertNotNull($methodName);
 
-            $methodsByClass[$className][] = $methodName;
+            $methodsByClass[$classNameKey][] = $methodName;
 
             self::assertSame($filePath, $context->getFilePath());
             self::assertFalse($context->isPatchMode());
         }
 
-        self::assertCount(1, $methodsByClass, 'Methods of anonymous class should not emitted');
         self::assertArrayHasKey('ClassWithAnonymousClass', $methodsByClass);
         self::assertSame(['methodWithAnonymousClass', 'regularMethod'], $methodsByClass['ClassWithAnonymousClass']);
+
+        self::assertArrayHasKey('', $methodsByClass);
+        self::assertSame(['methodOfAnonymousClass'], $methodsByClass['']);
+
+        self::assertCount(2, $methodsByClass);
     }
 
     public function testAnalysesTrait(): void
@@ -122,13 +130,11 @@ final class CodeBlockAnalyserTest extends TestCase
         $rule = $this->createContextCapturingRule();
 
         // In patch mode with no changed lines, methods should be skipped
-        $analyser = new CodeBlockAnalyser(
-            patchMode: true,
+        $analyser = $this->createAnalyser(
             filePath: $filePath,
-            linesChanged: [], // No changed lines
-            linesCoverage: [9 => 1, 13 => 1, 14 => 1, 17 => 1], // Some coverage
-            linesContents: $this->getFileLines($filePath),
             rules: [$rule],
+            patchMode: true,
+            linesChanged: [], // No changed lines
         );
 
         $this->traverseFile($filePath, $analyser);
@@ -140,17 +146,14 @@ final class CodeBlockAnalyserTest extends TestCase
     public function testAnalyzesOnlyChangedMethodsInPatchMode(): void
     {
         $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/SimpleClass.php';
-
         $rule = $this->createContextCapturingRule();
 
         // Mark only lines from the first method as changed
-        $analyser = new CodeBlockAnalyser(
-            patchMode: true,
+        $analyser = $this->createAnalyser(
             filePath: $filePath,
-            linesChanged: [9 => 9], // Line 9 is in simpleMethod
-            linesCoverage: [9 => 1, 13 => 1, 14 => 1, 17 => 1],
-            linesContents: $this->getFileLines($filePath),
             rules: [$rule],
+            patchMode: true,
+            linesChanged: [9 => 9], // Line 9 is in simpleMethod
         );
 
         $this->traverseFile($filePath, $analyser);
@@ -162,22 +165,37 @@ final class CodeBlockAnalyserTest extends TestCase
         self::assertSame('simpleMethod', $capturedContexts[0]->getMethodName());
     }
 
+    public function testIgnoreThrowNewExceptionLineExcluder(): void
+    {
+        $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithThrowStatements.php';
+        $excluder = new IgnoreThrowNewExceptionLineExcluder([MyLogicException::class]);
+
+        $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
+    }
+
     /**
      * @param list<CoverageRule> $rules
+     * @param list<ExecutableLineExcluder> $excluders
+     * @param array<int, int>|null $linesCoverage
+     * @param array<int, int>|null $linesChanged
      */
     private function createAnalyser(
         string $filePath,
-        array $rules,
+        array $rules = [],
         bool $patchMode = false,
+        array $excluders = [],
+        ?array $linesCoverage = null,
+        ?array $linesChanged = null,
     ): CodeBlockAnalyser
     {
         return new CodeBlockAnalyser(
             patchMode: $patchMode,
             filePath: $filePath,
-            linesChanged: $patchMode ? [9 => 9, 13 => 13, 14 => 14] : [],
-            linesCoverage: [9 => 1, 13 => 1, 14 => 1, 17 => 1],
+            linesChanged: $linesChanged ?? ($patchMode ? [9 => 9, 13 => 13, 14 => 14] : []),
+            linesCoverage: $linesCoverage ?? [9 => 1, 13 => 1, 14 => 1, 17 => 1],
             linesContents: $this->getFileLines($filePath),
             rules: $rules,
+            excluders: $excluders,
         );
     }
 
@@ -205,22 +223,8 @@ final class CodeBlockAnalyserTest extends TestCase
     ): void
     {
         $parser = (new ParserFactory())->createForNewestSupportedVersion();
-        $content = file_get_contents($filePath);
-
-        if ($content === false) {
-            throw new RuntimeException("Could not read file: $filePath");
-        }
-
-        $stmts = $parser->parse($content);
-
-        if ($stmts === null) {
-            throw new RuntimeException("Could not parse file: $filePath");
-        }
-
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new NameResolver()); // Required to resolve namespaced names
-        $traverser->addVisitor($analyser);
-        $traverser->traverse($stmts);
+        $traverser = new FileTraverser($parser);
+        $traverser->traverse($filePath, $this->getFileLines($filePath), $analyser);
     }
 
     /**
@@ -247,6 +251,87 @@ final class CodeBlockAnalyserTest extends TestCase
             }
 
         };
+    }
+
+    /**
+     * @return CoverageRule&object{capturedBlocks: list<ClassMethodBlock>}
+     */
+    private function createLineCapturingRule(): CoverageRule
+    {
+        return new class implements CoverageRule {
+
+            /**
+             * @var list<ClassMethodBlock>
+             */
+            public array $capturedBlocks = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly
+
+            public function inspect(
+                CodeBlock $codeBlock,
+                InspectionContext $context,
+            ): ?CoverageError
+            {
+                if ($codeBlock instanceof ClassMethodBlock) {
+                    $this->capturedBlocks[] = $codeBlock;
+                }
+                return null;
+            }
+
+        };
+    }
+
+    /**
+     * Helper method to test excluders by comparing excluded lines with "// excluded" comments in fixture
+     *
+     * @param list<ExecutableLineExcluder> $excluders
+     */
+    private function assertExcludedLinesMatchFixtureComments(
+        string $filePath,
+        array $excluders,
+    ): void
+    {
+        $rule = $this->createLineCapturingRule();
+        $linesContents = $this->getFileLines($filePath);
+
+        // Find all lines with "// excluded" comment
+        $expectedExcludedLines = [];
+        foreach ($linesContents as $lineNumber => $lineContent) {
+            if (str_contains($lineContent, '// excluded')) {
+                $expectedExcludedLines[] = $lineNumber;
+            }
+        }
+
+        $linesCoverage = [];
+        foreach (array_keys($linesContents) as $lineNumber) {
+            $linesCoverage[$lineNumber] = 1;
+        }
+
+        $analyser = $this->createAnalyser(
+            filePath: $filePath,
+            rules: [$rule],
+            excluders: $excluders,
+            linesCoverage: $linesCoverage,
+        );
+
+        $this->traverseFile($filePath, $analyser);
+
+        // Collect all excluded lines from all blocks
+        $actualExcludedLines = [];
+        foreach ($rule->capturedBlocks as $block) {
+            foreach ($block->getLines() as $line) {
+                if ($line->isExcluded()) {
+                    $actualExcludedLines[] = $line->getNumber();
+                }
+            }
+        }
+
+        sort($expectedExcludedLines);
+        sort($actualExcludedLines);
+
+        self::assertSame(
+            $expectedExcludedLines,
+            $actualExcludedLines,
+            'Excluded lines should match "// excluded" comments in fixture file',
+        );
     }
 
 }

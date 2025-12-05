@@ -25,9 +25,9 @@ final class ErrorFormatterTest extends TestCase
     public function testHighlightWithColors(): void
     {
         $lines = [
-            new LineOfCode(1, false, false, false, '<?php'),
-            new LineOfCode(2, true, true, false, '$variable = "string";'),
-            new LineOfCode(3, true, false, true, 'return $variable ? true : false;'),
+            new LineOfCode(1, false, false, false, false, '<?php'),
+            new LineOfCode(2, true, false, true, false, '$variable = "string";'),
+            new LineOfCode(3, true, false, false, true, 'return $variable ? true : false;'),
         ];
 
         $result = $this->formatReport($lines, new Config(), patchMode: true);
@@ -47,8 +47,8 @@ final class ErrorFormatterTest extends TestCase
         $config->setEditorUrl('vscode://file/{file}:{line}');
 
         $lines = [
-            new LineOfCode(1, false, false, false, '<?php'),
-            new LineOfCode(2, true, true, false, '$variable = "string";'),
+            new LineOfCode(1, false, false, false, false, '<?php'),
+            new LineOfCode(2, true, false, true, false, '$variable = "string";'),
         ];
 
         $result = $this->formatReport($lines, $config, patchMode: false);
@@ -62,8 +62,8 @@ final class ErrorFormatterTest extends TestCase
     public function testNoClickableFilepathWhenEditorUrlNotSet(): void
     {
         $lines = [
-            new LineOfCode(1, false, false, false, '<?php'),
-            new LineOfCode(2, true, true, false, '$variable = "string";'),
+            new LineOfCode(1, false, false, false, false, '<?php'),
+            new LineOfCode(2, true, false, true, false, '$variable = "string";'),
         ];
 
         $result = $this->formatReport($lines, new Config(), patchMode: false);
@@ -113,10 +113,14 @@ final class ErrorFormatterTest extends TestCase
     {
         $node = new ClassMethod(
             name: new Identifier('testMethod'),
+            subNodes: [
+                'stmts' => [],
+            ],
         );
+
         $codeBlock = new ClassMethodBlock(
-            $node,
-            $lines,
+            node: $node,
+            lines: $lines,
         );
         $reportedError = new ReportedError(
             '/tmp/test.php',

@@ -61,6 +61,7 @@ parameters:
                 ShipMonk\CoverageGuard\Rule\CoverageRule: Rule
                 ShipMonk\CoverageGuard\Writer\CoverageWriter: CoverageWriter
                 ShipMonk\CoverageGuard\Extractor\CoverageExtractor: Extractor
+                ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder: LineExcluder
 
     ignoreErrors:
         # allow calling internal methods from SebastianBergmann\CodeCoverage
@@ -75,6 +76,13 @@ parameters:
             message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
             paths:
                 - src/Utils/PatchParser.php
+
+        # support even old nikic/php-parser
+        -
+            message: '#PhpParser\\Node\\Stmt\\Throw_#'
+            identifier: class.notFound
+            paths:
+                - src/Excluder/IgnoreThrowNewExceptionLineExcluder.php
 
         # do not track checked exceptions in tests
         -
