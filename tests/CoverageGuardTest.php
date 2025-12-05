@@ -25,7 +25,7 @@ final class CoverageGuardTest extends TestCase
     use StreamTestTrait;
 
     /**
-     * @param list<string> $args
+     * @param array{string, ?string, bool} $args
      * @param (callable(Config): void)|null $adjustConfig
      */
     #[DataProvider('provideArgs')]
