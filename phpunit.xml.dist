@@ -8,6 +8,7 @@
     failOnRisky="true"
     failOnWarning="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
     cacheResultFile="cache/phpunit.result.cache"
 >
     <testsuites>

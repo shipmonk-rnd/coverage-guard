@@ -8,6 +8,7 @@ includes:
     - ./vendor/shipmonk/dead-code-detector/rules.neon
 
 parameters:
+    phpVersion: 80100
     paths:
         - bin/coverage-guard
         - coverage-guard.php
