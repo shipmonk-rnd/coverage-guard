@@ -149,7 +149,7 @@ Options:
 
 ### `merge` & `convert`
 
-- Merging multiple coverage files into a single file is useful when running tests in parallel CI jobs.
+- Merging multiple coverage files into a single file is useful when [running tests in parallel CI jobs](https://github.com/shipmonk-rnd/phpunit-parallel-job-balancer).
 - Please note those commands **do not maintain all data from original XMLs**
   - It only produces minimal XML files while maintaining usability by PHPStorm, GitLab and Coverage Guard
 - Input formats: `clover`, `cobertura`, `php` (autodetected)
