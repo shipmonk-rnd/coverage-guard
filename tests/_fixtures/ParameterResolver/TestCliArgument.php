@@ -10,7 +10,7 @@ final class TestCliArgument extends CliArgument
 
     public function __construct(
         string $name,
-        string $description = null,
+        ?string $description = null,
     )
     {
         parent::__construct($name, $description ?? '-');
