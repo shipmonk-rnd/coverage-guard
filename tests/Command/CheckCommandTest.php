@@ -5,6 +5,7 @@ namespace ShipMonk\CoverageGuard\Command;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageGuard;
 use ShipMonk\CoverageGuard\CoverageProvider;
@@ -125,7 +126,8 @@ final class CheckCommandTest extends TestCase
         $patchParser = new PatchParser($cwd, $stderrPrinter);
         $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter);
         $stopwatch = $this->createStopwatchMock();
-        $coverageGuard = new CoverageGuard($stderrPrinter, $phpParser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
+        $fileTraverser = new FileTraverser($phpParser);
+        $coverageGuard = new CoverageGuard($stderrPrinter, $fileTraverser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
         $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
         return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);
     }
