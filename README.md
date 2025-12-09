@@ -98,7 +98,10 @@ return $config;
 ### Advanced usage:
 
 - For custom enforcement logic, implement `CoverageRule` and pass it to `Config::addRule()` method:
-  - Inspire by prepared [`EnforceCoverageForMethodsRule`](src/Rule/EnforceCoverageForMethodsRule.php) or our own [coverage config](./coverage-guard.php).
+  - Inspire by prepared [`EnforceCoverageForMethodsRule`](src/Rule/EnforceCoverageForMethodsRule.php) or usages in the wild:
+     - [own coverage config](./coverage-guard.php)
+     - [dead-code-detector](https://github.com/shipmonk-rnd/dead-code-detector/blob/master/coverage-guard.php)
+     - [phpstan-rules](https://github.com/shipmonk-rnd/phpstan-rules/blob/master/coverage-guard.php)
 
 
 ### What can you enforce:
