@@ -89,6 +89,7 @@ try {
 } catch (Throwable $e) {
     $stderrPrinter->printLine('');
     $stderrPrinter->printLine('‼️  <red>Internal error:</red> ' . $e::class . ': ' . $e->getMessage());
+    $stderrPrinter->printLine(' at ' . $e->getFile() . ':' . $e->getLine());
     $stderrPrinter->printLine($e->getTraceAsString());
     exit(1);
 }
