@@ -74,7 +74,7 @@
         "check:ec": "ec src tests",
         "check:self": [
             "XDEBUG_MODE=coverage phpunit tests --coverage-clover cache/clover.xml",
-            "bin/coverage-guard check cache/clover.xml"
+            "bin/coverage-guard check cache/clover.xml --color"
         ],
         "check:tests": "phpunit tests",
         "check:types": "phpstan analyse -vv --ansi",
