@@ -115,8 +115,9 @@ final class ErrorFormatter
     private const COLOR_COMMENT = "\033[90m"; // Dark gray
     private const COLOR_VARIABLE = "\033[96m"; // Bright cyan
     private const COLOR_NUMBER = "\033[93m"; // Bright yellow
-    private const BG_COVERED = "\033[48;5;22m"; // Dark green background
-    private const BG_UNCOVERED = "\033[48;5;52m"; // Dark red background
+    private const BG_COVERED = "\033[48;5;28m"; // Medium green background
+    private const BG_UNCOVERED = "\033[48;5;124m"; // Medium red background
+    private const FG_BRIGHT_WHITE = "\033[97m"; // Bright white text
 
     public function __construct(
         private readonly PathHelper $pathHelper,
@@ -242,7 +243,7 @@ final class ErrorFormatter
             $bgColor = '';
             $resetColor = '';
             if ($isExecutable && !$this->printer->hasDisabledColors()) {
-                $bgColor = $isCovered ? self::BG_COVERED : self::BG_UNCOVERED;
+                $bgColor = ($isCovered ? self::BG_COVERED : self::BG_UNCOVERED) . self::FG_BRIGHT_WHITE;
                 $resetColor = self::COLOR_RESET;
             }
 

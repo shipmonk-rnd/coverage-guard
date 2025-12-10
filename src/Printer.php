@@ -23,12 +23,12 @@ final class Printer
         '<green>' => "\033[32m",
         '<orange>' => "\033[33m",
         '<gray>' => "\033[37m",
-        '<white>' => "\033[97m",
+        '<bold>' => "\033[1m",
         '</red>' => "\033[0m",
         '</green>' => "\033[0m",
         '</orange>' => "\033[0m",
         '</gray>' => "\033[0m",
-        '</white>' => "\033[0m",
+        '</bold>' => "\033[0m",
     ];
 
     /**
@@ -78,7 +78,7 @@ final class Printer
         string $string,
     ): void
     {
-        $this->printLine('<white>Info:</white> ' . $string);
+        $this->printLine('<bold>Info:</bold> ' . $string);
     }
 
     public function print(string $string): void

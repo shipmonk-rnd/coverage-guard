@@ -32,9 +32,9 @@ final class HelpRenderer
         $arguments = $this->parameterResolver->getArgumentDefinitions($invokeMethod);
         $options = $this->parameterResolver->getOptionDefinitions($invokeMethod);
 
-        $printer->printLine("<white>{$command->getDescription()}</white>");
+        $printer->printLine("<bold>{$command->getDescription()}</bold>");
         $printer->printLine('');
-        $printer->printLine('<white>Usage:</white>');
+        $printer->printLine('<bold>Usage:</bold>');
 
         $usageParts = ['vendor/bin/coverage-guard', $command->getName()];
 
@@ -55,7 +55,7 @@ final class HelpRenderer
         $printer->printLine('');
 
         if ($arguments !== []) {
-            $printer->printLine('<white>Arguments:</white>');
+            $printer->printLine('<bold>Arguments:</bold>');
             foreach ($arguments as $arg) {
                 $argName = $arg->name;
                 $printer->printLine(self::INDENT . "<green>{$argName}</green>");
@@ -65,17 +65,17 @@ final class HelpRenderer
         }
 
         if ($options !== []) {
-            $printer->printLine('<white>Options:</white>');
+            $printer->printLine('<bold>Options:</bold>');
             foreach ($options as $opt) {
                 $optStr = $opt->acceptsValue ? "--{$opt->name} <value>" : "--{$opt->name}";
                 $optStrPadded = str_pad($optStr, self::OPTION_PADDING);
-                $description = $opt->isRequired ? "{$opt->description} <white>(required)</white>" : $opt->description;
+                $description = $opt->isRequired ? "{$opt->description} <bold>(required)</bold>" : $opt->description;
                 $printer->printLine(self::INDENT . "<green>{$optStrPadded}</green>{$description}");
             }
             $printer->printLine('');
         }
 
-        $printer->printLine('<white>Global options:</white>');
+        $printer->printLine('<bold>Global options:</bold>');
         foreach (CommandRunner::GLOBAL_OPTIONS as $name => $description) {
             $optStr = "--{$name}";
             $optStrPadded = str_pad($optStr, 19);
@@ -88,12 +88,12 @@ final class HelpRenderer
         Printer $printer,
     ): void
     {
-        $printer->printLine('<white>PHP Code Coverage Guard</white>');
+        $printer->printLine('<bold>PHP Code Coverage Guard</bold>');
         $printer->printLine('');
-        $printer->printLine('<white>Usage:</white>');
+        $printer->printLine('<bold>Usage:</bold>');
         $printer->printLine(self::INDENT . 'vendor/bin/coverage-guard <command> [arguments] [options]');
         $printer->printLine('');
-        $printer->printLine('<white>Available commands:</white>');
+        $printer->printLine('<bold>Available commands:</bold>');
 
         foreach ($registry->getAllCommands() as $command) {
             $namePadded = str_pad($command->getName(), 20);
@@ -101,7 +101,7 @@ final class HelpRenderer
         }
 
         $printer->printLine('');
-        $printer->printLine('<white>Global options:</white>');
+        $printer->printLine('<bold>Global options:</bold>');
         foreach (CommandRunner::GLOBAL_OPTIONS as $name => $description) {
             $optStr = "--{$name}";
             $optStrPadded = str_pad($optStr, 19);
