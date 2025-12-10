@@ -29,7 +29,7 @@ $config->addRule(new class implements CoverageRule {
 
         // @api class methods to have at least 50% coverage
         if ($this->isPublicApiClass($classReflection) && $codeBlock->getCoveragePercentage() < 50) {
-            return CoverageError::create("Method <white>{$codeBlock->getMethodName()}</white> of @api class has only $coverage% coverage, expected at least 50%.");
+            return CoverageError::create("Method <bold>{$codeBlock->getMethodName()}</bold> of @api class has only $coverage% coverage, expected at least 50%.");
         }
 
         return null;

@@ -28,7 +28,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNotNull($error);
-        self::assertSame('Method <white>TestClass::testMethod</white> has no coverage, expected at least 1%.', $error->getMessage());
+        self::assertSame('Method <bold>TestClass::testMethod</bold> has no coverage, expected at least 1%.', $error->getMessage());
     }
 
     public function testReturnsErrorWhenMethodHasInsufficientCoverage(): void
@@ -47,7 +47,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
         self::assertNotNull($error);
-        self::assertSame('Method <white>TestClass::testMethod</white> has only 17% coverage, expected at least 50%.', $error->getMessage());
+        self::assertSame('Method <bold>TestClass::testMethod</bold> has only 17% coverage, expected at least 50%.', $error->getMessage());
     }
 
     public function testReturnsNullWhenMethodHasLessThanMinExecutableLinesDefault(): void
@@ -143,7 +143,7 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext(patchMode: true));
 
         self::assertNotNull($error);
-        self::assertSame('Method <white>TestClass::testMethod</white> has no coverage, expected at least 50%.', $error->getMessage());
+        self::assertSame('Method <bold>TestClass::testMethod</bold> has no coverage, expected at least 50%.', $error->getMessage());
     }
 
     public function testThrowsExceptionWhenRequiredCoveragePercentageIsTooLow(): void
