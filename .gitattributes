@@ -1,0 +1,16 @@
+* text=auto
+
+/cache export-ignore
+/img export-ignore
+/tests export-ignore
+/.editorconfig export-ignore
+/.editorconfig-checker.json export-ignore
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/CLAUDE.md export-ignore
+/composer-dependency-analyser.php export-ignore
+/coverage-guard.php export-ignore
+/phpcs.xml.dist export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml.dist export-ignore
