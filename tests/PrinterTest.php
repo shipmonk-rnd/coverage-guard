@@ -45,12 +45,12 @@ final class PrinterTest extends TestCase
         // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
         $wrapper = new class {
 
-            public static bool $called = false; // @phpstan-ignore shipmonk.publicPropertyNotReadonly
+            public static bool $called = false;
 
             /**
              * @var resource
              */
-            public mixed $context; // @phpstan-ignore property.uninitialized, shipmonk.publicPropertyNotReadonly
+            public mixed $context; // @phpstan-ignore property.uninitialized (ease testing), shipmonk.publicPropertyNotReadonly (ease testing)
 
             public function stream_open(): bool
             {

@@ -25,7 +25,7 @@ final class Indenter
         $out = preg_replace_callback(
             pattern: '/^((?:' . $escapedFrom . ')+)/m',
             callback: static function (array $matches) use ($from, $to): string {
-                $currentIndentLength = strlen($matches[1]); // @phpstan-ignore offsetAccess.notFound
+                $currentIndentLength = strlen($matches[1]); // @phpstan-ignore offsetAccess.notFound (always present)
                 $level = $currentIndentLength / strlen($from);
                 return str_repeat($to, (int) $level);
             },

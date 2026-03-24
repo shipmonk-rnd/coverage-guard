@@ -26,6 +26,7 @@ parameters:
     checkImplicitMixed: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkTooWideThrowTypesInProtectedAndPublicMethods: true
+    reportIgnoresWithoutComments: true
     reportAnyTypeWideningInVarTag: true
     reportPossiblyNonexistentConstantArrayOffset: true
     reportPossiblyNonexistentGeneralArrayOffset: true

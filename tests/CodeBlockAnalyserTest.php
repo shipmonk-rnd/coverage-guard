@@ -216,7 +216,7 @@ final class CodeBlockAnalyserTest extends TestCase
             /**
              * @var list<InspectionContext>
              */
-            public array $capturedContexts = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly
+            public array $capturedContexts = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly (ease testing)
 
             public function inspect(
                 CodeBlock $codeBlock,
