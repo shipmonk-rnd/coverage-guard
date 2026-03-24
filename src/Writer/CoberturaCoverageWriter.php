@@ -58,8 +58,8 @@ final class CoberturaCoverageWriter implements CoverageWriter
     /**
      * @param array<FileCoverage> $fileCoverages
      *
-     * @throws ErrorException
      * @throws DOMException
+     * @throws ErrorException
      */
     private function generateXml(array $fileCoverages): DOMDocument
     {

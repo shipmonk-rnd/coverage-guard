@@ -86,7 +86,7 @@ final class CliParser
         $i = 0;
         $count = count($args);
         while ($i < $count) {
-            $arg = $args[$i]; // @phpstan-ignore offsetAccess.notFound
+            $arg = $args[$i]; // @phpstan-ignore offsetAccess.notFound (guaranteed)
 
             if (str_starts_with($arg, '--')) {
                 [$optionName, $optionValue] = $this->extractOptionNameAndValue($arg, $args, $i, $optionMap);
