@@ -113,9 +113,6 @@ final class CoberturaCoverageWriter implements CoverageWriter
         return $dom;
     }
 
-    /**
-     * @throws DOMException
-     */
     private function addSource(
         DOMDocument $dom,
         DOMElement $coverage,
@@ -182,8 +179,6 @@ final class CoberturaCoverageWriter implements CoverageWriter
 
     /**
      * @param array<FileCoverage> $fileCoverages
-     *
-     * @throws DOMException
      */
     private function addPackages(
         DOMDocument $dom,
@@ -213,9 +208,6 @@ final class CoberturaCoverageWriter implements CoverageWriter
         }
     }
 
-    /**
-     * @throws DOMException
-     */
     private function createPackageElement(
         DOMDocument $dom,
         float $lineRate,
@@ -231,9 +223,6 @@ final class CoberturaCoverageWriter implements CoverageWriter
         return $packageElement;
     }
 
-    /**
-     * @throws DOMException
-     */
     private function createClassElement(
         DOMDocument $dom,
         FileCoverage $fileCoverage,
@@ -287,9 +276,6 @@ final class CoberturaCoverageWriter implements CoverageWriter
         throw new LogicException("File path '$filePath' is not within source directory '$sourceDir', broken source detection?");
     }
 
-    /**
-     * @throws DOMException
-     */
     private function addLines(
         DOMDocument $dom,
         DOMElement $classElement,

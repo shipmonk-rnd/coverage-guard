@@ -22,7 +22,7 @@ parameters:
     internalErrorsCountLimit: 1
     checkMissingCallableSignature: true
     checkUninitializedProperties: true
-    checkBenevolentUnionTypes: false # true not usable with DOMDocument::createElement usages: https://github.com/phpstan/phpstan/issues/13792
+    checkBenevolentUnionTypes: true
     checkImplicitMixed: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkTooWideThrowTypesInProtectedAndPublicMethods: true
