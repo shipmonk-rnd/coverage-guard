@@ -26,7 +26,7 @@
         "sebastian/diff": "^4.0 || ^5.0 || ^6.0 || ^7.0",
         "shipmonk/coding-standard": "^0.2.4",
         "shipmonk/composer-dependency-analyser": "1.8.4",
-        "shipmonk/dead-code-detector": "0.15.1",
+        "shipmonk/dead-code-detector": "^1.0",
         "shipmonk/name-collision-detector": "2.1.1",
         "shipmonk/phpstan-rules": "4.3.6"
     },
