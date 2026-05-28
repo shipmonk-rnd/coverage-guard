@@ -54,7 +54,7 @@ final class CoverageGuardTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{array{string, string|null, bool}}>
+     * @return iterable<string, array{array{string, string|null, bool}, 1?: callable(Config): void}>
      */
     public static function provideArgs(): iterable
     {
