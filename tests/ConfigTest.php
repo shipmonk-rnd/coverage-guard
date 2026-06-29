@@ -18,4 +18,12 @@ final class ConfigTest extends TestCase
         self::assertSame([__DIR__ => __DIR__], $config->getCoveragePathMapping());
     }
 
+    public function testCoveragePathMappingTrimsTrailingDirectorySeparators(): void
+    {
+        $config = new Config();
+        $config->addCoveragePathMapping('/some/ci/path/root/', __DIR__ . DIRECTORY_SEPARATOR);
+
+        self::assertSame(['/some/ci/path/root' => __DIR__], $config->getCoveragePathMapping());
+    }
+
 }
