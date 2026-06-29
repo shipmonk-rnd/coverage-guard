@@ -70,9 +70,10 @@ final class Config
             throw new ErrorException("Provided new path '$existingPathToUseInstead' is not a directory");
         }
 
-        $this->coveragePathMapping[
-            $this->trimTrailingDirectorySeparators($originalPathInCoverageFile)
-        ] = $this->trimTrailingDirectorySeparators($existingPathToUseInstead);
+        $originalPathInCoverageFile = $this->trimTrailingDirectorySeparators($originalPathInCoverageFile);
+        $existingPathToUseInstead = $this->trimTrailingDirectorySeparators($existingPathToUseInstead);
+
+        $this->coveragePathMapping[$originalPathInCoverageFile] = $existingPathToUseInstead;
         return $this;
     }
 
