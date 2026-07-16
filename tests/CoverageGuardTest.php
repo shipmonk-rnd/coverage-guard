@@ -67,6 +67,13 @@ final class CoverageGuardTest extends TestCase
                 $config->addCoveragePathMapping('/some/ci/path/root', __DIR__ . '/..');
             },
         ];
+
+        yield 'with path mapping with trailing slashes' => [
+            [__DIR__ . '/_fixtures/CoverageGuardTest/clover_with_absolute_paths.xml', null, false],
+            static function (Config $config): void {
+                $config->addCoveragePathMapping('/some/ci/path/root/', __DIR__ . '/../');
+            },
+        ];
     }
 
     public function testPatchIntegrityFailsWhenLineNumberExceedsFileLength(): void
