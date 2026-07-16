@@ -24,6 +24,23 @@ final class CoverageProviderTest extends TestCase
         $factory->getCoverage($config, '/non/existent/file.xml');
     }
 
+    public function testPathMappingIsNotAppliedOutsidePathSegmentBoundary(): void
+    {
+        $stream = $this->createStream();
+        $printer = new Printer($stream, noColor: true);
+        $factory = new CoverageProvider(new CoverageFormatDetector(), $printer);
+
+        $config = new Config();
+        $config->addCoveragePathMapping('/some/ci/path/ro', __DIR__ . '/..');
+
+        $coverageFile = __DIR__ . '/_fixtures/CoverageGuardTest/clover_with_absolute_paths.xml';
+
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage("File '/some/ci/path/root/tests/_fixtures/Sample.php' referenced in coverage file '$coverageFile' was not found. Is the report up-to-date?");
+
+        $factory->getCoverage($config, $coverageFile);
+    }
+
     public function testThrowsExceptionForUnknownFormat(): void
     {
         $stream = $this->createStream();

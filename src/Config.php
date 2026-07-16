@@ -7,6 +7,8 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use function file_exists;
 use function is_dir;
+use function preg_match;
+use function rtrim;
 use const DIRECTORY_SEPARATOR;
 
 /**
@@ -68,6 +70,9 @@ final class Config
             throw new ErrorException("Provided new path '$existingPathToUseInstead' is not a directory");
         }
 
+        $originalPathInCoverageFile = $this->trimTrailingDirectorySeparators($originalPathInCoverageFile);
+        $existingPathToUseInstead = $this->trimTrailingDirectorySeparators($existingPathToUseInstead);
+
         $this->coveragePathMapping[$originalPathInCoverageFile] = $existingPathToUseInstead;
         return $this;
     }
@@ -124,6 +129,17 @@ final class Config
     public function getEditorUrl(): ?string
     {
         return $this->editorUrl;
+    }
+
+    private function trimTrailingDirectorySeparators(string $path): string
+    {
+        $trimmedPath = rtrim($path, '/\\');
+
+        if ($trimmedPath === '' || preg_match('~^[a-zA-Z]:$~', $trimmedPath) === 1) {
+            return $path;
+        }
+
+        return $trimmedPath;
     }
 
 }

@@ -106,7 +106,8 @@ final class CoverageProvider
     ): string
     {
         foreach ($config->getCoveragePathMapping() as $oldPath => $newPath) {
-            if (str_starts_with($filePath, $oldPath)) {
+            // match only at path-segment boundary so that mapping of /a/foo does not remap /a/foobar
+            if (str_starts_with($filePath, $oldPath . '/') || str_starts_with($filePath, $oldPath . '\\')) {
                 return $newPath . substr($filePath, strlen($oldPath));
             }
         }
