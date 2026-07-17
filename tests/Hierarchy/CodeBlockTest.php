@@ -12,8 +12,8 @@ final class CodeBlockTest extends TestCase
     public function testGetLines(): void
     {
         $lines = [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: false, excluded: false, covered: false, changed: false, contents: 'comment'),
         ];
 
         $block = $this->createBlock(lines: $lines);
@@ -24,8 +24,8 @@ final class CodeBlockTest extends TestCase
     public function testGetStartLineNumber(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 5, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 6, executable: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 5, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
         ]);
 
         self::assertSame(5, $block->getStartLineNumber());
@@ -34,22 +34,23 @@ final class CodeBlockTest extends TestCase
     public function testGetExecutableLinesCount(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
-            new LineOfCode(number: 3, executable: true, covered: false, changed: false, contents: 'code'),
-            new LineOfCode(number: 4, executable: false, covered: false, changed: false, contents: 'whitespace'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: false, excluded: false, covered: false, changed: false, contents: 'comment'),
+            new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 4, executable: false, excluded: false, covered: false, changed: false, contents: 'whitespace'),
         ]);
 
-        self::assertSame(2, $block->getExecutableLinesCount());
+        self::assertSame(2, $block->getCoverableLinesCount());
+        self::assertSame(2, $block->getExecutableLinesCount()); // deprecated alias
     }
 
     public function testGetCoveredLinesCount(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
-            new LineOfCode(number: 3, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 4, executable: false, covered: false, changed: false, contents: 'comment'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 3, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 4, executable: false, excluded: false, covered: false, changed: false, contents: 'comment'),
         ]);
 
         self::assertSame(2, $block->getCoveredLinesCount());
@@ -58,8 +59,8 @@ final class CodeBlockTest extends TestCase
     public function testGetCoveragePercentageFullyCovered(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
         ]);
 
         self::assertSame(100, $block->getCoveragePercentage());
@@ -68,10 +69,10 @@ final class CodeBlockTest extends TestCase
     public function testGetCoveragePercentagePartiallyCovered(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
-            new LineOfCode(number: 3, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 4, executable: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 3, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
         ]);
 
         self::assertSame(50, $block->getCoveragePercentage());
@@ -80,18 +81,41 @@ final class CodeBlockTest extends TestCase
     public function testGetCoveragePercentageNoExecutableLines(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: false, covered: false, changed: false, contents: 'comment'),
-            new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'whitespace'),
+            new LineOfCode(number: 1, executable: false, excluded: false, covered: false, changed: false, contents: 'comment'),
+            new LineOfCode(number: 2, executable: false, excluded: false, covered: false, changed: false, contents: 'whitespace'),
         ]);
 
-        self::assertSame(0, $block->getCoveragePercentage());
+        self::assertSame(100, $block->getCoveragePercentage());
+    }
+
+    public function testExcludedLinesAreNotExecutable(): void
+    {
+        $block = $this->createBlock(lines: [
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 3, executable: true, excluded: true, covered: true, changed: false, contents: 'code'),
+        ]);
+
+        self::assertSame(1, $block->getCoverableLinesCount());
+        self::assertSame(1, $block->getCoveredLinesCount());
+        self::assertSame(100, $block->getCoveragePercentage());
+    }
+
+    public function testGetCoveragePercentageAllLinesExcluded(): void
+    {
+        $block = $this->createBlock(lines: [
+            new LineOfCode(number: 1, executable: true, excluded: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: false, contents: 'code'),
+        ]);
+
+        self::assertSame(100, $block->getCoveragePercentage());
     }
 
     public function testGetCoveragePercentageFullyUncovered(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: false, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
         ]);
 
         self::assertSame(0, $block->getCoveragePercentage());
@@ -100,10 +124,10 @@ final class CodeBlockTest extends TestCase
     public function testGetChangedLinesCount(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
-            new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 4, executable: false, covered: false, changed: true, contents: 'comment'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 4, executable: false, excluded: false, covered: false, changed: true, contents: 'comment'),
         ]);
 
         self::assertSame(2, $block->getChangedLinesCount());
@@ -112,8 +136,8 @@ final class CodeBlockTest extends TestCase
     public function testGetChangePercentageFullyChanged(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
         ]);
 
         self::assertSame(100, $block->getChangePercentage());
@@ -122,8 +146,8 @@ final class CodeBlockTest extends TestCase
     public function testGetChangePercentagePartiallyChanged(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
         ]);
 
         self::assertSame(50, $block->getChangePercentage());
@@ -132,29 +156,41 @@ final class CodeBlockTest extends TestCase
     public function testGetChangePercentageNoExecutableLines(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: false, covered: false, changed: true, contents: 'comment'),
+            new LineOfCode(number: 1, executable: false, excluded: false, covered: false, changed: true, contents: 'comment'),
         ]);
 
         self::assertSame(0, $block->getChangePercentage());
     }
 
-    public function testGetMethodName(): void
+    public function testGetChangePercentageIgnoresExcludedLines(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
-            new LineOfCode(number: 2, executable: false, covered: false, changed: false, contents: 'comment'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            new LineOfCode(number: 3, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
         ]);
 
-        self::assertSame('testMethod', $block->getMethodName());
+        self::assertSame(1, $block->getChangedLinesCount());
+        self::assertSame(50, $block->getChangePercentage());
     }
 
     public function testGetNode(): void
     {
         $block = $this->createBlock(lines: [
-            new LineOfCode(number: 1, executable: true, covered: true, changed: false, contents: 'code'),
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
         ]);
 
-        self::assertSame('testMethod', $block->getNode()->name->toString());
+        $node = $block->getNode();
+        self::assertSame('testMethod', $node->name->toString());
+    }
+
+    public function testGetMethodName(): void
+    {
+        $block = $this->createBlock(lines: [
+            new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: false, contents: 'code'),
+        ]);
+
+        self::assertSame('testMethod', $block->getMethodName());
     }
 
     /**

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
+use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
@@ -36,6 +37,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
      * @param array<int, int> $linesCoverage executable_line => hits
      * @param array<int, string> $linesContents
      * @param list<CoverageRule> $rules
+     * @param ExcluderVisitor $excluderVisitor must be traversed before this visitor
      */
     public function __construct(
         private readonly bool $patchMode,
@@ -44,6 +46,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         private readonly array $linesCoverage,
         private readonly array $linesContents,
         private readonly array $rules,
+        private readonly ExcluderVisitor $excluderVisitor,
     )
     {
         $this->updateContext();
@@ -130,6 +133,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             $executableLines[] = new LineOfCode(
                 number: $lineNumber,
                 executable: isset($this->linesCoverage[$lineNumber]),
+                excluded: $this->excluderVisitor->isLineExcluded($lineNumber),
                 covered: isset($this->linesCoverage[$lineNumber]) && $this->linesCoverage[$lineNumber] > 0,
                 changed: isset($this->linesChanged[$lineNumber]),
                 contents: $this->linesContents[$lineNumber],

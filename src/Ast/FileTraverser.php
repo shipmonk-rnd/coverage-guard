@@ -5,9 +5,9 @@ namespace ShipMonk\CoverageGuard\Ast;
 use LogicException;
 use PhpParser\Error as ParseError;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser as PhpParser;
-use ShipMonk\CoverageGuard\CodeBlockAnalyser;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function implode;
 use const PHP_EOL;
@@ -29,16 +29,13 @@ final class FileTraverser
     public function traverse(
         string $file,
         array $fileLines,
-        CodeBlockAnalyser $analyser,
+        NodeVisitor ...$visitors,
     ): void
     {
         $nameResolver = new NameResolver();
 
         $nameResolvingTraverser = new NodeTraverser();
         $nameResolvingTraverser->addVisitor($nameResolver);
-
-        $analyserTraverser = new NodeTraverser();
-        $analyserTraverser->addVisitor($analyser);
 
         try {
             /** @throws ParseError */
@@ -51,7 +48,14 @@ final class FileTraverser
             throw new LogicException("Failed to parse PHP code in file {$file}. Should never happen as Throwing error handler is used.");
         }
 
-        $analyserTraverser->traverse($nameResolvingTraverser->traverse($ast));
+        $resolvedAst = $nameResolvingTraverser->traverse($ast);
+
+        // each visitor gets its own traversal so that later visitors can rely on complete state of earlier ones
+        foreach ($visitors as $visitor) {
+            $visitorTraverser = new NodeTraverser();
+            $visitorTraverser->addVisitor($visitor);
+            $visitorTraverser->traverse($resolvedAst);
+        }
     }
 
 }

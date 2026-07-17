@@ -17,13 +17,13 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 1, minExecutableLines: 5);
 
         $block = $this->createBlock([
-            new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 5, executable: true, covered: false, changed: true, contents: 'code'),
-            new LineOfCode(number: 6, executable: true, covered: false, changed: true, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
@@ -31,18 +31,46 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         self::assertSame('Method <bold>TestClass::testMethod</bold> has no coverage, expected at least 1%.', $error->getMessage());
     }
 
+    public function testExcludedLinesDoNotRequireCoverage(): void
+    {
+        $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 100, minExecutableLines: 0);
+
+        $block = $this->createBlock([
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+            ]);
+
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
+
+        self::assertNull($error);
+    }
+
+    public function testFullyExcludedMethodIsNotReported(): void
+    {
+        $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 100, minExecutableLines: 0);
+
+        $block = $this->createBlock([
+                new LineOfCode(number: 1, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+            ]);
+
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
+
+        self::assertNull($error);
+    }
+
     public function testReturnsErrorWhenMethodHasInsufficientCoverage(): void
     {
         $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 50, minExecutableLines: 5);
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: true, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 5, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 6, executable: true, covered: false, changed: true, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
@@ -55,11 +83,11 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $rule = new EnforceCoverageForMethodsRule(minExecutableLines: 5);
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
@@ -71,12 +99,12 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $rule = new EnforceCoverageForMethodsRule(minExecutableLines: 10);
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 5, executable: true, covered: false, changed: true, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
@@ -88,13 +116,13 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 50, minExecutableLines: 5);
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: true, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: true, changed: true, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: true, changed: true, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 5, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 6, executable: true, covered: false, changed: true, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext());
 
@@ -110,13 +138,13 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         );
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: false, changed: false, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: false, changed: false, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: false, contents: 'code'),
-                new LineOfCode(number: 5, executable: true, covered: false, changed: false, contents: 'code'),
-                new LineOfCode(number: 6, executable: true, covered: false, changed: false, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+                new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext(patchMode: true));
 
@@ -132,13 +160,13 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         );
 
         $block = $this->createBlock([
-                new LineOfCode(number: 1, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 2, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 3, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 4, executable: true, covered: false, changed: true, contents: 'code'),
-                new LineOfCode(number: 5, executable: true, covered: false, changed: false, contents: 'code'),
-                new LineOfCode(number: 6, executable: true, covered: false, changed: false, contents: 'code'),
-        ]);
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 3, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 4, executable: true, excluded: false, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 5, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+                new LineOfCode(number: 6, executable: true, excluded: false, covered: false, changed: false, contents: 'code'),
+            ]);
 
         $error = $rule->inspect(codeBlock: $block, context: $this->createContext(patchMode: true));
 

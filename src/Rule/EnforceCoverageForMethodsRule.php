@@ -35,7 +35,7 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
     ): ?CoverageError
     {
         if (!$codeBlock instanceof ClassMethodBlock) {
-            return null;
+            return null; // we only care about methods
         }
 
         if (
@@ -46,7 +46,7 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
         }
 
         if (
-            $codeBlock->getExecutableLinesCount() >= $this->minExecutableLines
+            $codeBlock->getCoverableLinesCount() >= $this->minExecutableLines
             && $codeBlock->getCoveragePercentage() < $this->requiredCoveragePercentage
         ) {
             $className = $context->getClassName() ?? 'anonymous';

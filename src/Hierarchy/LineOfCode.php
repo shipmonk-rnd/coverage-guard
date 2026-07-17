@@ -13,6 +13,7 @@ final class LineOfCode
     public function __construct(
         private readonly int $number,
         private readonly bool $executable,
+        private readonly bool $excluded,
         private readonly bool $covered,
         private readonly bool $changed,
         private readonly string $contents,
@@ -31,9 +32,18 @@ final class LineOfCode
         return $this->number;
     }
 
+    /**
+     * True if coverage report marks this line as executable, regardless of exclusion.
+     * CodeBlock metrics skip excluded lines; do the same via isExcluded() when iterating lines manually.
+     */
     public function isExecutable(): bool
     {
         return $this->executable;
+    }
+
+    public function isExcluded(): bool
+    {
+        return $this->excluded;
     }
 
     /**

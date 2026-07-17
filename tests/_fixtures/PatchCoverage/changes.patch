@@ -1,0 +1,14 @@
+diff --git a/tests/_fixtures/PatchCoverage/ClassWithThrow.php b/tests/_fixtures/PatchCoverage/ClassWithThrow.php
+index 1234567..abcdefg 100644
+--- a/tests/_fixtures/PatchCoverage/ClassWithThrow.php
++++ b/tests/_fixtures/PatchCoverage/ClassWithThrow.php
+@@ -9,3 +9,9 @@ class ClassWithThrow
+
+     public function doSomething(bool $flag): int
+     {
++        if ($flag) {
++            throw new LogicException('boom');
++        }
++
++        return 42;
++    }
