@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
+use PhpParser\Node\PropertyHook;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -42,6 +43,7 @@ use ShipMonk\CoverageGuard\Hierarchy\FunctionBlock;
 use ShipMonk\CoverageGuard\Hierarchy\IfBlock;
 use ShipMonk\CoverageGuard\Hierarchy\MatchArmBlock;
 use ShipMonk\CoverageGuard\Hierarchy\MatchBlock;
+use ShipMonk\CoverageGuard\Hierarchy\PropertyHookBlock;
 use ShipMonk\CoverageGuard\Hierarchy\SwitchBlock;
 use ShipMonk\CoverageGuard\Hierarchy\TryBlock;
 use ShipMonk\CoverageGuard\Hierarchy\WhileBlock;
@@ -50,6 +52,7 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use function array_keys;
 use function array_map;
+use function class_exists;
 use function count;
 use function file;
 use const FILE_IGNORE_NEW_LINES;
@@ -59,49 +62,11 @@ final class ConditionalBlocksTest extends TestCase
 
     public function testAllConditionalBlocksAreDetected(): void
     {
-        $filePath = __DIR__ . '/_fixtures/ConditionalBlocks.php';
-        $linesContents = $this->getFileLines($filePath);
-
-        $linesCoverage = [];
-        foreach (array_keys($linesContents) as $lineNumber) {
-            $linesCoverage[$lineNumber] = 1;
-        }
-
-        $collectingRule = new class implements CoverageRule {
-
-            /**
-             * @var list<CodeBlock>
-             */
-            public array $blocks = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly (ease testing)
-
-            public function inspect(
-                CodeBlock $codeBlock,
-                InspectionContext $context,
-            ): ?CoverageError
-            {
-                $this->blocks[] = $codeBlock;
-                return null;
-            }
-
-        };
-
-        $excluderVisitor = new ExcluderVisitor([], new ExclusionContext($filePath, $linesContents));
-        $analyser = new CodeBlockAnalyser(
-            patchMode: false,
-            filePath: $filePath,
-            linesChanged: [],
-            linesCoverage: $linesCoverage,
-            linesContents: $linesContents,
-            rules: [$collectingRule],
-            excluderVisitor: $excluderVisitor,
-        );
-
-        $traverser = new FileTraverser((new ParserFactory())->createForNewestSupportedVersion());
-        $traverser->traverse($filePath, $linesContents, $excluderVisitor, $analyser);
+        $blocks = $this->collectBlocks(__DIR__ . '/_fixtures/ConditionalBlocks.php');
 
         $blockTypes = array_map(
             static fn (CodeBlock $block) => $block::class,
-            $collectingRule->blocks,
+            $blocks,
         );
 
         self::assertContains(ForeachBlock::class, $blockTypes, 'ForeachBlock should be detected');
@@ -133,7 +98,7 @@ final class ConditionalBlocksTest extends TestCase
         $catchBlock = null;
         $finallyBlock = null;
 
-        foreach ($collectingRule->blocks as $block) {
+        foreach ($blocks as $block) {
             if ($block instanceof FunctionBlock) {
                 $functionBlock ??= $block;
             }
@@ -230,7 +195,7 @@ final class ConditionalBlocksTest extends TestCase
             WhileBlock::class => While_::class,
         ];
 
-        foreach ($collectingRule->blocks as $block) {
+        foreach ($blocks as $block) {
             self::assertArrayHasKey($block::class, $expectedNodeTypes);
             self::assertInstanceOf($expectedNodeTypes[$block::class], $block->getNode());
         }
@@ -253,6 +218,88 @@ final class ConditionalBlocksTest extends TestCase
     {
         $lines = $block->getLines();
         return $lines[count($lines) - 1]->getNumber();
+    }
+
+    public function testPropertyHookBlocksAreDetected(): void
+    {
+        if (!class_exists(PropertyHook::class)) {
+            self::markTestSkipped('Installed nikic/php-parser does not support property hooks');
+        }
+
+        $blocks = $this->collectBlocks(__DIR__ . '/_fixtures/PropertyHooks.php');
+
+        $hookBlocks = [];
+        $ifBlockInsideHook = null;
+
+        foreach ($blocks as $block) {
+            if ($block instanceof PropertyHookBlock) {
+                $hookBlocks[] = $block;
+            }
+
+            if ($block instanceof IfBlock && $block->getParent() instanceof PropertyHookBlock) {
+                $ifBlockInsideHook = $block;
+            }
+        }
+
+        self::assertCount(3, $hookBlocks);
+        self::assertSame(['get', 'get', 'set'], array_map(
+            static fn (PropertyHookBlock $block) => $block->getHookName(),
+            $hookBlocks,
+        ));
+
+        foreach ($hookBlocks as $hookBlock) {
+            self::assertSame($hookBlock->getHookName(), $hookBlock->getNode()->name->toString());
+            self::assertNull($hookBlock->getParent(), 'Property hook of a real class should have no parent block');
+        }
+
+        self::assertNotNull($ifBlockInsideHook, 'IfBlock nested in property hook should be found');
+    }
+
+    /**
+     * @return list<CodeBlock>
+     */
+    private function collectBlocks(string $filePath): array
+    {
+        $linesContents = $this->getFileLines($filePath);
+
+        $linesCoverage = [];
+        foreach (array_keys($linesContents) as $lineNumber) {
+            $linesCoverage[$lineNumber] = 1;
+        }
+
+        $collectingRule = new class implements CoverageRule {
+
+            /**
+             * @var list<CodeBlock>
+             */
+            public array $blocks = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly (ease testing)
+
+            public function inspect(
+                CodeBlock $codeBlock,
+                InspectionContext $context,
+            ): ?CoverageError
+            {
+                $this->blocks[] = $codeBlock;
+                return null;
+            }
+
+        };
+
+        $excluderVisitor = new ExcluderVisitor([], new ExclusionContext($filePath, $linesContents));
+        $analyser = new CodeBlockAnalyser(
+            patchMode: false,
+            filePath: $filePath,
+            linesChanged: [],
+            linesCoverage: $linesCoverage,
+            linesContents: $linesContents,
+            rules: [$collectingRule],
+            excluderVisitor: $excluderVisitor,
+        );
+
+        $traverser = new FileTraverser((new ParserFactory())->createForNewestSupportedVersion());
+        $traverser->traverse($filePath, $linesContents, $excluderVisitor, $analyser);
+
+        return $collectingRule->blocks;
     }
 
     /**
