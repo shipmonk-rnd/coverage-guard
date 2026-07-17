@@ -3,9 +3,11 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use PhpParser\NodeVisitor;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
+use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
 use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
 use ShipMonk\CoverageGuard\Fixtures\MyLogicException;
@@ -175,7 +177,6 @@ final class CodeBlockAnalyserTest extends TestCase
 
     /**
      * @param list<CoverageRule> $rules
-     * @param list<ExecutableLineExcluder> $excluders
      * @param array<int, int>|null $linesCoverage
      * @param array<int, int>|null $linesChanged
      */
@@ -183,7 +184,7 @@ final class CodeBlockAnalyserTest extends TestCase
         string $filePath,
         array $rules = [],
         bool $patchMode = false,
-        array $excluders = [],
+        ?ExcluderVisitor $excluderVisitor = null,
         ?array $linesCoverage = null,
         ?array $linesChanged = null,
     ): CodeBlockAnalyser
@@ -195,7 +196,7 @@ final class CodeBlockAnalyserTest extends TestCase
             linesCoverage: $linesCoverage ?? [9 => 1, 13 => 1, 14 => 1, 17 => 1],
             linesContents: $this->getFileLines($filePath),
             rules: $rules,
-            excluders: $excluders,
+            excluderVisitor: $excluderVisitor ?? new ExcluderVisitor([]),
         );
     }
 
@@ -219,12 +220,12 @@ final class CodeBlockAnalyserTest extends TestCase
 
     private function traverseFile(
         string $filePath,
-        CodeBlockAnalyser $analyser,
+        NodeVisitor ...$visitors,
     ): void
     {
         $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $traverser = new FileTraverser($parser);
-        $traverser->traverse($filePath, $this->getFileLines($filePath), $analyser);
+        $traverser->traverse($filePath, $this->getFileLines($filePath), ...$visitors);
     }
 
     /**
@@ -305,14 +306,15 @@ final class CodeBlockAnalyserTest extends TestCase
             $linesCoverage[$lineNumber] = 1;
         }
 
+        $excluderVisitor = new ExcluderVisitor($excluders);
         $analyser = $this->createAnalyser(
             filePath: $filePath,
             rules: [$rule],
-            excluders: $excluders,
+            excluderVisitor: $excluderVisitor,
             linesCoverage: $linesCoverage,
         );
 
-        $this->traverseFile($filePath, $analyser);
+        $this->traverseFile($filePath, $excluderVisitor, $analyser);
 
         // Collect all excluded lines from all blocks
         $actualExcludedLines = [];

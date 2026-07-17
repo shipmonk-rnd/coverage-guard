@@ -2,13 +2,16 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Cli\Arguments\CoverageFileCliArgument;
 use ShipMonk\CoverageGuard\Cli\Options\ConfigCliOption;
 use ShipMonk\CoverageGuard\Cli\Options\PatchCliOption;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
+use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function number_format;
 
@@ -20,6 +23,7 @@ final class PatchCoverageCommand implements Command
         private readonly PatchParser $patchParser,
         private readonly ConfigResolver $configResolver,
         private readonly CoverageProvider $coverageProvider,
+        private readonly FileTraverser $fileTraverser,
     )
     {
     }
@@ -42,6 +46,7 @@ final class PatchCoverageCommand implements Command
 
         $coveragePerFile = $this->coverageProvider->getCoverage($config, $coverageFile);
         $changesPerFile = $this->patchParser->getPatchChangedLines($patchPath, $config);
+        $excluders = $config->getExecutableLineExcluders();
 
         // Calculate coverage for changed lines
         $totalChangedLines = 0;
@@ -52,6 +57,11 @@ final class PatchCoverageCommand implements Command
                 continue; // File not in coverage report
             }
 
+            $excluderVisitor = new ExcluderVisitor($excluders);
+            if ($excluders !== []) {
+                $this->fileTraverser->traverse($file, FileUtils::readFileLines($file), $excluderVisitor);
+            }
+
             $fileCoverage = $coveragePerFile[$file];
             $executableLinesMap = [];
 
@@ -60,7 +70,7 @@ final class PatchCoverageCommand implements Command
             }
 
             foreach ($changedLines as $lineNumber) {
-                if (isset($executableLinesMap[$lineNumber])) {
+                if (isset($executableLinesMap[$lineNumber]) && !$excluderVisitor->isLineExcluded($lineNumber)) {
                     $totalChangedLines++;
                     if ($executableLinesMap[$lineNumber]) {
                         $totalCoveredLines++;
@@ -79,7 +89,7 @@ final class PatchCoverageCommand implements Command
 
         $this->stdoutPrinter->printLine('Patch Coverage Statistics:');
         $this->stdoutPrinter->printLine('');
-        $this->stdoutPrinter->printLine("  Changed executable lines: {$totalChangedLines}"); // TODO excluders should be used
+        $this->stdoutPrinter->printLine("  Changed executable lines: {$totalChangedLines}");
         $this->stdoutPrinter->printLine("  Covered lines:            <green>{$totalCoveredLines}</green>");
         $this->stdoutPrinter->printLine('  Uncovered lines:          <orange>' . ($totalChangedLines - $totalCoveredLines) . '</orange>');
         $this->stdoutPrinter->printLine("  Coverage:                 {$percentageFormatted}%");

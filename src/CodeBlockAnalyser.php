@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
-use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
+use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
 use ShipMonk\CoverageGuard\Hierarchy\ClassMethodBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
@@ -40,16 +40,11 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     private array $reportedErrors = [];
 
     /**
-     * @var array<int, int>
-     */
-    private array $excludedLines = [];
-
-    /**
      * @param array<int, int> $linesChanged line => line
      * @param array<int, int> $linesCoverage executable_line => hits
      * @param array<int, string> $linesContents
      * @param list<CoverageRule> $rules
-     * @param list<ExecutableLineExcluder> $excluders
+     * @param ExcluderVisitor $excluderVisitor must be traversed before this visitor
      */
     public function __construct(
         private readonly bool $patchMode,
@@ -58,22 +53,13 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         private readonly array $linesCoverage,
         private readonly array $linesContents,
         private readonly array $rules,
-        private readonly array $excluders,
+        private readonly ExcluderVisitor $excluderVisitor,
     )
     {
     }
 
     public function enterNode(Node $node): ?int
     {
-        foreach ($this->excluders as $excluder) {
-            $excludedExecutableLineRange = $excluder->getExcludedLineRange($node);
-            if ($excludedExecutableLineRange !== null) {
-                foreach (range($excludedExecutableLineRange->getStart(), $excludedExecutableLineRange->getEnd()) as $excludedLine) {
-                    $this->excludedLines[$excludedLine] = $excludedLine;
-                }
-            }
-        }
-
         if ($node instanceof ClassLike) {
             $this->currentClassStack[] = $node->namespacedName?->toString();
         }
@@ -148,7 +134,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             $executableLines[] = new LineOfCode(
                 number: $lineNumber,
                 executable: isset($this->linesCoverage[$lineNumber]),
-                excluded: isset($this->excludedLines[$lineNumber]),
+                excluded: $this->excluderVisitor->isLineExcluded($lineNumber),
                 covered: isset($this->linesCoverage[$lineNumber]) && $this->linesCoverage[$lineNumber] > 0,
                 changed: isset($this->linesChanged[$lineNumber]),
                 contents: $this->linesContents[$lineNumber],

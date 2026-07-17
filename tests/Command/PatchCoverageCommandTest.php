@@ -2,8 +2,10 @@
 
 namespace ShipMonk\CoverageGuard\Command;
 
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -132,6 +134,48 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertStringContainsString('Coverage:', $output);
     }
 
+    public function testExcludersReduceChangedExecutableLines(): void
+    {
+        $coverageFile = __DIR__ . '/../_fixtures/PatchCoverage/clover.xml';
+        $patchFile = __DIR__ . '/../_fixtures/PatchCoverage/changes.patch';
+
+        // without excluders: lines 12, 13 (uncovered throw), 16 are changed & executable
+        $outputWithoutExcluders = $this->runCommand($coverageFile, $patchFile, __DIR__ . '/../_fixtures/PatchCoverage/config-without-excluders.php');
+        self::assertStringContainsString('Changed executable lines: 3', $outputWithoutExcluders);
+        self::assertStringContainsString('Coverage:                 66.67%', $outputWithoutExcluders);
+
+        // with excluders: the throw line is excluded, leaving 2 covered lines
+        $outputWithExcluders = $this->runCommand($coverageFile, $patchFile, __DIR__ . '/../_fixtures/PatchCoverage/config-with-excluders.php');
+        self::assertStringContainsString('Changed executable lines: 2', $outputWithExcluders);
+        self::assertStringContainsString('Coverage:                 100.00%', $outputWithExcluders);
+    }
+
+    private function runCommand(
+        string $coverageFile,
+        string $patchFile,
+        string $configPath,
+    ): string
+    {
+        $stdoutStream = $this->createStream();
+        $stdoutPrinter = new Printer($stdoutStream, noColor: true);
+
+        $command = $this->createCommand($stdoutPrinter);
+
+        $exitCode = ($command)(
+            $coverageFile,
+            patchPath: $patchFile,
+            configPath: $configPath,
+        );
+        self::assertSame(0, $exitCode);
+
+        rewind($stdoutStream);
+        $output = stream_get_contents($stdoutStream);
+        fclose($stdoutStream);
+
+        self::assertIsString($output);
+        return $output;
+    }
+
     private function createCommand(
         Printer $stdoutPrinter,
     ): PatchCoverageCommand
@@ -144,7 +188,8 @@ final class PatchCoverageCommandTest extends TestCase
         $stderrPrinter = new Printer($stderrStream, noColor: true);
         $patchParser = new PatchParser($gitRoot, $stderrPrinter);
         $configResolver = new ConfigResolver($gitRoot);
-        return new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter));
+        $fileTraverser = new FileTraverser((new ParserFactory())->createForHostVersion());
+        return new PatchCoverageCommand($stdoutPrinter, $patchParser, $configResolver, new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter), $fileTraverser);
     }
 
 }
