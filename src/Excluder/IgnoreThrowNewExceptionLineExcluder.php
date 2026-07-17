@@ -18,6 +18,9 @@ final class IgnoreThrowNewExceptionLineExcluder implements ExecutableLineExclude
 {
 
     /**
+     * Class names are matched exactly against the thrown class (resolved to FQN, no leading backslash).
+     * Subclasses are not matched, list each thrown class explicitly.
+     *
      * @param list<string> $classNames
      */
     public function __construct(

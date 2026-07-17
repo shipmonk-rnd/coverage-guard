@@ -109,7 +109,7 @@ return $config;
 - For custom line exclusion, implement `ExecutableLineExcluder` and pass it to `Config::addExecutableLineExcluder()` method:
   - It receives each AST node together with `ExclusionContext` (file path, line contents) and may return an `ExcludedLineRange`
   - Excluded lines are honored by both `check` and `patch-coverage` commands and rendered with gray background
-  - Inspire by prepared [`IgnoreThrowNewExceptionLineExcluder`](src/Excluder/IgnoreThrowNewExceptionLineExcluder.php)
+  - Inspire by prepared [`IgnoreThrowNewExceptionLineExcluder`](src/Excluder/IgnoreThrowNewExceptionLineExcluder.php) (exact class name matches only, subclasses are not excluded)
 
 
 ### What can you enforce:
