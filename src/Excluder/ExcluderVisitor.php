@@ -19,6 +19,7 @@ final class ExcluderVisitor extends NodeVisitorAbstract
      */
     public function __construct(
         private readonly array $excluders,
+        private readonly ExclusionContext $context,
     )
     {
     }
@@ -26,7 +27,7 @@ final class ExcluderVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node): ?int
     {
         foreach ($this->excluders as $excluder) {
-            $excludedLineRange = $excluder->getExcludedLineRange($node);
+            $excludedLineRange = $excluder->getExcludedLineRange($node, $this->context);
             if ($excludedLineRange !== null) {
                 foreach (range($excludedLineRange->getStart(), $excludedLineRange->getEnd()) as $excludedLine) {
                     $this->excludedLines[$excludedLine] = $excludedLine;

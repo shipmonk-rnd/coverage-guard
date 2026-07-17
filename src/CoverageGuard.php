@@ -7,6 +7,7 @@ use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
+use ShipMonk\CoverageGuard\Excluder\ExclusionContext;
 use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Report\CoverageReport;
 use ShipMonk\CoverageGuard\Report\ReportedError;
@@ -129,7 +130,7 @@ final class CoverageGuard
 
         $linesContents = array_combine($lineNumbers, $codeLines);
 
-        $excluderVisitor = new ExcluderVisitor($excluders);
+        $excluderVisitor = new ExcluderVisitor($excluders, new ExclusionContext($file, $linesContents));
         $analyser = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules, $excluderVisitor);
 
         $this->fileTraverser->traverse($file, $codeLines, $excluderVisitor, $analyser);

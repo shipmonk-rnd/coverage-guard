@@ -3,11 +3,14 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use PhpParser\Node;
 use PhpParser\NodeVisitor;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
+use ShipMonk\CoverageGuard\Excluder\ExcludedLineRange;
 use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
+use ShipMonk\CoverageGuard\Excluder\ExclusionContext;
 use ShipMonk\CoverageGuard\Excluder\ExecutableLineExcluder;
 use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
 use ShipMonk\CoverageGuard\Fixtures\MyLogicException;
@@ -18,6 +21,7 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use function array_keys;
 use function file;
+use function range;
 use function sort;
 use function str_contains;
 use const FILE_IGNORE_NEW_LINES;
@@ -175,6 +179,31 @@ final class CodeBlockAnalyserTest extends TestCase
         $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
     }
 
+    public function testExcluderCanUseExclusionContext(): void
+    {
+        $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithThrowStatements.php';
+
+        $excluder = new class implements ExecutableLineExcluder {
+
+            public function getExcludedLineRange(
+                Node $node,
+                ExclusionContext $context,
+            ): ?ExcludedLineRange
+            {
+                foreach (range($node->getStartLine(), $node->getEndLine()) as $lineNumber) {
+                    if (!str_contains($context->getLineContents($lineNumber), '// excluded')) {
+                        return null;
+                    }
+                }
+
+                return new ExcludedLineRange($node->getStartLine(), $node->getEndLine());
+            }
+
+        };
+
+        $this->assertExcludedLinesMatchFixtureComments($filePath, [$excluder]);
+    }
+
     /**
      * @param list<CoverageRule> $rules
      * @param array<int, int>|null $linesCoverage
@@ -196,8 +225,19 @@ final class CodeBlockAnalyserTest extends TestCase
             linesCoverage: $linesCoverage ?? [9 => 1, 13 => 1, 14 => 1, 17 => 1],
             linesContents: $this->getFileLines($filePath),
             rules: $rules,
-            excluderVisitor: $excluderVisitor ?? new ExcluderVisitor([]),
+            excluderVisitor: $excluderVisitor ?? $this->createExcluderVisitor($filePath, []),
         );
+    }
+
+    /**
+     * @param list<ExecutableLineExcluder> $excluders
+     */
+    private function createExcluderVisitor(
+        string $filePath,
+        array $excluders,
+    ): ExcluderVisitor
+    {
+        return new ExcluderVisitor($excluders, new ExclusionContext($filePath, $this->getFileLines($filePath)));
     }
 
     /**
@@ -306,7 +346,7 @@ final class CodeBlockAnalyserTest extends TestCase
             $linesCoverage[$lineNumber] = 1;
         }
 
-        $excluderVisitor = new ExcluderVisitor($excluders);
+        $excluderVisitor = $this->createExcluderVisitor($filePath, $excluders);
         $analyser = $this->createAnalyser(
             filePath: $filePath,
             rules: [$rule],

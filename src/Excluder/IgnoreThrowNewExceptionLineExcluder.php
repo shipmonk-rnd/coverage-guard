@@ -26,7 +26,10 @@ final class IgnoreThrowNewExceptionLineExcluder implements ExecutableLineExclude
     {
     }
 
-    public function getExcludedLineRange(Node $node): ?ExcludedLineRange
+    public function getExcludedLineRange(
+        Node $node,
+        ExclusionContext $context,
+    ): ?ExcludedLineRange
     {
         if (
             ($node instanceof Throw_ || $node instanceof OldThrow_)

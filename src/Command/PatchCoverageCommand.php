@@ -9,11 +9,15 @@ use ShipMonk\CoverageGuard\Cli\Options\PatchCliOption;
 use ShipMonk\CoverageGuard\CoverageProvider;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Excluder\ExcluderVisitor;
+use ShipMonk\CoverageGuard\Excluder\ExclusionContext;
 use ShipMonk\CoverageGuard\Printer;
 use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
+use function array_combine;
+use function count;
 use function number_format;
+use function range;
 
 final class PatchCoverageCommand implements Command
 {
@@ -57,9 +61,12 @@ final class PatchCoverageCommand implements Command
                 continue; // File not in coverage report
             }
 
-            $excluderVisitor = new ExcluderVisitor($excluders);
+            $excluderVisitor = null;
             if ($excluders !== []) {
-                $this->fileTraverser->traverse($file, FileUtils::readFileLines($file), $excluderVisitor);
+                $fileLines = FileUtils::readFileLines($file);
+                $linesContents = array_combine(range(1, count($fileLines)), $fileLines);
+                $excluderVisitor = new ExcluderVisitor($excluders, new ExclusionContext($file, $linesContents));
+                $this->fileTraverser->traverse($file, $fileLines, $excluderVisitor);
             }
 
             $fileCoverage = $coveragePerFile[$file];
@@ -70,7 +77,7 @@ final class PatchCoverageCommand implements Command
             }
 
             foreach ($changedLines as $lineNumber) {
-                if (isset($executableLinesMap[$lineNumber]) && !$excluderVisitor->isLineExcluded($lineNumber)) {
+                if (isset($executableLinesMap[$lineNumber]) && $excluderVisitor?->isLineExcluded($lineNumber) !== true) {
                     $totalChangedLines++;
                     if ($executableLinesMap[$lineNumber]) {
                         $totalCoveredLines++;
