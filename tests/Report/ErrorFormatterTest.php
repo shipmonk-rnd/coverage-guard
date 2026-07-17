@@ -15,6 +15,7 @@ use ShipMonk\CoverageGuard\Utils\PathHelper;
 use function rewind;
 use function str_replace;
 use function stream_get_contents;
+use function substr_count;
 use const DIRECTORY_SEPARATOR;
 
 final class ErrorFormatterTest extends TestCase
@@ -66,7 +67,8 @@ final class ErrorFormatterTest extends TestCase
         $result = $this->formatReport($lines, new Config(), patchMode: false, noColor: true);
 
         self::assertStringNotContainsString("\033[", $result);
-        self::assertStringContainsString('X', $result); // plain-text indicator of uncovered line
+        self::assertSame(1, substr_count($result, 'X'), 'only the uncovered line is marked, excluded line gets no indicator');
+        self::assertSame(1, substr_count($result, '|'), 'only the covered line is marked, excluded line gets no indicator');
     }
 
     public function testClickableFilepathWhenEditorUrlSet(): void

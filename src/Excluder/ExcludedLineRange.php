@@ -21,9 +21,6 @@ final class ExcludedLineRange
         if ($start < 1) {
             throw new LogicException('Start must be greater than or equal to 1.');
         }
-        if ($end < 1) {
-            throw new LogicException('End must be greater than or equal to 1.');
-        }
     }
 
     public function getStart(): int
