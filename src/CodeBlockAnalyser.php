@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -39,6 +40,7 @@ use ShipMonk\CoverageGuard\Hierarchy\ForeachBlock;
 use ShipMonk\CoverageGuard\Hierarchy\FunctionBlock;
 use ShipMonk\CoverageGuard\Hierarchy\IfBlock;
 use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
+use ShipMonk\CoverageGuard\Hierarchy\MatchArmBlock;
 use ShipMonk\CoverageGuard\Hierarchy\MatchBlock;
 use ShipMonk\CoverageGuard\Hierarchy\SwitchBlock;
 use ShipMonk\CoverageGuard\Hierarchy\TryBlock;
@@ -217,6 +219,11 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
         if ($node instanceof Match_) {
             $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new MatchBlock($node, $lines, $parent));
+            return null;
+        }
+
+        if ($node instanceof MatchArm) {
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new MatchArmBlock($node, $lines, $parent));
             return null;
         }
 

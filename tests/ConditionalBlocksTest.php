@@ -6,6 +6,7 @@ use LogicException;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -39,6 +40,7 @@ use ShipMonk\CoverageGuard\Hierarchy\ForBlock;
 use ShipMonk\CoverageGuard\Hierarchy\ForeachBlock;
 use ShipMonk\CoverageGuard\Hierarchy\FunctionBlock;
 use ShipMonk\CoverageGuard\Hierarchy\IfBlock;
+use ShipMonk\CoverageGuard\Hierarchy\MatchArmBlock;
 use ShipMonk\CoverageGuard\Hierarchy\MatchBlock;
 use ShipMonk\CoverageGuard\Hierarchy\SwitchBlock;
 use ShipMonk\CoverageGuard\Hierarchy\TryBlock;
@@ -118,6 +120,7 @@ final class ConditionalBlocksTest extends TestCase
         self::assertContains(ClosureBlock::class, $blockTypes, 'ClosureBlock should be detected');
         self::assertContains(ArrowFunctionBlock::class, $blockTypes, 'ArrowFunctionBlock should be detected');
         self::assertContains(MatchBlock::class, $blockTypes, 'MatchBlock should be detected');
+        self::assertContains(MatchArmBlock::class, $blockTypes, 'MatchArmBlock should be detected');
 
         $functionBlock = null;
         $ifBlockInsideMethod = null;
@@ -125,6 +128,7 @@ final class ConditionalBlocksTest extends TestCase
         $elseIfBlock = null;
         $foreachBlockInsideMethod = null;
         $caseBlock = null;
+        $matchArmBlock = null;
         $tryBlock = null;
         $catchBlock = null;
         $finallyBlock = null;
@@ -156,6 +160,10 @@ final class ConditionalBlocksTest extends TestCase
 
             if ($block instanceof CaseBlock) {
                 $caseBlock ??= $block;
+            }
+
+            if ($block instanceof MatchArmBlock) {
+                $matchArmBlock ??= $block;
             }
 
             if ($block instanceof CatchBlock) {
@@ -191,6 +199,9 @@ final class ConditionalBlocksTest extends TestCase
         self::assertNotNull($caseBlock, 'CaseBlock should be found');
         self::assertInstanceOf(SwitchBlock::class, $caseBlock->getParent());
 
+        self::assertNotNull($matchArmBlock, 'MatchArmBlock should be found');
+        self::assertInstanceOf(MatchBlock::class, $matchArmBlock->getParent());
+
         self::assertNotNull($catchBlock, 'CatchBlock should be found');
         self::assertInstanceOf(TryBlock::class, $catchBlock->getParent());
 
@@ -212,6 +223,7 @@ final class ConditionalBlocksTest extends TestCase
             ForeachBlock::class => Foreach_::class,
             FunctionBlock::class => Function_::class,
             IfBlock::class => If_::class,
+            MatchArmBlock::class => MatchArm::class,
             MatchBlock::class => Match_::class,
             SwitchBlock::class => Switch_::class,
             TryBlock::class => TryCatch::class,
