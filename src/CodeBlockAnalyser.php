@@ -7,9 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -161,47 +166,41 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             if ($node->stmts !== []) {
                 $this->processNestedBlock($node, IfBlock::class);
             }
+            return null;
+        }
 
-            foreach ($node->elseifs as $elseif) {
-                if ($elseif->stmts !== []) {
-                    $this->processChildBlock($elseif, ElseIfBlock::class);
-                }
-            }
+        if ($node instanceof ElseIf_ && $node->stmts !== []) {
+            $this->processNestedBlock($node, ElseIfBlock::class);
+            return null;
+        }
 
-            if ($node->else !== null && $node->else->stmts !== []) {
-                $this->processChildBlock($node->else, ElseBlock::class);
-            }
-
+        if ($node instanceof Else_ && $node->stmts !== []) {
+            $this->processNestedBlock($node, ElseBlock::class);
             return null;
         }
 
         if ($node instanceof Switch_ && $node->cases !== []) {
             $this->processNestedBlock($node, SwitchBlock::class);
-
-            foreach ($node->cases as $case) {
-                if ($case->stmts !== []) {
-                    $this->processChildBlock($case, CaseBlock::class);
-                }
-            }
-
             return null;
         }
 
-        if ($node instanceof TryCatch) {
-            if ($node->stmts !== []) {
-                $this->processNestedBlock($node, TryBlock::class);
-            }
+        if ($node instanceof Case_ && $node->stmts !== []) {
+            $this->processNestedBlock($node, CaseBlock::class);
+            return null;
+        }
 
-            foreach ($node->catches as $catch) {
-                if ($catch->stmts !== []) {
-                    $this->processChildBlock($catch, CatchBlock::class);
-                }
-            }
+        if ($node instanceof TryCatch && $node->stmts !== []) {
+            $this->processNestedBlock($node, TryBlock::class);
+            return null;
+        }
 
-            if ($node->finally !== null && $node->finally->stmts !== []) {
-                $this->processChildBlock($node->finally, FinallyBlock::class);
-            }
+        if ($node instanceof Catch_ && $node->stmts !== []) {
+            $this->processNestedBlock($node, CatchBlock::class);
+            return null;
+        }
 
+        if ($node instanceof Finally_ && $node->stmts !== []) {
+            $this->processNestedBlock($node, FinallyBlock::class);
             return null;
         }
 
@@ -277,25 +276,6 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         }
 
         $this->trackBlock($node, $block);
-        $this->processBlock($block);
-    }
-
-    /**
-     * Creates a block that never becomes a parent (elseif, else, case, catch, finally),
-     * blocks nested inside it get its enclosing block as parent
-     *
-     * @param class-string<CodeBlock> $blockClass
-     */
-    private function processChildBlock(
-        Node $node,
-        string $blockClass,
-    ): void
-    {
-        $block = $this->createBlock($node, $blockClass);
-        if ($block === null) {
-            return;
-        }
-
         $this->processBlock($block);
     }
 

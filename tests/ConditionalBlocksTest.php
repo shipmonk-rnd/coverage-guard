@@ -103,7 +103,11 @@ final class ConditionalBlocksTest extends TestCase
 
         $functionBlock = null;
         $ifBlockInsideMethod = null;
+        $ifBlockInsideElse = null;
         $foreachBlockInsideMethod = null;
+        $caseBlock = null;
+        $catchBlock = null;
+        $finallyBlock = null;
 
         foreach ($collectingRule->blocks as $block) {
             if ($block instanceof FunctionBlock) {
@@ -114,8 +118,24 @@ final class ConditionalBlocksTest extends TestCase
                 $ifBlockInsideMethod = $block;
             }
 
+            if ($block instanceof IfBlock && $block->getParent() instanceof ElseBlock) {
+                $ifBlockInsideElse = $block;
+            }
+
             if ($block instanceof ForeachBlock && $block->getParent() instanceof ClassMethodBlock) {
                 $foreachBlockInsideMethod = $block;
+            }
+
+            if ($block instanceof CaseBlock) {
+                $caseBlock ??= $block;
+            }
+
+            if ($block instanceof CatchBlock) {
+                $catchBlock ??= $block;
+            }
+
+            if ($block instanceof FinallyBlock) {
+                $finallyBlock ??= $block;
             }
         }
 
@@ -131,6 +151,23 @@ final class ConditionalBlocksTest extends TestCase
         self::assertNotNull($foreachBlockInsideMethod, 'ForeachBlock inside method should be found');
         self::assertInstanceOf(ClassMethodBlock::class, $foreachBlockInsideMethod->getParent());
         self::assertSame('testForeach', $foreachBlockInsideMethod->getParent()->getMethodName());
+
+        // parent chain mimics the AST: if inside else -> else -> if -> method
+        self::assertNotNull($ifBlockInsideElse, 'IfBlock inside else should be found');
+        $elseBlock = $ifBlockInsideElse->getParent();
+        self::assertInstanceOf(ElseBlock::class, $elseBlock);
+        self::assertInstanceOf(IfBlock::class, $elseBlock->getParent());
+        self::assertInstanceOf(ClassMethodBlock::class, $elseBlock->getParent()->getParent());
+        self::assertSame('testIf', $elseBlock->getParent()->getParent()->getMethodName());
+
+        self::assertNotNull($caseBlock, 'CaseBlock should be found');
+        self::assertInstanceOf(SwitchBlock::class, $caseBlock->getParent());
+
+        self::assertNotNull($catchBlock, 'CatchBlock should be found');
+        self::assertInstanceOf(TryBlock::class, $catchBlock->getParent());
+
+        self::assertNotNull($finallyBlock, 'FinallyBlock should be found');
+        self::assertInstanceOf(TryBlock::class, $finallyBlock->getParent());
     }
 
     /**

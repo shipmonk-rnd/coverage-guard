@@ -52,7 +52,10 @@ class ConditionalBlocks
         } elseif ($value < 0) {
             return 'negative';
         } else {
-            return 'zero';
+            if ($value === 0) {
+                return 'zero';
+            }
+            return 'unknown';
         }
     }
 
