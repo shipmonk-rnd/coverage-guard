@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard;
 
+use LogicException;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -9,9 +10,11 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
+use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
 use ShipMonk\CoverageGuard\Hierarchy\CodeBlock;
 use ShipMonk\CoverageGuard\Rule\CoverageError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
+use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use ShipMonk\CoverageGuard\Utils\PathHelper;
@@ -74,6 +77,24 @@ final class CoverageGuardTest extends TestCase
                 $config->addCoveragePathMapping('/some/ci/path/root/', __DIR__ . '/../');
             },
         ];
+    }
+
+    public function testExcludersAffectRuleResults(): void
+    {
+        $coverageFile = __DIR__ . '/_fixtures/PatchCoverage/clover.xml';
+        $guard = $this->createCoverageGuard();
+
+        $config = $this->createConfig();
+        $config->addRule(new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 100));
+
+        $reportWithoutExcluders = $guard->checkCoverage($config, $coverageFile, null, false);
+        self::assertCount(1, $reportWithoutExcluders->reportedErrors);
+        self::assertStringContainsString('has only 67% coverage', $reportWithoutExcluders->reportedErrors[0]->error->getMessage());
+
+        $config->addExecutableLineExcluder(new IgnoreThrowNewExceptionLineExcluder([LogicException::class]));
+
+        $reportWithExcluders = $guard->checkCoverage($config, $coverageFile, null, false);
+        self::assertCount(0, $reportWithExcluders->reportedErrors);
     }
 
     public function testPatchIntegrityFailsWhenLineNumberExceedsFileLength(): void
