@@ -31,6 +31,7 @@ use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use function array_keys;
 use function array_map;
+use function count;
 use function file;
 use const FILE_IGNORE_NEW_LINES;
 
@@ -104,14 +105,24 @@ final class ConditionalBlocksTest extends TestCase
         $functionBlock = null;
         $ifBlockInsideMethod = null;
         $ifBlockInsideElse = null;
+        $elseIfBlock = null;
         $foreachBlockInsideMethod = null;
         $caseBlock = null;
+        $tryBlock = null;
         $catchBlock = null;
         $finallyBlock = null;
 
         foreach ($collectingRule->blocks as $block) {
             if ($block instanceof FunctionBlock) {
                 $functionBlock ??= $block;
+            }
+
+            if ($block instanceof ElseIfBlock) {
+                $elseIfBlock ??= $block;
+            }
+
+            if ($block instanceof TryBlock) {
+                $tryBlock ??= $block;
             }
 
             if ($block instanceof IfBlock && $block->getParent() instanceof ClassMethodBlock) {
@@ -168,6 +179,25 @@ final class ConditionalBlocksTest extends TestCase
 
         self::assertNotNull($finallyBlock, 'FinallyBlock should be found');
         self::assertInstanceOf(TryBlock::class, $finallyBlock->getParent());
+
+        // sibling branch blocks never share lines
+        self::assertNotNull($elseIfBlock);
+        self::assertNotNull($tryBlock);
+        self::assertLessThan($this->getFirstLine($elseIfBlock), $this->getLastLine($ifBlockInsideMethod), 'IfBlock must end before its elseif starts');
+        self::assertLessThan($this->getFirstLine($elseBlock), $this->getLastLine($elseIfBlock), 'ElseIfBlock must end before its else starts');
+        self::assertLessThan($this->getFirstLine($catchBlock), $this->getLastLine($tryBlock), 'TryBlock must end before its catch starts');
+        self::assertLessThan($this->getFirstLine($finallyBlock), $this->getLastLine($catchBlock), 'CatchBlock must end before its finally starts');
+    }
+
+    private function getFirstLine(CodeBlock $block): int
+    {
+        return $block->getLines()[0]->getNumber();
+    }
+
+    private function getLastLine(CodeBlock $block): int
+    {
+        $lines = $block->getLines();
+        return $lines[count($lines) - 1]->getNumber();
     }
 
     /**

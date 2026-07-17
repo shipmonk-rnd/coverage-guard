@@ -46,6 +46,7 @@ use ShipMonk\CoverageGuard\Hierarchy\WhileBlock;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
+use function array_key_last;
 use function assert;
 use function end;
 use function range;
@@ -164,18 +165,18 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
         if ($node instanceof If_) {
             if ($node->stmts !== []) {
-                $this->processNestedBlock($node, IfBlock::class);
+                $this->processNestedBlock($node, IfBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             }
             return null;
         }
 
         if ($node instanceof ElseIf_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ElseIfBlock::class);
+            $this->processNestedBlock($node, ElseIfBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Else_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ElseBlock::class);
+            $this->processNestedBlock($node, ElseBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
@@ -185,22 +186,22 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         }
 
         if ($node instanceof Case_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, CaseBlock::class);
+            $this->processNestedBlock($node, CaseBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof TryCatch && $node->stmts !== []) {
-            $this->processNestedBlock($node, TryBlock::class);
+            $this->processNestedBlock($node, TryBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Catch_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, CatchBlock::class);
+            $this->processNestedBlock($node, CatchBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Finally_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, FinallyBlock::class);
+            $this->processNestedBlock($node, FinallyBlock::class, $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
@@ -263,36 +264,34 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     /**
      * Creates a block that becomes parent of blocks nested inside it
      *
+     * Blocks owning sibling branches (if, elseif, try, catch, ...) end at their last own
+     * statement instead of the node end, so that they never overlap with the sibling branch
+     * that may start at the very line of their closing brace (e.g. `} else {`).
+     *
      * @param class-string<CodeBlock> $blockClass
      */
     private function processNestedBlock(
         Node $node,
         string $blockClass,
+        ?int $endLine = null,
     ): void
     {
-        $block = $this->createBlock($node, $blockClass);
-        if ($block === null) {
+        $lines = $this->getLines($node->getStartLine(), $endLine ?? $node->getEndLine());
+        if ($lines === []) {
             return;
         }
 
+        $block = new $blockClass($lines, $this->getCurrentParent());
         $this->trackBlock($node, $block);
         $this->processBlock($block);
     }
 
     /**
-     * @param class-string<CodeBlock> $blockClass
+     * @param non-empty-array<Node> $statements
      */
-    private function createBlock(
-        Node $node,
-        string $blockClass,
-    ): ?CodeBlock
+    private function getEndLineOfLastStatement(array $statements): int
     {
-        $lines = $this->getLines($node->getStartLine(), $node->getEndLine());
-        if ($lines === []) {
-            return null;
-        }
-
-        return new $blockClass($lines, $this->getCurrentParent());
+        return $statements[array_key_last($statements)]->getEndLine();
     }
 
     private function processBlock(CodeBlock $block): void
