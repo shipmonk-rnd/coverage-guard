@@ -41,6 +41,34 @@ final class ErrorFormatterTest extends TestCase
         self::assertStringNotContainsString(str_replace('/', DIRECTORY_SEPARATOR, '/tmp/test.php'), $result); // path was relativized
     }
 
+    public function testExcludedLineHasGrayBackground(): void
+    {
+        $lines = [
+            new LineOfCode(1, true, false, true, false, '$covered = 1;'),
+            new LineOfCode(2, true, true, false, false, 'throw new LogicException();'),
+        ];
+
+        $result = $this->formatReport($lines, new Config(), patchMode: false);
+
+        self::assertStringContainsString("\033[48;5;236m", $result); // gray background of excluded line
+        self::assertStringContainsString("\033[48;5;28m", $result); // green background of covered line
+        self::assertStringNotContainsString("\033[48;5;124m", $result); // excluded line must not be marked as uncovered
+    }
+
+    public function testNoAnsiCodesWhenColorsDisabled(): void
+    {
+        $lines = [
+            new LineOfCode(1, true, false, true, false, '$covered = 1;'),
+            new LineOfCode(2, true, true, false, false, 'throw new LogicException();'),
+            new LineOfCode(3, true, false, false, false, '$uncovered = 1;'),
+        ];
+
+        $result = $this->formatReport($lines, new Config(), patchMode: false, noColor: true);
+
+        self::assertStringNotContainsString("\033[", $result);
+        self::assertStringContainsString('X', $result); // plain-text indicator of uncovered line
+    }
+
     public function testClickableFilepathWhenEditorUrlSet(): void
     {
         $config = new Config();
@@ -79,10 +107,11 @@ final class ErrorFormatterTest extends TestCase
         array $lines,
         Config $config,
         bool $patchMode,
+        bool $noColor = false,
     ): string
     {
         $stream = $this->createStream();
-        $formatter = $this->createErrorFormatter($stream);
+        $formatter = $this->createErrorFormatter($stream, $noColor);
         $report = $this->createCoverageReport($lines, patchMode: $patchMode);
 
         $formatter->formatReport($report, $config->getEditorUrl());
@@ -95,11 +124,12 @@ final class ErrorFormatterTest extends TestCase
      */
     private function createErrorFormatter(
         $stream,
+        bool $noColor = false,
     ): ErrorFormatter
     {
         return new ErrorFormatter(
             new PathHelper('/tmp'),
-            new Printer($stream, noColor: false),
+            new Printer($stream, noColor: $noColor),
         );
     }
 
