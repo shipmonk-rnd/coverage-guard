@@ -34,7 +34,7 @@ abstract class CodeBlock
      */
     public function getExecutableLinesCount(): int
     {
-        return count($this->getExecutableLines());
+        return count($this->getCoverableLines());
     }
 
     /**
@@ -46,15 +46,15 @@ abstract class CodeBlock
      */
     public function getCoveragePercentage(): int
     {
-        $totalExecutableLines = $this->getExecutableLinesCount();
+        $totalCoverableLines = $this->getExecutableLinesCount();
 
-        if ($totalExecutableLines === 0) {
+        if ($totalCoverableLines === 0) {
             return 100;
         }
 
         $coveredLines = $this->getCoveredLinesCount();
 
-        return (int) round(($coveredLines / $totalExecutableLines) * 100, 0);
+        return (int) round(($coveredLines / $totalCoverableLines) * 100, 0);
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class CodeBlock
     public function getCoveredLinesCount(): int
     {
         $coveredLines = 0;
-        foreach ($this->getExecutableLines() as $line) {
+        foreach ($this->getCoverableLines() as $line) {
             if ($line->isCovered()) {
                 $coveredLines++;
             }
@@ -78,16 +78,15 @@ abstract class CodeBlock
      */
     public function getChangePercentage(): int
     {
-        $executableLines = $this->getExecutableLines();
-        $totalExecutableLines = count($executableLines);
+        $totalCoverableLines = count($this->getCoverableLines());
 
-        if ($totalExecutableLines === 0) {
+        if ($totalCoverableLines === 0) {
             return 0;
         }
 
         $changedLines = $this->getChangedLinesCount();
 
-        return (int) round(($changedLines / $totalExecutableLines) * 100, 0);
+        return (int) round(($changedLines / $totalCoverableLines) * 100, 0);
     }
 
     /**
@@ -95,10 +94,9 @@ abstract class CodeBlock
      */
     public function getChangedLinesCount(): int
     {
-        $executableLines = $this->getExecutableLines();
         $changedLines = 0;
 
-        foreach ($executableLines as $line) {
+        foreach ($this->getCoverableLines() as $line) {
             if ($line->isChanged()) {
                 $changedLines++;
             }
@@ -115,7 +113,7 @@ abstract class CodeBlock
     /**
      * @return array<LineOfCode>
      */
-    private function getExecutableLines(): array
+    private function getCoverableLines(): array
     {
         return array_filter($this->lines, static function (LineOfCode $line): bool {
             return $line->isExecutable() && !$line->isExcluded();
