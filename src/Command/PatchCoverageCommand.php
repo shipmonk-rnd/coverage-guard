@@ -15,8 +15,6 @@ use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function array_combine;
-use function array_filter;
-use function array_values;
 use function count;
 use function number_format;
 use function range;
@@ -70,10 +68,12 @@ final class PatchCoverageCommand implements Command
                 $executableLinesMap[$line->lineNumber] = $line->hits > 0;
             }
 
-            $changedExecutableLines = array_values(array_filter(
-                $changedLines,
-                static fn (int $lineNumber): bool => isset($executableLinesMap[$lineNumber]),
-            ));
+            $changedExecutableLines = [];
+            foreach ($changedLines as $lineNumber) {
+                if (isset($executableLinesMap[$lineNumber])) {
+                    $changedExecutableLines[$lineNumber] = $executableLinesMap[$lineNumber];
+                }
+            }
 
             $excluderVisitor = null;
             if ($excluders !== [] && $changedExecutableLines !== []) {
@@ -83,12 +83,12 @@ final class PatchCoverageCommand implements Command
                 $this->fileTraverser->traverse($file, $fileLines, $excluderVisitor);
             }
 
-            foreach ($changedExecutableLines as $lineNumber) {
+            foreach ($changedExecutableLines as $lineNumber => $isCovered) {
                 if ($excluderVisitor?->isLineExcluded($lineNumber) === true) {
                     continue;
                 }
                 $totalChangedLines++;
-                if ($executableLinesMap[$lineNumber]) {
+                if ($isCovered) {
                     $totalCoveredLines++;
                 }
             }
