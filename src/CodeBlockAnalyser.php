@@ -157,8 +157,10 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             return null;
         }
 
-        if ($node instanceof If_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, IfBlock::class);
+        if ($node instanceof If_) {
+            if ($node->stmts !== []) {
+                $this->processNestedBlock($node, IfBlock::class);
+            }
 
             foreach ($node->elseifs as $elseif) {
                 if ($elseif->stmts !== []) {
@@ -185,8 +187,10 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             return null;
         }
 
-        if ($node instanceof TryCatch && $node->stmts !== []) {
-            $this->processNestedBlock($node, TryBlock::class);
+        if ($node instanceof TryCatch) {
+            if ($node->stmts !== []) {
+                $this->processNestedBlock($node, TryBlock::class);
+            }
 
             foreach ($node->catches as $catch) {
                 if ($catch->stmts !== []) {
