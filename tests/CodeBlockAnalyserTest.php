@@ -263,7 +263,7 @@ final class CodeBlockAnalyserTest extends TestCase
             /**
              * @var list<ClassMethodBlock>
              */
-            public array $capturedBlocks = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly
+            public array $capturedBlocks = []; // @phpstan-ignore shipmonk.publicPropertyNotReadonly (ease testing)
 
             public function inspect(
                 CodeBlock $codeBlock,
