@@ -2,18 +2,18 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\PropertyHook;
 
 /**
- * Represents a non-empty method in class, trait or enum
+ * Represents a non-empty property hook body (PHP 8.4+)
  *
  * @api
  */
-final class ClassMethodBlock extends CodeBlock
+final class PropertyHookBlock extends CodeBlock
 {
 
     public function __construct(
-        private readonly ClassMethod $node,
+        private readonly PropertyHook $node,
         array $lines,
         ?CodeBlock $parent = null,
     )
@@ -21,12 +21,15 @@ final class ClassMethodBlock extends CodeBlock
         parent::__construct($lines, $parent);
     }
 
-    public function getNode(): ClassMethod
+    public function getNode(): PropertyHook
     {
         return $this->node;
     }
 
-    public function getMethodName(): string
+    /**
+     * Returns 'get' or 'set'
+     */
+    public function getHookName(): string
     {
         return $this->node->name->toString();
     }
