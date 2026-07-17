@@ -69,6 +69,7 @@ vendor/bin/coverage-guard check clover.xml --patch changes.patch
 <?php
 
 use ShipMonk\CoverageGuard\Config;
+use ShipMonk\CoverageGuard\Excluder\IgnoreThrowNewExceptionLineExcluder;
 use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 
 $config = new Config();
@@ -79,6 +80,9 @@ $config->addRule(new EnforceCoverageForMethodsRule(
     minMethodChangePercentage: 50, // when --patch is provided, check only methods changed by more than 50%
     minExecutableLines: 5, // only check methods with at least 5 executable lines
 ));
+
+// Lines you don't want to enforce coverage for (they stop being treated as executable)
+$config->addExecutableLineExcluder(new IgnoreThrowNewExceptionLineExcluder([LogicException::class]));
 
 // Replace prefix of absolute paths in coverage files
 // Handy if you want to reuse clover.xml generated in CI
@@ -102,10 +106,14 @@ return $config;
      - [own coverage config](./coverage-guard.php)
      - [dead-code-detector](https://github.com/shipmonk-rnd/dead-code-detector/blob/master/coverage-guard.php)
      - [phpstan-rules](https://github.com/shipmonk-rnd/phpstan-rules/blob/master/coverage-guard.php)
+- For custom line exclusion, implement `ExecutableLineExcluder` and pass it to `Config::addExecutableLineExcluder()` method:
+  - It receives each AST node together with `ExclusionContext` (file path, line contents) and may return an `ExcludedLineRange`
+  - Excluded lines are honored by both `check` and `patch-coverage` commands and rendered with gray background
+  - Inspire by prepared [`IgnoreThrowNewExceptionLineExcluder`](src/Excluder/IgnoreThrowNewExceptionLineExcluder.php)
 
 
 ### What can you enforce:
-The `CodeBlock` class passed to `CoverageRule` is aware **which line is executable, changed and covered**.
+The `CodeBlock` class passed to `CoverageRule` is aware **which line is executable, excluded, changed and covered**.
 Also, you can use **reflection** to pinpoint your rules.
 This allows you to setup huge variety of rules, examples:
 
