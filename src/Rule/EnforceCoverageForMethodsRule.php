@@ -51,7 +51,7 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
         }
 
         if (
-            $codeBlock->getExecutableLinesCount() >= $this->minExecutableLines
+            $codeBlock->getCoverableLinesCount() >= $this->minExecutableLines
             && $codeBlock->getCoveragePercentage() < $this->requiredCoveragePercentage
         ) {
             $className = $context->getClassName() ?? 'anonymous';

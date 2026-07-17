@@ -30,9 +30,17 @@ abstract class CodeBlock
     }
 
     /**
-     * Excluded lines are not counted
+     * @deprecated use getCoverableLinesCount() instead
      */
     public function getExecutableLinesCount(): int
+    {
+        return $this->getCoverableLinesCount();
+    }
+
+    /**
+     * Number of executable lines that are not excluded
+     */
+    public function getCoverableLinesCount(): int
     {
         return count($this->getCoverableLines());
     }
@@ -46,7 +54,7 @@ abstract class CodeBlock
      */
     public function getCoveragePercentage(): int
     {
-        $totalCoverableLines = $this->getExecutableLinesCount();
+        $totalCoverableLines = $this->getCoverableLinesCount();
 
         if ($totalCoverableLines === 0) {
             return 100;

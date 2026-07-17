@@ -40,7 +40,8 @@ final class CodeBlockTest extends TestCase
             new LineOfCode(number: 4, executable: false, excluded: false, covered: false, changed: false, contents: 'whitespace'),
         ]);
 
-        self::assertSame(2, $block->getExecutableLinesCount());
+        self::assertSame(2, $block->getCoverableLinesCount());
+        self::assertSame(2, $block->getExecutableLinesCount()); // deprecated alias
     }
 
     public function testGetCoveredLinesCount(): void
@@ -95,7 +96,7 @@ final class CodeBlockTest extends TestCase
             new LineOfCode(number: 3, executable: true, excluded: true, covered: true, changed: false, contents: 'code'),
         ]);
 
-        self::assertSame(1, $block->getExecutableLinesCount());
+        self::assertSame(1, $block->getCoverableLinesCount());
         self::assertSame(1, $block->getCoveredLinesCount());
         self::assertSame(100, $block->getCoveragePercentage());
     }

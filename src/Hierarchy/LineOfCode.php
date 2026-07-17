@@ -32,6 +32,10 @@ final class LineOfCode
         return $this->number;
     }
 
+    /**
+     * True if coverage report marks this line as executable, regardless of exclusion.
+     * CodeBlock metrics skip excluded lines; do the same via isExcluded() when iterating lines manually.
+     */
     public function isExecutable(): bool
     {
         return $this->executable;
