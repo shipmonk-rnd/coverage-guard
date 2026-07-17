@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
+use PhpParser\Node;
 use function array_filter;
 use function count;
 use function round;
@@ -37,6 +38,11 @@ abstract class CodeBlock
     {
         return $this->parent;
     }
+
+    /**
+     * Returns the AST node this block was created from
+     */
+    abstract public function getNode(): Node;
 
     /**
      * @deprecated use getCoverableLinesCount() instead

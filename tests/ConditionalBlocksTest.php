@@ -3,6 +3,23 @@
 namespace ShipMonk\CoverageGuard;
 
 use LogicException;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\Node\Stmt\While_;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
@@ -179,6 +196,32 @@ final class ConditionalBlocksTest extends TestCase
 
         self::assertNotNull($finallyBlock, 'FinallyBlock should be found');
         self::assertInstanceOf(TryBlock::class, $finallyBlock->getParent());
+
+        // every block exposes the AST node it was created from
+        $expectedNodeTypes = [
+            ArrowFunctionBlock::class => ArrowFunction::class,
+            CaseBlock::class => Case_::class,
+            CatchBlock::class => Catch_::class,
+            ClassMethodBlock::class => ClassMethod::class,
+            ClosureBlock::class => Closure::class,
+            DoWhileBlock::class => Do_::class,
+            ElseBlock::class => Else_::class,
+            ElseIfBlock::class => ElseIf_::class,
+            FinallyBlock::class => Finally_::class,
+            ForBlock::class => For_::class,
+            ForeachBlock::class => Foreach_::class,
+            FunctionBlock::class => Function_::class,
+            IfBlock::class => If_::class,
+            MatchBlock::class => Match_::class,
+            SwitchBlock::class => Switch_::class,
+            TryBlock::class => TryCatch::class,
+            WhileBlock::class => While_::class,
+        ];
+
+        foreach ($collectingRule->blocks as $block) {
+            self::assertArrayHasKey($block::class, $expectedNodeTypes);
+            self::assertInstanceOf($expectedNodeTypes[$block::class], $block->getNode());
+        }
 
         // sibling branch blocks never share lines
         self::assertNotNull($elseIfBlock);

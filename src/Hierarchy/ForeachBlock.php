@@ -2,6 +2,8 @@
 
 namespace ShipMonk\CoverageGuard\Hierarchy;
 
+use PhpParser\Node\Stmt\Foreach_;
+
 /**
  * Represents a foreach loop block
  *
@@ -9,5 +11,19 @@ namespace ShipMonk\CoverageGuard\Hierarchy;
  */
 final class ForeachBlock extends CodeBlock
 {
+
+    public function __construct(
+        private readonly Foreach_ $node,
+        array $lines,
+        ?CodeBlock $parent = null,
+    )
+    {
+        parent::__construct($lines, $parent);
+    }
+
+    public function getNode(): Foreach_
+    {
+        return $this->node;
+    }
 
 }

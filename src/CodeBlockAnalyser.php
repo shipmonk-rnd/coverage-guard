@@ -144,79 +144,79 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         }
 
         if ($node instanceof Foreach_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ForeachBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ForeachBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof For_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ForBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ForBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof While_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, WhileBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new WhileBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof Do_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, DoWhileBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new DoWhileBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof If_) {
             if ($node->stmts !== []) {
-                $this->processNestedBlock($node, IfBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+                $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new IfBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             }
             return null;
         }
 
         if ($node instanceof ElseIf_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ElseIfBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ElseIfBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Else_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, ElseBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ElseBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Switch_ && $node->cases !== []) {
-            $this->processNestedBlock($node, SwitchBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new SwitchBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof Case_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, CaseBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new CaseBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof TryCatch && $node->stmts !== []) {
-            $this->processNestedBlock($node, TryBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new TryBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Catch_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, CatchBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new CatchBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Finally_ && $node->stmts !== []) {
-            $this->processNestedBlock($node, FinallyBlock::class, $this->getEndLineOfLastStatement($node->stmts));
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new FinallyBlock($node, $lines, $parent), $this->getEndLineOfLastStatement($node->stmts));
             return null;
         }
 
         if ($node instanceof Closure && $node->stmts !== []) {
-            $this->processNestedBlock($node, ClosureBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ClosureBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof ArrowFunction) {
-            $this->processNestedBlock($node, ArrowFunctionBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new ArrowFunctionBlock($node, $lines, $parent));
             return null;
         }
 
         if ($node instanceof Match_) {
-            $this->processNestedBlock($node, MatchBlock::class);
+            $this->processNestedBlock($node, static fn (array $lines, ?CodeBlock $parent): CodeBlock => new MatchBlock($node, $lines, $parent));
             return null;
         }
 
@@ -268,11 +268,11 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
      * statement instead of the node end, so that they never overlap with the sibling branch
      * that may start at the very line of their closing brace (e.g. `} else {`).
      *
-     * @param class-string<CodeBlock> $blockClass
+     * @param callable(non-empty-list<LineOfCode>, CodeBlock|null): CodeBlock $blockFactory
      */
     private function processNestedBlock(
         Node $node,
-        string $blockClass,
+        callable $blockFactory,
         ?int $endLine = null,
     ): void
     {
@@ -281,7 +281,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
             return;
         }
 
-        $block = new $blockClass($lines, $this->getCurrentParent());
+        $block = $blockFactory($lines, $this->getCurrentParent());
         $this->trackBlock($node, $block);
         $this->processBlock($block);
     }
