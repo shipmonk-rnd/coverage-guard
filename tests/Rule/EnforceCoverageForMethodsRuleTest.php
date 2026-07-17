@@ -31,6 +31,34 @@ final class EnforceCoverageForMethodsRuleTest extends TestCase
         self::assertSame('Method <bold>' . self::class . '::testMethod</bold> has no coverage, expected at least 1%.', $error->getMessage());
     }
 
+    public function testExcludedLinesDoNotRequireCoverage(): void
+    {
+        $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 100, minExecutableLines: 0);
+
+        $block = $this->createBlock([
+                new LineOfCode(number: 1, executable: true, excluded: false, covered: true, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+            ]);
+
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext(className: self::class, methodName: 'createBlock'));
+
+        self::assertNull($error);
+    }
+
+    public function testFullyExcludedMethodIsNotReported(): void
+    {
+        $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 100, minExecutableLines: 0);
+
+        $block = $this->createBlock([
+                new LineOfCode(number: 1, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+                new LineOfCode(number: 2, executable: true, excluded: true, covered: false, changed: true, contents: 'code'),
+            ]);
+
+        $error = $rule->inspect(codeBlock: $block, context: $this->createContext(className: self::class, methodName: 'createBlock'));
+
+        self::assertNull($error);
+    }
+
     public function testReturnsErrorWhenMethodHasInsufficientCoverage(): void
     {
         $rule = new EnforceCoverageForMethodsRule(requiredCoveragePercentage: 50, minExecutableLines: 5);

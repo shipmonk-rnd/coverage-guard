@@ -29,6 +29,9 @@ abstract class CodeBlock
         return $this->lines;
     }
 
+    /**
+     * Excluded lines are not counted
+     */
     public function getExecutableLinesCount(): int
     {
         return count($this->getExecutableLines());
@@ -37,6 +40,8 @@ abstract class CodeBlock
     /**
      * Calculates the coverage percentage of the code block.
      *
+     * Excluded lines are not counted, block with nothing to cover is fully covered.
+     *
      * @return int 0-100
      */
     public function getCoveragePercentage(): int
@@ -44,7 +49,7 @@ abstract class CodeBlock
         $totalExecutableLines = $this->getExecutableLinesCount();
 
         if ($totalExecutableLines === 0) {
-            return 0;
+            return 100;
         }
 
         $coveredLines = $this->getCoveredLinesCount();
@@ -113,7 +118,7 @@ abstract class CodeBlock
     private function getExecutableLines(): array
     {
         return array_filter($this->lines, static function (LineOfCode $line): bool {
-            return $line->isExecutable();
+            return $line->isExecutable() && !$line->isExcluded();
         });
     }
 
