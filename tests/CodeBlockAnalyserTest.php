@@ -64,32 +64,27 @@ final class CodeBlockAnalyserTest extends TestCase
 
         $this->traverseFile($filePath, $analyser);
 
-        /** @var list<InspectionContext> $capturedContexts */
         $capturedContexts = $rule->capturedContexts;
 
-        self::assertCount(3, $capturedContexts);
+        self::assertCount(2, $capturedContexts);
 
         $methodsByClass = [];
         foreach ($capturedContexts as $context) {
             $className = $context->getClassName();
             $methodName = $context->getMethodName();
 
-            $classNameKey = $className ?? '';
+            self::assertNotNull($className);
             self::assertNotNull($methodName);
 
-            $methodsByClass[$classNameKey][] = $methodName;
+            $methodsByClass[$className][] = $methodName;
 
             self::assertSame($filePath, $context->getFilePath());
             self::assertFalse($context->isPatchMode());
         }
 
+        self::assertCount(1, $methodsByClass, 'Methods of anonymous class should not emitted');
         self::assertArrayHasKey('ClassWithAnonymousClass', $methodsByClass);
         self::assertSame(['methodWithAnonymousClass', 'regularMethod'], $methodsByClass['ClassWithAnonymousClass']);
-
-        self::assertArrayHasKey('', $methodsByClass);
-        self::assertSame(['methodOfAnonymousClass'], $methodsByClass['']);
-
-        self::assertCount(2, $methodsByClass);
     }
 
     public function testAnalysesTrait(): void

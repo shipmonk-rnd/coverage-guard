@@ -13,31 +13,24 @@ use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
-use function array_pop;
-use function end;
+use function assert;
 use function range;
 
 final class CodeBlockAnalyser extends NodeVisitorAbstract
 {
 
-    /**
-     * Anonymous classes can be nested
-     *
-     * @var list<string|null>
-     */
-    private array $currentClassStack = [];
+    private ?string $currentClass = null;
 
-    /**
-     * Anonymous classes can cause nested methods
-     *
-     * @var list<string|null>
-     */
-    private array $currentMethodStack = [];
+    private ?string $currentMethod = null;
+
+    private bool $inAnonymousClass = false;
 
     /**
      * @var list<ReportedError>
      */
     private array $reportedErrors = [];
+
+    private InspectionContext $context;
 
     /**
      * @param array<int, int> $linesChanged line => line
@@ -56,16 +49,55 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
         private readonly ExcluderVisitor $excluderVisitor,
     )
     {
+        $this->updateContext();
     }
 
     public function enterNode(Node $node): ?int
     {
         if ($node instanceof ClassLike) {
-            $this->currentClassStack[] = $node->namespacedName?->toString();
+            if ($node->name === null) {
+                $this->inAnonymousClass = true;
+            } else {
+                assert($node->namespacedName !== null); // using NameResolver
+                $this->currentClass = $node->namespacedName->toString();
+                $this->updateContext();
+            }
         }
 
-        if ($node instanceof ClassMethod) {
-            $this->currentMethodStack[] = $node->name->name;
+        if ($node instanceof ClassMethod && $node->stmts !== null) {
+            if ($this->inAnonymousClass) {
+                return null; // ClassMethodBlock is emitted only for real methods
+            }
+            if ($this->currentClass === null) {
+                throw new LogicException('Found class method without a class, should never happen');
+            }
+
+            $startLine = $node->name->getStartLine();
+            $endLine = $node->getEndLine();
+            $methodName = $node->name->toString();
+
+            $lines = $this->getLines($startLine, $endLine);
+            if ($lines === []) {
+                return null;
+            }
+
+            $block = new ClassMethodBlock(
+                $node,
+                $lines,
+            );
+
+            $this->currentMethod = $methodName;
+            $this->updateContext();
+
+            if ($this->patchMode && $block->getChangedLinesCount() === 0) {
+                return null; // unchanged methods not passed to rules in patch mode
+            }
+
+            foreach ($this->inspectCodeBlock($block) as $reportedError) {
+                $this->reportedErrors[] = $reportedError;
+            }
+
+            return null;
         }
 
         return null;
@@ -73,45 +105,12 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     public function leaveNode(Node $node): mixed
     {
-        if ($node instanceof ClassMethod && $node->stmts !== null) {
-            $currentClass = end($this->currentClassStack) !== false ? end($this->currentClassStack) : null;
-            $currentMethod = end($this->currentMethodStack) !== false ? end($this->currentMethodStack) : null;
-            $startLine = $node->name->getStartLine();
-            $endLine = $node->getEndLine();
-
-            $lines = $this->getLines($startLine, $endLine);
-            if ($lines === []) {
-                $classStr = $currentClass ?? 'unknown';
-                $methodStr = $currentMethod ?? 'unknown';
-                throw new LogicException("Class method '{$classStr}::{$methodStr}' has no executable lines although it has some statements");
-            }
-
-            $block = new ClassMethodBlock(
-                $node,
-                $lines,
-            );
-            $context = new InspectionContext(
-                className: $currentClass,
-                methodName: $currentMethod,
-                filePath: $this->filePath,
-                patchMode: $this->patchMode,
-            );
-
-            if ($this->patchMode && $block->getChangedLinesCount() === 0) {
-                return null; // unchanged methods not passed to rules in patch mode
-            }
-
-            foreach ($this->inspectCodeBlock($block, $context) as $reportedError) {
-                $this->reportedErrors[] = $reportedError;
-            }
-        }
-
         if ($node instanceof ClassLike) {
-            array_pop($this->currentClassStack);
-        }
-
-        if ($node instanceof ClassMethod) {
-            array_pop($this->currentMethodStack);
+            if ($node->name !== null) {
+                $this->currentClass = null;
+            } else {
+                $this->inAnonymousClass = false;
+            }
         }
 
         return null;
@@ -146,14 +145,11 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     /**
      * @return list<ReportedError>
      */
-    private function inspectCodeBlock(
-        ClassMethodBlock $block,
-        InspectionContext $context,
-    ): array
+    private function inspectCodeBlock(ClassMethodBlock $block): array
     {
         $reportedErrors = [];
         foreach ($this->rules as $rule) {
-            $coverageError = $rule->inspect($block, $context);
+            $coverageError = $rule->inspect($block, $this->context);
 
             if ($coverageError !== null) {
                 $reportedErrors[] = new ReportedError($this->filePath, $block, $coverageError);
@@ -169,6 +165,16 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     public function getReportedErrors(): array
     {
         return $this->reportedErrors;
+    }
+
+    private function updateContext(): void
+    {
+        $this->context = new InspectionContext(
+            className: $this->currentClass,
+            methodName: $this->currentMethod,
+            filePath: $this->filePath,
+            patchMode: $this->patchMode,
+        );
     }
 
 }

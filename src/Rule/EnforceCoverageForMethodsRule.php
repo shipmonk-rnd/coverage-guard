@@ -38,11 +38,6 @@ final class EnforceCoverageForMethodsRule implements CoverageRule
             return null; // we only care about methods
         }
 
-        $methodReflection = $context->getMethodReflection();
-        if ($methodReflection === null) {
-            return null; // e.g. anonymous class methods
-        }
-
         if (
             $this->minMethodChangePercentage !== null
             && $codeBlock->getChangePercentage() < $this->minMethodChangePercentage
