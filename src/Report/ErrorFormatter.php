@@ -244,13 +244,14 @@ final class ErrorFormatter
             // Add background color if executable (when colors are enabled)
             $bgColor = '';
             $resetColor = '';
-            if ($isExecutable && !$this->printer->hasDisabledColors()) {
-                $bgColor = ($isCovered ? self::BG_COVERED : self::BG_UNCOVERED) . self::FG_BRIGHT_WHITE;
-                $resetColor = self::COLOR_RESET;
-            }
-            if ($isExcluded) {
-                $bgColor = self::BG_EXCLUDED;
-                $resetColor = self::COLOR_RESET;
+            if (!$this->printer->hasDisabledColors()) {
+                if ($isExcluded) {
+                    $bgColor = self::BG_EXCLUDED;
+                    $resetColor = self::COLOR_RESET;
+                } elseif ($isExecutable) {
+                    $bgColor = ($isCovered ? self::BG_COVERED : self::BG_UNCOVERED) . self::FG_BRIGHT_WHITE;
+                    $resetColor = self::COLOR_RESET;
+                }
             }
 
             // Add change indicator
