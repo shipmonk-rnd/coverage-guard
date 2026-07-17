@@ -133,7 +133,11 @@ final class CoverageGuard
         $excluderVisitor = new ExcluderVisitor($excluders, new ExclusionContext($file, $linesContents));
         $analyser = new CodeBlockAnalyser($patchMode, $file, $linesChangedMap, $linesCoverage, $linesContents, $rules, $excluderVisitor);
 
-        $this->fileTraverser->traverse($file, $codeLines, $excluderVisitor, $analyser);
+        $visitors = $excluders === []
+            ? [$analyser] // avoid needless traversal, empty visitor cannot exclude anything
+            : [$excluderVisitor, $analyser];
+
+        $this->fileTraverser->traverse($file, $codeLines, ...$visitors);
 
         return $analyser->getReportedErrors();
     }
