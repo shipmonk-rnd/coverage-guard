@@ -15,6 +15,8 @@ use ShipMonk\CoverageGuard\Utils\ConfigResolver;
 use ShipMonk\CoverageGuard\Utils\FileUtils;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use function array_combine;
+use function array_filter;
+use function array_values;
 use function count;
 use function number_format;
 use function range;
@@ -61,14 +63,6 @@ final class PatchCoverageCommand implements Command
                 continue; // File not in coverage report
             }
 
-            $excluderVisitor = null;
-            if ($excluders !== []) {
-                $fileLines = FileUtils::readFileLines($file);
-                $linesContents = array_combine(range(1, count($fileLines)), $fileLines);
-                $excluderVisitor = new ExcluderVisitor($excluders, new ExclusionContext($file, $linesContents));
-                $this->fileTraverser->traverse($file, $fileLines, $excluderVisitor);
-            }
-
             $fileCoverage = $coveragePerFile[$file];
             $executableLinesMap = [];
 
@@ -76,12 +70,26 @@ final class PatchCoverageCommand implements Command
                 $executableLinesMap[$line->lineNumber] = $line->hits > 0;
             }
 
-            foreach ($changedLines as $lineNumber) {
-                if (isset($executableLinesMap[$lineNumber]) && $excluderVisitor?->isLineExcluded($lineNumber) !== true) {
-                    $totalChangedLines++;
-                    if ($executableLinesMap[$lineNumber]) {
-                        $totalCoveredLines++;
-                    }
+            $changedExecutableLines = array_values(array_filter(
+                $changedLines,
+                static fn (int $lineNumber): bool => isset($executableLinesMap[$lineNumber]),
+            ));
+
+            $excluderVisitor = null;
+            if ($excluders !== [] && $changedExecutableLines !== []) {
+                $fileLines = FileUtils::readFileLines($file);
+                $linesContents = array_combine(range(1, count($fileLines)), $fileLines);
+                $excluderVisitor = new ExcluderVisitor($excluders, new ExclusionContext($file, $linesContents));
+                $this->fileTraverser->traverse($file, $fileLines, $excluderVisitor);
+            }
+
+            foreach ($changedExecutableLines as $lineNumber) {
+                if ($excluderVisitor?->isLineExcluded($lineNumber) === true) {
+                    continue;
+                }
+                $totalChangedLines++;
+                if ($executableLinesMap[$lineNumber]) {
+                    $totalCoveredLines++;
                 }
             }
         }
