@@ -2,7 +2,7 @@ diff --git a/tests/_fixtures/CoverageGuardTest/SampleWindows.php b/tests/_fixtur
 index 1234567..abcdefg 100644
 --- a/tests/_fixtures/CoverageGuardTest/SampleWindows.php
 +++ b/tests/_fixtures/CoverageGuardTest/SampleWindows.php
-@@ -10,4 +10,10 @@ class SampleWindows
+@@ -10,5 +10,9 @@ class SampleWindows
          return 42;
      }
 
