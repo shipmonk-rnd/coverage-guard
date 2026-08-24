@@ -2,9 +2,6 @@
 
 namespace ShipMonk\CoverageGuard\Utils;
 
-use Composer\InstalledVersions;
-use SebastianBergmann\Diff\Line;
-use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\Printer;
@@ -12,7 +9,6 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function is_file;
-use function method_exists;
 use function str_ends_with;
 use function str_starts_with;
 use function substr;
@@ -21,11 +17,14 @@ use const DIRECTORY_SEPARATOR;
 final class PatchParser
 {
 
+    private readonly UnifiedDiffParser $unifiedDiffParser;
+
     public function __construct(
         private readonly string $cwd,
         private readonly Printer $printer,
     )
     {
+        $this->unifiedDiffParser = new UnifiedDiffParser();
     }
 
     /**
@@ -46,10 +45,6 @@ final class PatchParser
             throw new ErrorException("Unknown patch filepath {$patchFile}, expecting .patch or .diff extension");
         }
 
-        if (!InstalledVersions::isInstalled('sebastian/diff')) {
-            throw new ErrorException('In order to use --patch mode, you need to install sebastian/diff');
-        }
-
         $gitRoot = $this->resolveGitRoot($config);
         $patchContent = file_get_contents($patchFile);
 
@@ -57,11 +52,11 @@ final class PatchParser
             throw new ErrorException("Failed to read patch file: {$patchFile}");
         }
 
-        $diffs = (new DiffParser())->parse($patchContent);
+        $fileDiffs = $this->unifiedDiffParser->parse($patchContent, $patchFile);
         $changes = [];
 
-        foreach ($diffs as $diff) {
-            $diffTo = method_exists($diff, 'to') ? $diff->to() : $diff->getTo();
+        foreach ($fileDiffs as $fileDiff) {
+            $diffTo = $fileDiff->targetPath;
             if ($diffTo === '/dev/null') {
                 continue; // deleted file
             }
@@ -79,39 +74,22 @@ final class PatchParser
 
             $changes[$realPath] = [];
 
-            $diffChunks = method_exists($diff, 'chunks') ? $diff->chunks() : $diff->getChunks();
-            foreach ($diffChunks as $chunk) {
-                $lineNumber = method_exists($chunk, 'end') ? $chunk->end() : $chunk->getEnd();
-                $chunkLines = method_exists($chunk, 'lines') ? $chunk->lines() : $chunk->getLines();
-
-                foreach ($chunkLines as $line) {
-                    $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
-                    $lineContent = method_exists($line, 'content') ? $line->content() : $line->getContent();
-
-                    if ($lineType === Line::ADDED) {
-                        if (!isset($actualFileLines[$lineNumber - 1])) {
-                            throw new ErrorException("Patch file '{$patchFile}' refers to added line #{$lineNumber} with '{$lineContent}' contents in file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
-                        }
-
-                        $actualLine = $actualFileLines[$lineNumber - 1];
-
-                        if ($lineContent !== $actualLine) {
-                            throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nPatch data: '{$lineContent}'\nFilesystem: '{$actualLine}'\n\nIs the patch up-to-date?");
-                        }
-                    }
-
-                    if ($lineType === Line::ADDED) {
-                        $changes[$realPath][] = $lineNumber;
-                    }
-
-                    if ($lineType !== Line::REMOVED) {
-                        $lineNumber++;
-                    }
+            foreach ($fileDiff->addedLines as $lineNumber => $lineContent) {
+                if (!isset($actualFileLines[$lineNumber - 1])) {
+                    throw new ErrorException("Patch file '{$patchFile}' refers to added line #{$lineNumber} with '{$lineContent}' contents in file '{$realPath}', but such line does not exist. Is the patch up-to-date?");
                 }
+
+                $actualLine = $actualFileLines[$lineNumber - 1];
+
+                if ($lineContent !== $actualLine) {
+                    throw new ErrorException("Patch file '{$patchFile}' has added line #{$lineNumber} that does not match actual content of file '{$realPath}'.\nPatch data: '{$lineContent}'\nFilesystem: '{$actualLine}'\n\nIs the patch up-to-date?");
+                }
+
+                $changes[$realPath][] = $lineNumber;
             }
         }
 
-        if ($diffs === []) {
+        if ($fileDiffs === []) {
             $this->printer->printWarning("Patch file '{$patchFile}' does not contain any changes. Is it valid patch file?");
         }
 

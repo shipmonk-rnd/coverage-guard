@@ -213,7 +213,6 @@ vendor/bin/coverage-guard init
 ## Optional dependencies
 - Libraries:
   - `phpunit/php-code-coverage` for loading coverage cov files
-  - `sebastian/diff` for processing diff/patch files
 - PHP extensions:
   - `ext-libxml` and `ext-simplexml` for loading coverage XML files
   - `ext-dom` for `check` and `merge` commands
