@@ -43,8 +43,20 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
             throw new ErrorException("Invalid coverage file: '{$coverageFile}'. Expected serialized CodeCoverage instance or array with 'codeCoverage' key, got " . get_debug_type($coverage));
         }
 
+        return $this->extractFileCoverages($coverageFile, $coverageData->lineCoverage(), $basePath);
+    }
+
+    /**
+     * @param array<mixed> $lineCoverage Shape differs between php-code-coverage versions
+     * @return list<FileCoverage>
+     */
+    private function extractFileCoverages(
+        string $coverageFile,
+        array $lineCoverage,
+        string $basePath,
+    ): array
+    {
         $result = [];
-        $lineCoverage = $coverageData->lineCoverage();
 
         foreach ($lineCoverage as $filePath => $fileCoverage) {
             if (!is_array($fileCoverage)) {

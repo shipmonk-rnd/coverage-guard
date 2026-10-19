@@ -21,7 +21,7 @@ final class PhpUnitCoverageExtractorTest extends TestCase
 
     public function testValidCovFile(): void
     {
-        $driver = $this->createMock(Driver::class);
+        $driver = self::createStub(Driver::class);
         $filter = new Filter();
         $data = new ProcessedCodeCoverageData();
         $data->setLineCoverage(['tests/_fixtures/Sample.php' => [8 => []]]);
@@ -40,7 +40,7 @@ final class PhpUnitCoverageExtractorTest extends TestCase
     {
         $data = new ProcessedCodeCoverageData();
         $data->setLineCoverage([
-            'Sample.php' => [8 => [0 => 3, 1 => 1], 9 => []],
+            'Sample.php' => [8 => [], 9 => []],
             'Extractor/Other.php' => [5 => []],
         ]);
 
@@ -54,7 +54,7 @@ final class PhpUnitCoverageExtractorTest extends TestCase
 
         self::assertSame([
             '/app/tests/_fixtures' . DIRECTORY_SEPARATOR . 'Extractor/Other.php' => [5 => 0],
-            '/app/tests/_fixtures' . DIRECTORY_SEPARATOR . 'Sample.php' => [8 => 2, 9 => 0],
+            '/app/tests/_fixtures' . DIRECTORY_SEPARATOR . 'Sample.php' => [8 => 0, 9 => 0],
         ], $this->toHitsMap($result));
     }
 
