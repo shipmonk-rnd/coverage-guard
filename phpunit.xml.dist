@@ -9,7 +9,7 @@
     failOnWarning="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"
-    cacheResultFile="cache/phpunit.result.cache"
+    cacheDirectory="cache/phpunit"
 >
     <testsuites>
         <testsuite name="default">

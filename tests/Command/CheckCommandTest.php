@@ -3,7 +3,7 @@
 namespace ShipMonk\CoverageGuard\Command;
 
 use PhpParser\ParserFactory;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
@@ -125,17 +125,17 @@ final class CheckCommandTest extends TestCase
         $phpParser = (new ParserFactory())->createForHostVersion();
         $patchParser = new PatchParser($cwd, $stderrPrinter);
         $coverageProvider = new CoverageProvider(new CoverageFormatDetector(), $stderrPrinter);
-        $stopwatch = $this->createStopwatchMock();
+        $stopwatch = $this->createStopwatchStub();
         $fileTraverser = new FileTraverser($phpParser);
         $coverageGuard = new CoverageGuard($stderrPrinter, $fileTraverser, $pathHelper, $patchParser, $coverageProvider, $stopwatch);
         $errorFormatter = new ErrorFormatter($pathHelper, $stdoutPrinter);
         return new CheckCommand($configResolver, $coverageGuard, $errorFormatter);
     }
 
-    private function createStopwatchMock(): MockObject&Stopwatch
+    private function createStopwatchStub(): Stopwatch&Stub
     {
-        $stopwatch = $this->createMock(Stopwatch::class);
-        $stopwatch->expects(self::any())->method('stop')->willReturn(0.0);
+        $stopwatch = self::createStub(Stopwatch::class);
+        $stopwatch->method('stop')->willReturn(0.0);
 
         return $stopwatch;
     }
