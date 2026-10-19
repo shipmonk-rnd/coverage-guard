@@ -72,12 +72,6 @@ parameters:
                 - src/Extractor/PhpUnitCoverageExtractor.php
                 - tests/Extractor/PhpUnitCoverageExtractorTest.php
 
-        # support even old sebastian/diff
-        -
-            message: "#Call to function method_exists\\(\\) with SebastianBergmann\\\\Diff.*#"
-            paths:
-                - src/Utils/PatchParser.php
-
         # support even old nikic/php-parser
         -
             message: '#PhpParser\\Node\\Stmt\\Throw_#'

@@ -12,10 +12,10 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function is_file;
-use function method_exists;
 use function str_ends_with;
 use function str_starts_with;
 use function substr;
+use function version_compare;
 use const DIRECTORY_SEPARATOR;
 
 final class PatchParser
@@ -50,6 +50,12 @@ final class PatchParser
             throw new ErrorException('In order to use --patch mode, you need to install sebastian/diff');
         }
 
+        $diffVersion = InstalledVersions::getPrettyVersion('sebastian/diff');
+
+        if ($diffVersion !== null && version_compare($diffVersion, '5.1', '<')) {
+            throw new ErrorException("In order to use --patch mode, you need sebastian/diff 5.1 or newer, {$diffVersion} is installed");
+        }
+
         $gitRoot = $this->resolveGitRoot($config);
         $patchContent = file_get_contents($patchFile);
 
@@ -61,7 +67,7 @@ final class PatchParser
         $changes = [];
 
         foreach ($diffs as $diff) {
-            $diffTo = method_exists($diff, 'to') ? $diff->to() : $diff->getTo();
+            $diffTo = $diff->to();
             if ($diffTo === '/dev/null') {
                 continue; // deleted file
             }
@@ -79,14 +85,12 @@ final class PatchParser
 
             $changes[$realPath] = [];
 
-            $diffChunks = method_exists($diff, 'chunks') ? $diff->chunks() : $diff->getChunks();
-            foreach ($diffChunks as $chunk) {
-                $lineNumber = method_exists($chunk, 'end') ? $chunk->end() : $chunk->getEnd();
-                $chunkLines = method_exists($chunk, 'lines') ? $chunk->lines() : $chunk->getLines();
+            foreach ($diff->chunks() as $chunk) {
+                $lineNumber = $chunk->end();
 
-                foreach ($chunkLines as $line) {
-                    $lineType = method_exists($line, 'type') ? $line->type() : $line->getType();
-                    $lineContent = method_exists($line, 'content') ? $line->content() : $line->getContent();
+                foreach ($chunk->lines() as $line) {
+                    $lineType = $line->type();
+                    $lineContent = $line->content();
 
                     if ($lineType === Line::ADDED) {
                         if (!isset($actualFileLines[$lineNumber - 1])) {
