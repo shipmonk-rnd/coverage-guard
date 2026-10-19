@@ -201,6 +201,8 @@ Patch Coverage Statistics:
   Coverage:                 84.44%
 ```
 
+When the patch changes no executable line, the command prints `No executable lines changed in the patch.` and no `Coverage:` line, so GitLab does not record a false 0 %.
+
 ### `init`
 
 - Generates sample `coverage-guard.php` configuration file in your current directory.

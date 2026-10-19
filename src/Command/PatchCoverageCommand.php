@@ -134,11 +134,11 @@ final class PatchCoverageCommand implements Command
     ): void
     {
         if ($totalChangedLines === 0) {
-            $percentage = 0;
-        } else {
-            $percentage = ($totalCoveredLines / $totalChangedLines) * 100;
+            $this->stdoutPrinter->printLine('No executable lines changed in the patch.');
+            return;
         }
 
+        $percentage = ($totalCoveredLines / $totalChangedLines) * 100;
         $percentageFormatted = number_format($percentage, 2);
 
         $this->stdoutPrinter->printLine('Patch Coverage Statistics:');

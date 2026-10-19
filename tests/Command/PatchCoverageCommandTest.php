@@ -150,6 +150,16 @@ final class PatchCoverageCommandTest extends TestCase
         self::assertStringContainsString('Coverage:                 100.00%', $outputWithExcluders);
     }
 
+    public function testNoChangedExecutableLinesOmitsCoverage(): void
+    {
+        $coverageFile = __DIR__ . '/../_fixtures/PatchCoverage/clover.xml';
+        $patchFile = __DIR__ . '/../_fixtures/PatchCoverage/no-executable-changes.patch';
+
+        $output = $this->runCommand($coverageFile, $patchFile, __DIR__ . '/../_fixtures/PatchCoverage/config-without-excluders.php');
+        self::assertStringContainsString('No executable lines changed in the patch.', $output);
+        self::assertStringNotContainsString('Coverage:', $output);
+    }
+
     private function runCommand(
         string $coverageFile,
         string $patchFile,

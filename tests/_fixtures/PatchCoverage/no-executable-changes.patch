@@ -1,0 +1,8 @@
+diff --git a/tests/_fixtures/PatchCoverage/ClassWithThrow.php b/tests/_fixtures/PatchCoverage/ClassWithThrow.php
+index 1234567..abcdefg 100644
+--- a/tests/_fixtures/PatchCoverage/ClassWithThrow.php
++++ b/tests/_fixtures/PatchCoverage/ClassWithThrow.php
+@@ -14,2 +14,3 @@ class ClassWithThrow
+         }
++
+         return 42;
