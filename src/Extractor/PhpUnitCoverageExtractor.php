@@ -5,12 +5,15 @@ namespace ShipMonk\CoverageGuard\Extractor;
 use Composer\InstalledVersions;
 use LogicException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Data\ProcessedCodeCoverageData;
 use ShipMonk\CoverageGuard\Coverage\ExecutableLine;
 use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function count;
 use function get_debug_type;
 use function is_array;
+use function is_string;
+use const DIRECTORY_SEPARATOR;
 
 final class PhpUnitCoverageExtractor implements CoverageExtractor
 {
@@ -28,12 +31,20 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
             return include $file;
         })($coverageFile);
 
-        if (!$coverage instanceof CodeCoverage) {
-            throw new ErrorException("Invalid coverage file: '{$coverageFile}'. Expected serialized CodeCoverage instance, got " . get_debug_type($coverage));
+        if ($coverage instanceof CodeCoverage) { // php-code-coverage < 14
+            $coverageData = $coverage->getData();
+            $basePath = '';
+
+        } elseif (is_array($coverage) && ($coverage['codeCoverage'] ?? null) instanceof ProcessedCodeCoverageData) { // php-code-coverage >= 14
+            $coverageData = $coverage['codeCoverage'];
+            $basePath = is_string($coverage['basePath'] ?? null) ? $coverage['basePath'] : '';
+
+        } else {
+            throw new ErrorException("Invalid coverage file: '{$coverageFile}'. Expected serialized CodeCoverage instance or array with 'codeCoverage' key, got " . get_debug_type($coverage));
         }
 
         $result = [];
-        $lineCoverage = $coverage->getData()->lineCoverage();
+        $lineCoverage = $coverageData->lineCoverage();
 
         foreach ($lineCoverage as $filePath => $fileCoverage) {
             if (!is_array($fileCoverage)) {
@@ -49,7 +60,9 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
                 $executableLines[] = new ExecutableLine((int) $lineNumber, count($tests));
             }
 
-            $result[] = new FileCoverage((string) $filePath, $executableLines);
+            // php-code-coverage >= 14 strips the common path prefix of all files and stores it as basePath
+            $absoluteFilePath = $basePath === '' ? (string) $filePath : $basePath . DIRECTORY_SEPARATOR . $filePath;
+            $result[] = new FileCoverage($absoluteFilePath, $executableLines);
         }
 
         return $result;
