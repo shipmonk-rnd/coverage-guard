@@ -2,6 +2,7 @@
 
 namespace ShipMonk\CoverageGuard\Coverage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use function array_map;
@@ -107,6 +108,30 @@ final class CoverageMergerTest extends TestCase
         $coverage2 = new FileCoverage('/path/to/file.php', [new ExecutableLine(20, 3)], 120);
 
         (new CoverageMerger())->merge([[$coverage1], [$coverage2]]);
+    }
+
+    #[DataProvider('provideMixedExpectedLinesCounts')]
+    public function testMergeKeepsKnownExpectedLinesCount(
+        ?int $first,
+        ?int $second,
+    ): void
+    {
+        $coverage1 = new FileCoverage('/path/to/file.php', [new ExecutableLine(10, 5)], $first);
+        $coverage2 = new FileCoverage('/path/to/file.php', [new ExecutableLine(20, 3)], $second);
+
+        $result = (new CoverageMerger())->merge([[$coverage1], [$coverage2]]);
+
+        self::assertCount(1, $result);
+        self::assertSame(100, $result[0]->expectedLinesCount);
+    }
+
+    /**
+     * @return iterable<string, array{int|null, int|null}>
+     */
+    public static function provideMixedExpectedLinesCounts(): iterable
+    {
+        yield 'known first' => [100, null];
+        yield 'known second' => [null, 100];
     }
 
     public function testMergeWithNullExpectedLinesCount(): void

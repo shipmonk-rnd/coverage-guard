@@ -3,7 +3,6 @@
 namespace ShipMonk\CoverageGuard\Coverage;
 
 use ShipMonk\CoverageGuard\Exception\ErrorException;
-use function array_key_exists;
 
 final class CoverageMerger
 {
@@ -26,12 +25,14 @@ final class CoverageMerger
             foreach ($coverageSet as $fileCoverage) {
                 $filePath = $fileCoverage->filePath;
 
-                if (array_key_exists($filePath, $fileExpectedLines) && $fileExpectedLines[$filePath] !== $fileCoverage->expectedLinesCount) {
-                    $previous = $fileExpectedLines[$filePath] ?? 'none';
-                    $current = $fileCoverage->expectedLinesCount ?? 'none';
+                $previous = $fileExpectedLines[$filePath] ?? null;
+                $current = $fileCoverage->expectedLinesCount;
+
+                // only some formats (clover) carry lines count, so missing value is not an inconsistency
+                if ($previous !== null && $current !== null && $previous !== $current) {
                     throw new ErrorException("Inconsistent expected lines count for file '{$filePath}': {$previous} vs. {$current}. Check incriminated file for 'coverage.project.file.metrics.loc' in given clover source files.");
                 }
-                $fileExpectedLines[$filePath] = $fileCoverage->expectedLinesCount;
+                $fileExpectedLines[$filePath] = $previous ?? $current;
 
                 foreach ($fileCoverage->executableLines as $line) {
                     $fileLineHits[$filePath][$line->lineNumber] = ($fileLineHits[$filePath][$line->lineNumber] ?? 0) + $line->hits;
