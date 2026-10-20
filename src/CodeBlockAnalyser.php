@@ -13,7 +13,9 @@ use ShipMonk\CoverageGuard\Hierarchy\LineOfCode;
 use ShipMonk\CoverageGuard\Report\ReportedError;
 use ShipMonk\CoverageGuard\Rule\CoverageRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
+use function array_pop;
 use function assert;
+use function end;
 use function range;
 
 final class CodeBlockAnalyser extends NodeVisitorAbstract
@@ -23,7 +25,10 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
 
     private ?string $currentMethod = null;
 
-    private bool $inAnonymousClass = false;
+    /**
+     * @var list<string|null> FQN of each entered class-like, null for anonymous class
+     */
+    private array $classStack = [];
 
     /**
      * @var list<ReportedError>
@@ -56,20 +61,22 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     {
         if ($node instanceof ClassLike) {
             if ($node->name === null) {
-                $this->inAnonymousClass = true;
+                $this->classStack[] = null;
             } else {
                 assert($node->namespacedName !== null); // using NameResolver
-                $this->currentClass = $node->namespacedName->toString();
-                $this->updateContext();
+                $this->classStack[] = $node->namespacedName->toString();
             }
         }
 
         if ($node instanceof ClassMethod && $node->stmts !== null) {
-            if ($this->inAnonymousClass) {
-                return null; // ClassMethodBlock is emitted only for real methods
-            }
-            if ($this->currentClass === null) {
+            if ($this->classStack === []) {
                 throw new LogicException('Found class method without a class, should never happen');
+            }
+
+            $this->currentClass = end($this->classStack);
+
+            if ($this->currentClass === null) {
+                return null; // ClassMethodBlock is emitted only for real methods
             }
 
             $startLine = $node->name->getStartLine();
@@ -106,11 +113,7 @@ final class CodeBlockAnalyser extends NodeVisitorAbstract
     public function leaveNode(Node $node): mixed
     {
         if ($node instanceof ClassLike) {
-            if ($node->name !== null) {
-                $this->currentClass = null;
-            } else {
-                $this->inAnonymousClass = false;
-            }
+            array_pop($this->classStack);
         }
 
         return null;
