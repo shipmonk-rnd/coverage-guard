@@ -7,6 +7,7 @@ use PhpParser\ParserFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\CodeCoverage\Data\ProcessedCodeCoverageData;
 use ShipMonk\CoverageGuard\Ast\FileTraverser;
 use ShipMonk\CoverageGuard\Coverage\CoverageFormatDetector;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
@@ -18,10 +19,16 @@ use ShipMonk\CoverageGuard\Rule\EnforceCoverageForMethodsRule;
 use ShipMonk\CoverageGuard\Rule\InspectionContext;
 use ShipMonk\CoverageGuard\Utils\PatchParser;
 use ShipMonk\CoverageGuard\Utils\PathHelper;
+use function file_put_contents;
+use function realpath;
 use function rewind;
+use function serialize;
 use function str_replace;
 use function stream_get_contents;
+use function sys_get_temp_dir;
+use function tempnam;
 use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 
 final class CoverageGuardTest extends TestCase
 {
@@ -186,6 +193,57 @@ final class CoverageGuardTest extends TestCase
         self::assertStringContainsString('Info: Checking files listed in patch file', $output);
         self::assertStringContainsString('tests/_fixtures/Sample.php', $output);
         self::assertStringContainsString('%', $output); // Coverage percentage
+    }
+
+    #[DataProvider('provideVerbose')]
+    public function testSkipsFilesWithoutExecutableLines(bool $verbose): void
+    {
+        $sampleFile = realpath(__DIR__ . '/_fixtures/Sample.php');
+        $interfaceFile = realpath(__DIR__ . '/_fixtures/CoverageGuardTest/SampleInterface.php');
+        $emptyFile = tempnam(sys_get_temp_dir(), 'empty');
+
+        self::assertNotFalse($sampleFile);
+        self::assertNotFalse($interfaceFile);
+        self::assertNotFalse($emptyFile);
+
+        $data = new ProcessedCodeCoverageData();
+        $data->setLineCoverage([
+            $sampleFile => [10 => [], 15 => []],
+            $interfaceFile => [],
+            $emptyFile => [],
+        ]);
+
+        $coverageFile = $this->writeCovFile([
+            'buildInformation' => [],
+            'basePath' => '',
+            'codeCoverage' => $data,
+            'testResults' => [],
+        ]);
+
+        $report = $this->createCoverageGuard()->checkCoverage($this->createConfig(), $coverageFile, patchFile: null, verbose: $verbose);
+
+        self::assertSame([$sampleFile], $report->analysedFiles);
+    }
+
+    /**
+     * @return iterable<string, array{bool}>
+     */
+    public static function provideVerbose(): iterable
+    {
+        yield 'verbose' => [true];
+        yield 'not verbose' => [false];
+    }
+
+    private function writeCovFile(mixed $coverage): string
+    {
+        $path = tempnam(sys_get_temp_dir(), 'coverage');
+        self::assertNotFalse($path);
+
+        $covPath = $path . '.cov';
+        $php = "<?php return \unserialize(<<<'COV'" . PHP_EOL . serialize($coverage) . PHP_EOL . 'COV' . PHP_EOL . ');';
+        file_put_contents($covPath, $php);
+
+        return $covPath;
     }
 
     private function checkCoverageWithPatch(string $patchFile): void
