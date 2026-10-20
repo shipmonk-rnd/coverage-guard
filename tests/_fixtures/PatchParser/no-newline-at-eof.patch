@@ -1,0 +1,16 @@
+diff --git a/tests/_fixtures/PatchParser/NoNewlineAtEof.php b/tests/_fixtures/PatchParser/NoNewlineAtEof.php
+index 88952c9..f5afafd 100644
+--- a/tests/_fixtures/PatchParser/NoNewlineAtEof.php
++++ b/tests/_fixtures/PatchParser/NoNewlineAtEof.php
+@@ -8,4 +8,9 @@ class NoNewlineAtEof
+         return 1;
+     }
+
+-}
+\ No newline at end of file
++    public function second(): int
++    {
++        return 2;
++    }
++
++}
