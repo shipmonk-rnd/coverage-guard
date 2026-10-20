@@ -75,6 +75,22 @@ final class PhpUnitCoverageExtractorTest extends TestCase
         self::assertSame('tests/_fixtures/Sample.php', $result[0]->filePath);
     }
 
+    public function testSkipsDeadLines(): void
+    {
+        $data = new ProcessedCodeCoverageData();
+        $data->setLineCoverage(['Sample.php' => [8 => [], 9 => null, 10 => []]]);
+
+        $extractor = new PhpUnitCoverageExtractor();
+        $result = $extractor->getCoverage($this->writeCovFile([
+            'buildInformation' => [],
+            'basePath' => '',
+            'codeCoverage' => $data,
+            'testResults' => [],
+        ]));
+
+        self::assertSame(['Sample.php' => [8 => 0, 10 => 0]], $this->toHitsMap($result));
+    }
+
     public function testInvalidCovFile(): void
     {
         $extractor = new PhpUnitCoverageExtractor();

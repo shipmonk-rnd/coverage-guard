@@ -65,8 +65,12 @@ final class PhpUnitCoverageExtractor implements CoverageExtractor
 
             $executableLines = [];
             foreach ($fileCoverage as $lineNumber => $tests) {
+                if ($tests === null) {
+                    continue; // dead (unreachable) line, PHPUnit reports skip it too
+                }
+
                 if (!is_array($tests)) {
-                    throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array under {$filePath} and #$lineNumber, got " . get_debug_type($tests));
+                    throw new LogicException("Invalid coverage file: '{$coverageFile}'. Expected array or null under {$filePath} and #$lineNumber, got " . get_debug_type($tests));
                 }
 
                 $executableLines[] = new ExecutableLine((int) $lineNumber, count($tests));
