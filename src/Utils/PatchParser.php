@@ -3,6 +3,7 @@
 namespace ShipMonk\CoverageGuard\Utils;
 
 use Composer\InstalledVersions;
+use LogicException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser as DiffParser;
 use ShipMonk\CoverageGuard\Config;
@@ -12,6 +13,7 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function is_file;
+use function preg_replace;
 use function str_ends_with;
 use function str_starts_with;
 use function substr;
@@ -61,6 +63,13 @@ final class PatchParser
 
         if ($patchContent === false) {
             throw new ErrorException("Failed to read patch file: {$patchFile}");
+        }
+
+        // sebastian/diff parses "\ No newline at end of file" as an unchanged line, which shifts numbers of the following lines
+        $patchContent = preg_replace('~^\\\\.*\R?~m', '', $patchContent);
+
+        if ($patchContent === null) {
+            throw new LogicException('Failed to remove no-newline markers from patch file');
         }
 
         $diffs = (new DiffParser())->parse($patchContent);
