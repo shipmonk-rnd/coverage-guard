@@ -8,6 +8,8 @@ use ShipMonk\CoverageGuard\Coverage\FileCoverage;
 use ShipMonk\CoverageGuard\Exception\ErrorException;
 use ShipMonk\CoverageGuard\XmlLoader;
 use SimpleXMLElement;
+use function ksort;
+use function max;
 use function str_starts_with;
 
 final class CoberturaCoverageExtractor implements CoverageExtractor
@@ -23,7 +25,6 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
     {
         $xml = $this->xmlLoader->readXml($coverageFile);
 
-        $coverage = [];
         $source = $this->extractSource($xml, $coverageFile);
         $classNodes = $xml->xpath('//class');
 
@@ -31,6 +32,10 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
             throw new LogicException('Invalid usage of XPath, cannot happen');
         }
 
+        /** @var array<string, array<int, int>> $fileLineHits file path => [line number => hits] */
+        $fileLineHits = [];
+
+        // PHPUnit writes one <class> per class (plus one for functions), each with only its own lines
         foreach ($classNodes as $classNode) {
             $filename = (string) $classNode['filename'];
 
@@ -41,11 +46,23 @@ final class CoberturaCoverageExtractor implements CoverageExtractor
                 continue;
             }
 
-            $executableLines = [];
-
             foreach ($classNode->lines->line as $lineNode) {
                 $lineNumber = (int) $lineNode['number'];
                 $hitCount = (int) $lineNode['hits'];
+
+                // a line listed twice in one report is the same line, its hits must not add up
+                $fileLineHits[$filePath][$lineNumber] = max($fileLineHits[$filePath][$lineNumber] ?? 0, $hitCount);
+            }
+        }
+
+        $coverage = [];
+
+        foreach ($fileLineHits as $filePath => $lineHits) {
+            ksort($lineHits);
+
+            $executableLines = [];
+
+            foreach ($lineHits as $lineNumber => $hitCount) {
                 $executableLines[] = new ExecutableLine($lineNumber, $hitCount);
             }
 
