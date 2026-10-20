@@ -4,6 +4,9 @@ namespace ShipMonk\CoverageGuard\Utils;
 
 use function rtrim;
 use function str_replace;
+use function str_starts_with;
+use function strlen;
+use function substr;
 use const DIRECTORY_SEPARATOR;
 
 final class PathHelper
@@ -18,7 +21,10 @@ final class PathHelper
 
     public function relativizePath(string $path): string
     {
-        $relativePath = str_replace($this->cwd, '', $path);
+        $relativePath = str_starts_with($path, $this->cwd)
+            ? substr($path, strlen($this->cwd))
+            : $path;
+
         return str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
     }
 
