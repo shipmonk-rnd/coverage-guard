@@ -32,6 +32,27 @@ final class CoberturaCoverageExtractorTest extends TestCase
         ], $lineNumberToHitCount);
     }
 
+    public function testCombinesAllClassesOfOneFile(): void
+    {
+        $extractor = new CoberturaCoverageExtractor(new XmlLoader());
+        $coverage = $extractor->getCoverage(__DIR__ . '/../_fixtures/Extractor/cobertura-multiple-classes.xml');
+
+        self::assertCount(1, $coverage);
+        self::assertSame('tests/_fixtures/Multi.php', $coverage[0]->filePath);
+
+        $lineNumberToHitCount = array_combine(
+            array_map(static fn (ExecutableLine $line) => $line->lineNumber, $coverage[0]->executableLines),
+            array_map(static fn (ExecutableLine $line) => $line->hits, $coverage[0]->executableLines),
+        );
+
+        self::assertSame([
+            3 => 2,
+            9 => 0,
+            10 => 0,
+            17 => 1,
+        ], $lineNumberToHitCount);
+    }
+
     public function testThrowsExceptionForInvalidXml(): void
     {
         $extractor = new CoberturaCoverageExtractor(new XmlLoader());
