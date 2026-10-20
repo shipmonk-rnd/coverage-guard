@@ -70,6 +70,7 @@ parameters:
             message: "#internal class SebastianBergmann\\\\CodeCoverage\\\\.*#"
             paths:
                 - src/Extractor/PhpUnitCoverageExtractor.php
+                - tests/CoverageGuardTest.php
                 - tests/Extractor/PhpUnitCoverageExtractorTest.php
 
         # support even old nikic/php-parser

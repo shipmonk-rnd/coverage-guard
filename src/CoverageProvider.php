@@ -76,6 +76,10 @@ final class CoverageProvider
                 }
             }
 
+            if ($fileCoverage->executableLines === []) {
+                continue; // e.g. interface or empty file, listed only in .cov files
+            }
+
             $remappedCoverages[$realPath] = new FileCoverage($realPath, $fileCoverage->executableLines, $fileCoverage->expectedLinesCount);
         }
 
