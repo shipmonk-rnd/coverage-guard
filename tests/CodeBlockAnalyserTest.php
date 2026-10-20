@@ -87,6 +87,43 @@ final class CodeBlockAnalyserTest extends TestCase
         self::assertSame(['methodWithAnonymousClass', 'regularMethod'], $methodsByClass['ClassWithAnonymousClass']);
     }
 
+    public function testAnalysesClassWithNestedAnonymousClasses(): void
+    {
+        $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithNestedAnonymousClasses.php';
+
+        $rule = $this->createContextCapturingRule();
+        $analyser = $this->createAnalyser($filePath, [$rule]);
+
+        $this->traverseFile($filePath, $analyser);
+
+        self::assertSame(
+            [
+                'ClassWithNestedAnonymousClasses::methodWithAnonymousClass',
+                'ClassWithNestedAnonymousClasses::regularMethod',
+            ],
+            $this->getAnalysedMethods($rule->capturedContexts),
+        );
+    }
+
+    public function testAnalysesClassDeclaredInMethod(): void
+    {
+        $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/ClassWithClassDeclaredInMethod.php';
+
+        $rule = $this->createContextCapturingRule();
+        $analyser = $this->createAnalyser($filePath, [$rule]);
+
+        $this->traverseFile($filePath, $analyser);
+
+        self::assertSame(
+            [
+                'ClassWithClassDeclaredInMethod::methodDeclaringClass',
+                'ClassDeclaredInMethod::innerMethod',
+                'ClassWithClassDeclaredInMethod::regularMethod',
+            ],
+            $this->getAnalysedMethods($rule->capturedContexts),
+        );
+    }
+
     public function testAnalysesTrait(): void
     {
         $filePath = __DIR__ . '/_fixtures/CodeBlockAnalyser/TraitWithMethod.php';
@@ -261,6 +298,26 @@ final class CodeBlockAnalyserTest extends TestCase
         $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $traverser = new FileTraverser($parser);
         $traverser->traverse($filePath, $this->getFileLines($filePath), ...$visitors);
+    }
+
+    /**
+     * @param list<InspectionContext> $contexts
+     * @return list<string>
+     */
+    private function getAnalysedMethods(array $contexts): array
+    {
+        $methods = [];
+        foreach ($contexts as $context) {
+            $className = $context->getClassName();
+            $methodName = $context->getMethodName();
+
+            self::assertNotNull($className);
+            self::assertNotNull($methodName);
+
+            $methods[] = "{$className}::{$methodName}";
+        }
+
+        return $methods;
     }
 
     /**
