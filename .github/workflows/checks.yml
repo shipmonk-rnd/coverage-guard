@@ -42,7 +42,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
                 dependency-version: [ prefer-lowest, prefer-stable ]
                 operating-system: [ ubuntu-latest, windows-latest ]
         steps:
@@ -67,7 +67,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         steps:
             -
                 name: Checkout code
@@ -90,7 +90,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         steps:
             -
                 name: Checkout code
