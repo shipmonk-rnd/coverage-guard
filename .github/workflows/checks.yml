@@ -42,7 +42,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
                 dependency-version: [ prefer-lowest, prefer-stable ]
                 operating-system: [ ubuntu-latest, windows-latest ]
         steps:
@@ -56,6 +56,10 @@ jobs:
                     php-version: ${{ matrix.php-version }}
                     ini-file: development
             -
+                name: Resolve dependencies as on PHP 8.5 (not all of them allow PHP 8.6 yet)
+                if: matrix.php-version == '8.6'
+                run: composer config --global platform.php 8.5.99
+            -
                 name: Update dependencies
                 run: composer update --no-progress --${{ matrix.dependency-version }} --prefer-dist --no-interaction
             -
@@ -67,7 +71,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         steps:
             -
                 name: Checkout code
@@ -78,6 +82,10 @@ jobs:
                 with:
                     php-version: ${{ matrix.php-version }}
                     ini-file: development
+            -
+                name: Resolve dependencies as on PHP 8.5 (not all of them allow PHP 8.6 yet)
+                if: matrix.php-version == '8.6'
+                run: composer config --global platform.php 8.5.99
             -
                 name: Update dependencies
                 run: composer update --no-progress --prefer-dist --no-interaction
@@ -90,7 +98,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+                php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' ]
         steps:
             -
                 name: Checkout code
@@ -101,6 +109,10 @@ jobs:
                 with:
                     php-version: ${{ matrix.php-version }}
                     ini-file: development
+            -
+                name: Resolve dependencies as on PHP 8.5 (not all of them allow PHP 8.6 yet)
+                if: matrix.php-version == '8.6'
+                run: composer config --global platform.php 8.5.99
             -
                 name: Update dependencies
                 run: composer update --no-progress --prefer-dist --no-interaction
