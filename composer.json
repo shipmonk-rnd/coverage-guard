@@ -17,7 +17,6 @@
     },
     "require-dev": {
         "editorconfig-checker/editorconfig-checker": "10.7.0",
-        "ergebnis/composer-normalize": "2.48.2",
         "phpstan/phpstan": "2.2.0",
         "phpstan/phpstan-phpunit": "2.0.16",
         "phpstan/phpstan-strict-rules": "2.0.11",
@@ -26,6 +25,7 @@
         "sebastian/diff": "^5.1.1 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
         "shipmonk/coding-standard": "^0.2.4",
         "shipmonk/composer-dependency-analyser": "1.8.4",
+        "shipmonk/composer-normalizer": "^0.1.0",
         "shipmonk/dead-code-detector": "^1.0",
         "shipmonk/name-collision-detector": "2.1.1",
         "shipmonk/phpstan-rules": "4.3.6"
@@ -48,8 +48,7 @@
     ],
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": false,
-            "ergebnis/composer-normalize": true
+            "dealerdirect/phpcodesniffer-composer-installer": false
         },
         "sort-packages": true
     },
@@ -65,7 +64,7 @@
         ],
         "check:collisions": "detect-collisions src tests",
         "check:composer": [
-            "composer normalize --dry-run --no-update-lock",
+            "composer-normalizer --dry-run",
             "composer validate --strict",
             "composer dump -o --strict-psr"
         ],
@@ -78,6 +77,11 @@
         ],
         "check:tests": "phpunit tests",
         "check:types": "phpstan analyse -vv --ansi",
+        "fix": [
+            "@fix:composer",
+            "@fix:cs"
+        ],
+        "fix:composer": "composer-normalizer",
         "fix:cs": "phpcbf"
     }
 }
